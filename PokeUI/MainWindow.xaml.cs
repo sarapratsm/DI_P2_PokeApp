@@ -20,4 +20,28 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
+
+    private void btnBack_Click(object sender, RoutedEventArgs e)
+    {
+    }
+
+    private void btnEdit_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnSave_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void btnAdd_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 }

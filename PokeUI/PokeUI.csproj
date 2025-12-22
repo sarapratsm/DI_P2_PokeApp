@@ -1,6 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <None Remove="Imatges\Ball-Pokedex.png" />
+    <None Remove="Imatges\pokeball.png" />
+    <None Remove="Imatges\Pokedex.png" />
+    <None Remove="Imatges\TheAmazingPokedex %281%29.png" />
+    <None Remove="Imatges\TheAmazingPokedex %282%29.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Imatges\Ball-Pokedex.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imatges\pokeball.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imatges\Pokedex.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imatges\TheAmazingPokedex (1).png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Imatges\TheAmazingPokedex (2).png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PokeData\PokeData.csproj" />
   </ItemGroup>
 

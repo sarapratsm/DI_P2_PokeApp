@@ -1,10 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\sprat\\Documents\\Aa ICB0 - DESENVOLUPAMENT D\u0027APLICACIONS MULTIPLATAFORMA\\DAM2\\DAM2_DissenyInterficies\\PokeApp\\",
+  "WorkspaceRootPath": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|c:\\users\\sprat\\documents\\aa icb0 - desenvolupament d\u0027aplicacions multiplataforma\\dam2\\dam2_dissenyinterficies\\pokeapp\\pokeui\\pokeui.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\pokeui.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,15 +38,52 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PokeUI",
-              "DocumentMoniker": "C:\\Users\\sprat\\Documents\\Aa ICB0 - DESENVOLUPAMENT D\u0027APLICACIONS MULTIPLATAFORMA\\DAM2\\DAM2_DissenyInterficies\\PokeApp\\PokeUI\\PokeUI.csproj",
-              "RelativeDocumentMoniker": "PokeUI\\PokeUI.csproj",
-              "ToolTip": "C:\\Users\\sprat\\Documents\\Aa ICB0 - DESENVOLUPAMENT D\u0027APLICACIONS MULTIPLATAFORMA\\DAM2\\DAM2_DissenyInterficies\\PokeApp\\PokeUI\\PokeUI.csproj",
-              "RelativeToolTip": "PokeUI\\PokeUI.csproj",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "PokeUI\\MainWindow.xaml.cs",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\MainWindow.xaml.cs",
+              "RelativeToolTip": "PokeUI\\MainWindow.xaml.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAASwB4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-22T20:28:06.537Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\App.xaml.cs",
+              "RelativeDocumentMoniker": "PokeUI\\App.xaml.cs",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\App.xaml.cs",
+              "RelativeToolTip": "PokeUI\\App.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-12-06T18:31:06.464Z",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-22T20:06:09.695Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "App.xaml",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\App.xaml",
+              "RelativeDocumentMoniker": "PokeUI\\App.xaml",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\App.xaml",
+              "RelativeToolTip": "PokeUI\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-22T20:06:09.935Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "PokeUI\\MainWindow.xaml",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\MainWindow.xaml",
+              "RelativeToolTip": "PokeUI\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-22T19:36:53.738Z",
               "EditorCaption": ""
             }
           ]
