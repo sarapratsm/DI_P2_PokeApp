@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PokeUI.UserControls"
+             x:Name="Root"
+
              mc:Ignorable="d" 
              Background="LightGreen"
              d:DesignHeight="800" d:DesignWidth="500">
@@ -17,14 +19,40 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Image Source="{Binding PokImage}" Grid.Column="0"/>
-            <StackPanel Orientation="Vertical" Grid.Column="1">
-                <TextBlock Background="DarkGreen" Text="{Binding PokName, FallbackValue=Charmander}" Style="{StaticResource HeaderTextStyle}"></TextBlock>
-                <Label Content="Height"></Label>
-            </StackPanel>
+            <Border BorderBrush="Gray" BorderThickness="2" Background="white">
+                <Image Source="{Binding ElementName=Root, Path=ThePokemon.PokImage}" Height="150" Grid.Column="0"/>
+            </Border>
+
+
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="DarkGreen" Padding="10" >
+                    <TextBlock Text="{Binding ElementName=Root, Path=ThePokemon.PokName, FallbackValue=Charmander}" 
+                       Foreground="White" FontSize="24" FontWeight="Bold"/>
+                </Border>
+
+                <StackPanel Grid.Row="1" Margin="10">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Height: "/>
+                        <TextBlock Text="{Binding ElementName=Root, Path=ThePokemon.PokHeight}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Weight: "/>
+                        <TextBlock Text="{Binding ElementName=Root, Path=ThePokemon.PokWeight}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+
         </Grid>
         <Grid x:Name="grdBottom" Grid.Row="1">
-            
+
         </Grid>
     </Grid>
 </UserControl>

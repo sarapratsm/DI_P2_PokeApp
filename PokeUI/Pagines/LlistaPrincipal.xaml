@@ -26,12 +26,14 @@
             <ComboBox x:Name="cmbTipus" Margin="10"/>
             <Button x:Name="btnNetejaFiltres"  Click="btnNetejaFiltres_Click" Style="{StaticResource PokedexButtonStyle}">Neteja</Button>
         </StackPanel>
-        <ListView x:Name="lsvPokedex" Grid.Row="1">
+        <ListView x:Name="lsvPokedex" Grid.Row="2" HorizontalContentAlignment="Stretch" SelectionChanged="lsvPokedex_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:FitxaReduida ThePokemon="{Binding Pokemon}"/>
+                    <uc:FitxaReduida ThePokemon="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <uc:FitxaCompleta x:Name="MasterDetail" ThePokemon="{Binding ElementName=lsvPokedex, Path=SelectedItem}" Grid.Column="1" Grid.Row="1"/>
     </Grid>
 </Page>

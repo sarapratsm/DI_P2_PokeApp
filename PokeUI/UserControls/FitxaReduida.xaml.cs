@@ -33,7 +33,6 @@ namespace PokeUI.UserControls
         public FitxaReduida()
         {
             InitializeComponent();
-            this.DataContext = ThePokemon;
         }
     }
 }

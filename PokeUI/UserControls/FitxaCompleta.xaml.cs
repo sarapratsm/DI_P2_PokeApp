@@ -28,7 +28,6 @@ namespace PokeUI.UserControls
         public FitxaCompleta()
         {
             InitializeComponent();
-            this.DataContext = ThePokemon;
         }
     }
 }

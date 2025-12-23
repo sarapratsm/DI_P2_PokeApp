@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PokeUI.UserControls"
+             x:Name="Root"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -11,6 +12,14 @@
             <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Source="{Binding Imagen}" Width="70" Height="70" RenderOptions.BitmapScalingMode="HighQuality"/>
+
+        <Image Grid.Column="0" 
+               Source="{Binding ElementName=Root, Path=ThePokemon.PokImage}"               
+               Width="60" Height="60" Margin="5"/>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock Text="{Binding ElementName=Root, Path=ThePokemon.PokName}" 
+                        FontWeight="Bold" FontSize="16"/>
+        </StackPanel>
     </Grid>
 </UserControl>

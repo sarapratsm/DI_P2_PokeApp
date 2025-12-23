@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PokeData.Models;
+using PokeUI.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace PokeUI.Pagines
     public partial class LlistaPrincipal : Page
     {
         private AppDbContext context = new AppDbContext();
+        Pokemon selectedPokemon;
 
 
         public LlistaPrincipal()
@@ -48,11 +50,19 @@ namespace PokeUI.Pagines
             cmbTipus.DisplayMemberPath = "TypeName";
             cmbTipus.SelectedValuePath = "TypeId";
             cmbTipus.ItemsSource = llistaTipus;
+
+            lsvPokedex.SelectedIndex = 0;
         }
 
         private void btnNetejaFiltres_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void lsvPokedex_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedPokemon = lsvPokedex.SelectedItem as Pokemon;
+            MasterDetail.ThePokemon = selectedPokemon;
         }
     }
 }

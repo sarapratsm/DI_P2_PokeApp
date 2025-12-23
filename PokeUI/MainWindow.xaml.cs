@@ -27,6 +27,11 @@ public partial class MainWindow : Window
 
     private void btnBack_Click(object sender, RoutedEventArgs e)
     {
+        if (frm.NavigationService.CanGoBack)
+        {
+            frm.NavigationService.GoBack();
+        }
+
     }
 
     private void btnEdit_Click(object sender, RoutedEventArgs e)
@@ -51,6 +56,21 @@ public partial class MainWindow : Window
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        frm.Navigate(principal);
+        Navegacio(1);
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="lloc">1 és la Llista Principal</param>
+    private void Navegacio(int lloc)
+    {
+        if (lloc == 1)
+        {
+            frm.Navigate(principal);
+
+        }
+
+        btnBack.IsEnabled = frm.NavigationService.CanGoBack;
+
     }
 }
