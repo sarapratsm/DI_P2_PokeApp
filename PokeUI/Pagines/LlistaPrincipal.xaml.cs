@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PokeData.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +25,34 @@ namespace PokeUI.Pagines
     /// </summary>
     public partial class LlistaPrincipal : Page
     {
+        private AppDbContext context = new AppDbContext();
+
+
         public LlistaPrincipal()
         {
             InitializeComponent();
+
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            // 1. Cargar la lista de Pokémon (Asegúrate de incluir las relaciones si vas a filtrar)
+            // Usamos Include para traer los tipos junto con el Pokemon
+            var pokemons = context.Pokemons
+                                  .Include(p => p.PokemonTypes)
+                                  .ThenInclude(pt => pt.Type)
+                                  .ToList();
+
+            lsvPokedex.ItemsSource = pokemons;
+            var llistaTipus = context.Types.ToList();
+            cmbTipus.DisplayMemberPath = "TypeName";
+            cmbTipus.SelectedValuePath = "TypeId";
+            cmbTipus.ItemsSource = llistaTipus;
+        }
+
+        private void btnNetejaFiltres_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

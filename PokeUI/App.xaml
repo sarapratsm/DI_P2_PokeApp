@@ -5,19 +5,22 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="PokedexRedBrush" Color="#DC0A2D"/>
+            <!--colors-->
+            <SolidColorBrush x:Key="PokedexRedBrush" Color="#F25C78"/>
             <SolidColorBrush x:Key="PokedexDarkRedBrush" Color="#89061C"/>
-            <SolidColorBrush x:Key="ScreenBlueBrush" Color="#28AAFD"/>
+            <SolidColorBrush x:Key="BlueBrush" Color="#3767A6"/>
             <SolidColorBrush x:Key="DisplayCyanBrush" Color="#51ADCF"/>
-            <SolidColorBrush x:Key="CautionYellowBrush" Color="#FFDE00"/>
+            <SolidColorBrush x:Key="YellowPikachu" Color="#F2B705"/>
             <SolidColorBrush x:Key="UIBlackBrush" Color="#2B2B2B"/>
             <SolidColorBrush x:Key="UIWhiteBrush" Color="#F5F5F5"/>
 
+            <!--Estils-->
             <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="Segoe UI"/>
-                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="FontWeight" Value="DemiBold"/>
                 <Setter Property="FontSize" Value="28"/>
                 <Setter Property="Foreground" Value="{StaticResource UIWhiteBrush}"/>
+                <Setter Property="Margin" Value="5"/>
                 <Setter Property="Effect">
                     <Setter.Value>
                         <DropShadowEffect Color="Black" BlurRadius="2" ShadowDepth="1" Opacity="0.5"/>
@@ -49,18 +52,19 @@
             </Style>
 
             <Style x:Key="PokedexButtonStyle" TargetType="Button">
-                <Setter Property="Background" Value="{StaticResource ScreenBlueBrush}"/>
+                <Setter Property="Background" Value="{StaticResource YellowPikachu}"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Padding" Value="15,8"/>
+                <Setter Property="Padding" Value="5"/>
                 <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Margin" Value="5"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}" 
                                 CornerRadius="5" 
-                                BorderBrush="{StaticResource PokedexDarkRedBrush}"
+                                BorderBrush="{StaticResource BlueBrush}"
                                 BorderThickness="0,0,0,3">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>

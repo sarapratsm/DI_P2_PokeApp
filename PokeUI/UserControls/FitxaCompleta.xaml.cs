@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PokeData.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DependencyPropertyGenerator;
 
 namespace PokeUI.UserControls
 {
+    [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon")]
+
+
     /// <summary>
     /// Lógica de interacción para FitxaCompleta.xaml
     /// </summary>
@@ -23,6 +28,7 @@ namespace PokeUI.UserControls
         public FitxaCompleta()
         {
             InitializeComponent();
+            this.DataContext = ThePokemon;
         }
     }
 }

@@ -12,9 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DependencyPropertyGenerator;
+using System.Windows.Controls;
+using PokeData.Models;
+
+#nullable enable
+
+
+
 
 namespace PokeUI.UserControls
 {
+
+    [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon")]
     /// <summary>
     /// Lógica de interacción para FitxaReduida.xaml
     /// </summary>
@@ -23,6 +33,7 @@ namespace PokeUI.UserControls
         public FitxaReduida()
         {
             InitializeComponent();
+            this.DataContext = ThePokemon;
         }
     }
 }

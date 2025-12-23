@@ -5,8 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PokeUI.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             Background="LightGreen"
+             d:DesignHeight="800" d:DesignWidth="500">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid x:Name="grdTop" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="{Binding PokImage}" Grid.Column="0"/>
+            <StackPanel Orientation="Vertical" Grid.Column="1">
+                <TextBlock Background="DarkGreen" Text="{Binding PokName, FallbackValue=Charmander}" Style="{StaticResource HeaderTextStyle}"></TextBlock>
+                <Label Content="Height"></Label>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="grdBottom" Grid.Row="1">
             
+        </Grid>
     </Grid>
 </UserControl>

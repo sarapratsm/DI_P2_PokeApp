@@ -4,8 +4,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PokeUI.Pagines"
+      xmlns:uc="clr-namespace:PokeUI.UserControls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      Loaded="Page_Loaded"
+      Background="White"
       Title="LlistaPrincipal">
 
     <Grid>
@@ -17,7 +20,18 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Image ></Image>
-        <ListView x:Name="lsvPokedex" Grid.Row="1"></ListView>
+        <Image Source="/Imatges/Ball-Pokedex.png" Height="50"></Image>
+        <StackPanel Orientation="Horizontal" x:Name="stpFiltres" Grid.Column="1">
+            <TextBox Width="150" Margin="10"></TextBox>
+            <ComboBox x:Name="cmbTipus" Margin="10"/>
+            <Button x:Name="btnNetejaFiltres"  Click="btnNetejaFiltres_Click" Style="{StaticResource PokedexButtonStyle}">Neteja</Button>
+        </StackPanel>
+        <ListView x:Name="lsvPokedex" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <uc:FitxaReduida ThePokemon="{Binding Pokemon}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using PokeUI.Pagines;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +17,12 @@ namespace PokeUI;
 /// </summary>
 public partial class MainWindow : Window
 {
+    LlistaPrincipal principal = new LlistaPrincipal();
+
     public MainWindow()
     {
         InitializeComponent();
+
     }
 
     private void btnBack_Click(object sender, RoutedEventArgs e)
@@ -43,5 +47,10 @@ public partial class MainWindow : Window
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        frm.Navigate(principal);
     }
 }
