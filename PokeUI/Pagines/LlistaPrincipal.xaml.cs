@@ -38,20 +38,46 @@ namespace PokeUI.Pagines
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            // 1. Cargar la lista de Pokémon (Asegúrate de incluir las relaciones si vas a filtrar)
-            // Usamos Include para traer los tipos junto con el Pokemon
-            var pokemons = context.Pokemons
-                                  .Include(p => p.PokemonTypes)
-                                  .ThenInclude(pt => pt.Type)
-                                  .ToList();
+            try
+            {
+                carregarPokemons();
+                carregarTipus();
 
-            lsvPokedex.ItemsSource = pokemons;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error en carregar els pokémons des de la base de dades: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
+
+        }
+
+        /// <summary>
+        /// Mètode per carregar els tipus de pokémon dins del combobox i fer la configuració inicial.
+        /// (Aquest mètode no és realment necessari però així quedava més entenedor i net.)
+        /// </summary>
+        private void carregarTipus()
+        {
             var llistaTipus = context.Types.ToList();
             cmbTipus.DisplayMemberPath = "TypeName";
             cmbTipus.SelectedValuePath = "TypeId";
             cmbTipus.ItemsSource = llistaTipus;
+        }
 
+        /// <summary>
+        /// Mètode per carregar els pokémon des de la base de dades i els entra a la llista lsvPokedex, .
+        /// </summary>
+        private void carregarPokemons()
+        {
+            var pokemons = context.Pokemons
+                                              .Include(p => p.PokemonTypes)
+                                              .ThenInclude(pt => pt.Type)
+                                              .ToList();
+            lsvPokedex.ItemsSource = pokemons;
             lsvPokedex.SelectedIndex = 0;
+
+
         }
 
         private void btnNetejaFiltres_Click(object sender, RoutedEventArgs e)

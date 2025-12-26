@@ -11,6 +11,8 @@ public partial class Type
 
     public int? DamageTypeId { get; set; }
 
+    public string? Color { get; set; }
+
     public virtual ICollection<Move> Moves { get; set; } = new List<Move>();
 
     public virtual ICollection<PokemonType> PokemonTypes { get; set; } = new List<PokemonType>();

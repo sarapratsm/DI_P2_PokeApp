@@ -7,6 +7,7 @@ namespace PokeData.Models;
 
 public partial class AppDbContext : DbContext
 {
+    //dotnet ef dbcontext scaffold “Server=localhost;Database=pokemon;Port=3306;UID=root;Password=;” Pomelo.EntityFrameworkCore.MySQL -o Models -c AppDbContext -f
     public AppDbContext()
     {
     }
@@ -426,6 +427,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.TypeId)
                 .HasColumnType("int(11)")
                 .HasColumnName("type_id");
+            entity.Property(e => e.Color)
+                .HasMaxLength(7)
+                .HasColumnName("color");
             entity.Property(e => e.DamageTypeId)
                 .HasColumnType("int(11)")
                 .HasColumnName("damage_type_id");
