@@ -27,7 +27,7 @@ namespace PokeUI.Pagines
     public partial class LlistaPrincipal : Page
     {
         private AppDbContext context = new AppDbContext();
-        Pokemon selectedPokemon;
+        //Pokemon selectedPokemon;
 
 
         public LlistaPrincipal()
@@ -73,6 +73,8 @@ namespace PokeUI.Pagines
             var pokemons = context.Pokemons
                                               .Include(p => p.PokemonTypes)
                                               .ThenInclude(pt => pt.Type)
+                                              .Include(p => p.BaseStat)
+                                              .Include(p => p.PokemonAbilities).ThenInclude(pa => pa.Abil)
                                               .ToList();
             lsvPokedex.ItemsSource = pokemons;
             lsvPokedex.SelectedIndex = 0;
@@ -87,8 +89,8 @@ namespace PokeUI.Pagines
 
         private void lsvPokedex_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selectedPokemon = lsvPokedex.SelectedItem as Pokemon;
-            MasterDetail.ThePokemon = selectedPokemon;
+            //selectedPokemon = lsvPokedex.SelectedItem as Pokemon;
+            //MasterDetail.ThePokemon = selectedPokemon;
         }
     }
 }

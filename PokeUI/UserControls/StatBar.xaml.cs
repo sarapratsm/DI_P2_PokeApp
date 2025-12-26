@@ -21,50 +21,27 @@ using System.Windows.Shapes;
 namespace PokeUI.UserControls
 {
 
-    //[DependencyProperty<int>("Min", DefaultValue = 0, Description = "Min value", OnChanged = "OnMinChanged")]
-    //[DependencyProperty<int>("Max", DefaultValue = 255, Description = "Max value", OnChanged = "OnMaxChanged")]
-    [DependencyProperty<int>("Valor", DefaultValue = 0, Description = "El valor", OnChanged = "ValorChanged")]
+    [DependencyProperty<int>("Valor", DefaultValue = 0, Description = "El valor")]
+    [DependencyProperty<string>("StatText", DefaultValue = null, Description = "La estadistica associada")]
 
     /// <summary>
     /// Lógica de interacción para StatBar.xaml
     /// </summary>
     public partial class StatBar : UserControl
     {
-        private const int MIN = 0;
-        private const int MAX = 255;
+        //private const int MIN = 0;
+        //private const int MAX = 255;
         public StatBar()
         {
             InitializeComponent();
         }
 
-        //public void OnMinChanged(int old, int newValue)
+        ///No utilitzem aquest mètode perquè trenca el binding! Confiem en que la ProgressBar aplica Minim i Maxim autonomament
+        //public void ValorChanged()
         //{
-        //    if (Min >= Max)
-        //    {
-        //        Min = Max - 1;
-        //    }
-        //    ValorChanged();
+        //    Valor = Math.Clamp(Valor, MIN, MAX);
         //}
 
-        //public void OnMaxChanged(int old, int newValue)
-        //{
-        //    if (Min >= Max)
-        //    {
-        //        Max = Min + 1;
-        //    }
-        //    ValorChanged();
-        //}
-
-
-        public void ValorChanged()
-        {
-            Valor = Math.Clamp(Valor, MIN, MAX);
-            crearBarra();
-        }
-
-        private void crearBarra()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

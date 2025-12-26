@@ -34,6 +34,9 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <uc:FitxaCompleta x:Name="MasterDetail" ThePokemon="{Binding ElementName=lsvPokedex, Path=SelectedItem}" Grid.Column="1" Grid.Row="1"/>
+        <uc:FitxaCompleta x:Name="MasterDetail" 
+                  Grid.Column="1" 
+                  Grid.Row="1"
+                  ThePokemon="{Binding ElementName=lsvPokedex, Path=SelectedItem}" />
     </Grid>
 </Page>

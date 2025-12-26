@@ -5,8 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PokeUI.UserControls"
              mc:Ignorable="d" 
+             x:Name="Stat"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid Margin="5,0,0,3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="45"/>
+            <ColumnDefinition Width="255"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding ElementName=Stat, Path=StatText}" 
+                       Width="60" FontWeight="Bold" VerticalAlignment="Center"
+                   Grid.Column="0"/>
+
+        <ProgressBar Value="{Binding ElementName=Stat, Path=Valor}" 
+                         Maximum="255" Minimum="0" 
+                         Height="20" Width="200"
+                         Foreground="Green" 
+                     Grid.Column="1"/>
+
+        <TextBlock Text="{Binding ElementName=Stat, Path=Valor}"
+                   Foreground="LightGray" Grid.Column="1" Margin="35,0,0,0" VerticalAlignment="Center"></TextBlock>
+
     </Grid>
 </UserControl>

@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              Background="LightGreen"
              d:DesignHeight="500" d:DesignWidth="500">
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"></RowDefinition>
@@ -21,8 +21,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Border BorderBrush="Gray" BorderThickness="2" Background="white" >
-                    <Image Source="{Binding ElementName=Fitxa, Path=ThePokemon.PokImage}" Height="150" Grid.Column="0"/>
+                <Border BorderBrush="Gray" BorderThickness="2" Background="white" MaxHeight="300">
+                    <Image Source="{Binding ElementName=Fitxa, Path=ThePokemon.PokImage}" Grid.Column="0"/>
                 </Border>
 
 
@@ -54,9 +54,30 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="5,0,0,0" Text="Abilities: " FontWeight="SemiBold"/>
-                            <TextBlock Margin="5,0,0,0" Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokemonAbilities}"/>
+                            <ItemsControl Margin="5,0,0,0" ItemsSource="{Binding ElementName=Fitxa, Path=ThePokemon.PokemonAbilities}">
+                                <!--Com que pot haver mes duna habilitat necessitem un itemscontorl-->
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Abil.AbilName}" Margin="0,10,0,0"></TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                
+                            </ItemsControl>
                         </StackPanel>
-                        
+
+                        <local:StatBar StatText="HP:"       Valor="{Binding ElementName=Fitxa, Path=ThePokemon.BaseStat.BHp}"/>
+                        <local:StatBar StatText="Attack:"   Valor="{Binding ElementName=Fitxa, Path=ThePokemon.BaseStat.BAtk}"/>
+                        <local:StatBar StatText="Defense:"  Valor="{Binding ElementName=Fitxa, Path=ThePokemon.BaseStat.BDef}"/>
+                        <local:StatBar StatText="SpAtk:"    Valor="{Binding ElementName=Fitxa, Path=ThePokemon.BaseStat.BSpAtk}"/>
+                        <local:StatBar StatText="SpDef:"    Valor="{Binding ElementName=Fitxa, Path=ThePokemon.BaseStat.BSpDef}"/>
+                        <local:StatBar StatText="Speed;"    Valor="{Binding ElementName=Fitxa, Path=ThePokemon.BaseStat.BSpeed}"/>
+
+
                     </StackPanel>
                 </Grid>
 
