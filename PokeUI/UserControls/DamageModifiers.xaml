@@ -21,31 +21,37 @@
                        Foreground="Black"
                    Margin="5"/>
 
+            <StackPanel x:Name="stkTypes" Grid.Column="1"></StackPanel>
             <ListBox x:Name="lsbTipus" Grid.Column="1"
-                     ItemsSource="{Binding ElementName=Root, Path=TypeList}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Disabled">
+         ItemsSource="{Binding ElementName=Root, Path=TypeList}"
+         BorderThickness="0" 
+         Background="Transparent"
+         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+         ScrollViewer.VerticalScrollBarVisibility="Disabled">
+
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="3" Columns="2"/>
+                        <WrapPanel Orientation="Horizontal" Width="168"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="Black" 
-                            CornerRadius="3" 
-                            Margin="0,0,5,5" 
-                            Padding="10,4">
+                        <Border Background="{Binding Color}" 
+                    CornerRadius="3" 
+                    Margin="2" 
+                    Padding="10,4"
+                    MinWidth="70">
                             <TextBlock Text="{Binding TypeName}" 
-                                   Foreground="{Binding Color}" 
-                                   FontWeight="SemiBold" 
-                                   FontSize="12"/>
+                           Foreground="White" 
+                           FontWeight="SemiBold" 
+                           FontSize="11"
+                           HorizontalAlignment="Center"/>
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
-    </Grid>
+
+        </Grid>
     </Border>
 </UserControl>

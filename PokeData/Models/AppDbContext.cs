@@ -7,7 +7,6 @@ namespace PokeData.Models;
 
 public partial class AppDbContext : DbContext
 {
-    //dotnet ef dbcontext scaffold “Server=localhost;Database=pokemon;Port=3306;UID=root;Password=;” Pomelo.EntityFrameworkCore.MySQL -o Models -c AppDbContext -f
     public AppDbContext()
     {
     }
@@ -460,6 +459,16 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.DamageFactor)
                 .HasColumnType("int(11)")
                 .HasColumnName("damage_factor");
+
+            entity.HasOne(d => d.DamageType).WithMany(p => p.TypeEfficacyDamageTypes)
+                .HasForeignKey(d => d.DamageTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_type_efficacy_damage_type");
+
+            entity.HasOne(d => d.TargetType).WithMany(p => p.TypeEfficacyTargetTypes)
+                .HasForeignKey(d => d.TargetTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_type_efficacy_target_type");
         });
 
         modelBuilder.Entity<VersionGroup>(entity =>

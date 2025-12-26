@@ -10,4 +10,8 @@ public partial class TypeEfficacy
     public int TargetTypeId { get; set; }
 
     public int DamageFactor { get; set; }
+
+    public virtual Type DamageType { get; set; } = null!;
+
+    public virtual Type TargetType { get; set; } = null!;
 }

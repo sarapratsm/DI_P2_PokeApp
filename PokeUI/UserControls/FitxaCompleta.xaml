@@ -4,55 +4,93 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PokeUI.UserControls"
-             x:Name="Root"
+             Loaded="Fitxa_Loaded"
+             x:Name="Fitxa"
 
              mc:Ignorable="d" 
              Background="LightGreen"
-             d:DesignHeight="800" d:DesignWidth="500">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid x:Name="grdTop" Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Border BorderBrush="Gray" BorderThickness="2" Background="white">
-                <Image Source="{Binding ElementName=Root, Path=ThePokemon.PokImage}" Height="150" Grid.Column="0"/>
-            </Border>
+             d:DesignHeight="500" d:DesignWidth="500">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid x:Name="grdTop" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border BorderBrush="Gray" BorderThickness="2" Background="white" >
+                    <Image Source="{Binding ElementName=Fitxa, Path=ThePokemon.PokImage}" Height="150" Grid.Column="0"/>
+                </Border>
 
 
 
-            <Grid Grid.Column="1">
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Background="DarkGreen" Padding="10" >
+                        <TextBlock Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokName, FallbackValue=Charmander}" 
+                       Foreground="White" FontSize="24" FontWeight="Bold"/>
+                    </Border>
+
+                    <StackPanel Grid.Row="1">
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5,5,0,0" Text="Height: " FontWeight="SemiBold"/>
+                            <TextBlock Margin="5,5,0,0"  Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokHeight}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5,0,0,0" Text="Weight: " FontWeight="SemiBold"/>
+                            <TextBlock Margin="5,0,0,0" Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokWeight}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5,0,0,0" Text="Base Experience: " FontWeight="SemiBold"/>
+                            <TextBlock Margin="5,0,0,0" Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokBaseExperience}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="5,0,0,0" Text="Abilities: " FontWeight="SemiBold"/>
+                            <TextBlock Margin="5,0,0,0" Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokemonAbilities}"/>
+                        </StackPanel>
+                        
+                    </StackPanel>
+                </Grid>
+
+
+            </Grid>
+            <Grid x:Name="grdBottom" Grid.Row="1">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border Background="DarkGreen" Padding="10" >
-                    <TextBlock Text="{Binding ElementName=Root, Path=ThePokemon.PokName, FallbackValue=Charmander}" 
-                       Foreground="White" FontSize="24" FontWeight="Bold"/>
+                <Border Background="DarkGreen" Padding="10" Grid.Row="0">
+                    <TextBlock Text="Damage Modifiers" 
+       Foreground="White" FontSize="24"  HorizontalAlignment="Center"/>
                 </Border>
 
-                <StackPanel Grid.Row="1" Margin="10">
+                <ScrollViewer Grid.Row="1" 
+              HorizontalScrollBarVisibility="Auto" 
+              VerticalScrollBarVisibility="Disabled"
+              Margin="0,10">
+                    <StackPanel x:Name="stkDamageModifiers" 
+                Orientation="Horizontal">
+                    </StackPanel>
 
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Height: "/>
-                        <TextBlock Text="{Binding ElementName=Root, Path=ThePokemon.PokHeight}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Weight: "/>
-                        <TextBlock Text="{Binding ElementName=Root, Path=ThePokemon.PokWeight}"/>
-                    </StackPanel>
-                </StackPanel>
+                </ScrollViewer>
+
+                <Border Background="DarkGreen" Padding="10"  Grid.Row="2">
+                    <TextBlock Text="Evolutions" 
+       Foreground="White" FontSize="24"  HorizontalAlignment="Center"/>
+                </Border>
+                <local:Evolutions Grid.Row="3" x:Name="evolutions"/>
             </Grid>
-
-
         </Grid>
-        <Grid x:Name="grdBottom" Grid.Row="1">
-
-        </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

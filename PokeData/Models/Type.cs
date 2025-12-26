@@ -16,4 +16,8 @@ public partial class Type
     public virtual ICollection<Move> Moves { get; set; } = new List<Move>();
 
     public virtual ICollection<PokemonType> PokemonTypes { get; set; } = new List<PokemonType>();
+
+    public virtual ICollection<TypeEfficacy> TypeEfficacyDamageTypes { get; set; } = new List<TypeEfficacy>();
+
+    public virtual ICollection<TypeEfficacy> TypeEfficacyTargetTypes { get; set; } = new List<TypeEfficacy>();
 }

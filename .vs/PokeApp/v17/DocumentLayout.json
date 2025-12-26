@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\usercontrols\\fitxacompleta.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\usercontrols\\fitxacompleta.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\usercontrols\\fitxareduida.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\usercontrols\\fitxareduida.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\usercontrols\\fitxareduida.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\usercontrols\\fitxareduida.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\usercontrols\\fitxacompleta.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\usercontrols\\fitxacompleta.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\usercontrols\\damagemodifiers.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\usercontrols\\damagemodifiers.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -11,28 +27,8 @@
       "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\usercontrols\\damagemodifiers.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\usercontrols\\fitxareduida.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\usercontrols\\fitxareduida.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokeui\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{A9B5CBD2-3622-43AE-B565-411B4D69DDD6}|PokeUI\\PokeUI.csproj|solutionrelative:pokeui\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokedata\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|solutionrelative:pokedata\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokedata\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|solutionrelative:pokedata\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokedata\\models\\type.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|solutionrelative:pokedata\\models\\type.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|d:\\dam2\\interficies\\practiques_interficies\\pokeapp\\pokedata\\models\\pokemontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{477BD390-7EA0-4DFF-89C6-F2C3F33C3233}|PokeData\\PokeData.csproj|solutionrelative:pokedata\\models\\pokemontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,104 +50,89 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "FitxaReduida.xaml.cs",
-              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaReduida.xaml.cs",
-              "RelativeDocumentMoniker": "PokeUI\\UserControls\\FitxaReduida.xaml.cs",
-              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaReduida.xaml.cs",
-              "RelativeToolTip": "PokeUI\\UserControls\\FitxaReduida.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T13:20:32.493Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\MainWindow.xaml",
               "RelativeDocumentMoniker": "PokeUI\\MainWindow.xaml",
               "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\MainWindow.xaml",
               "RelativeToolTip": "PokeUI\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-12-26T12:50:59.301Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Models\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "PokeData\\Models\\AppDbContext.cs",
-              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Models\\AppDbContext.cs",
-              "RelativeToolTip": "PokeData\\Models\\AppDbContext.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAqwDwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T12:49:54.142Z",
+              "WhenOpened": "2025-12-26T22:34:15Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "Class1.cs",
-              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Class1.cs",
-              "RelativeDocumentMoniker": "PokeData\\Class1.cs",
-              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Class1.cs",
-              "RelativeToolTip": "PokeData\\Class1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T12:49:23.591Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Type.cs",
-              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Models\\Type.cs",
-              "RelativeDocumentMoniker": "PokeData\\Models\\Type.cs",
-              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Models\\Type.cs",
-              "RelativeToolTip": "PokeData\\Models\\Type.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T12:46:55.557Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "PokemonType.cs",
-              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Models\\PokemonType.cs",
-              "RelativeDocumentMoniker": "PokeData\\Models\\PokemonType.cs",
-              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeData\\Models\\PokemonType.cs",
-              "RelativeToolTip": "PokeData\\Models\\PokemonType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T12:43:21.026Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "DamageModifiers.xaml.cs",
               "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\DamageModifiers.xaml.cs",
               "RelativeDocumentMoniker": "PokeUI\\UserControls\\DamageModifiers.xaml.cs",
               "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\DamageModifiers.xaml.cs",
               "RelativeToolTip": "PokeUI\\UserControls\\DamageModifiers.xaml.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAQwDUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACsAAAAAAAAAAAAAwGwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T12:26:23.63Z",
+              "WhenOpened": "2025-12-26T22:23:35.187Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "DamageModifiers.xaml",
               "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\DamageModifiers.xaml",
               "RelativeDocumentMoniker": "PokeUI\\UserControls\\DamageModifiers.xaml",
               "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\DamageModifiers.xaml",
               "RelativeToolTip": "PokeUI\\UserControls\\DamageModifiers.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-12-26T12:25:58.462Z",
+              "WhenOpened": "2025-12-26T22:23:32.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FitxaReduida.xaml",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaReduida.xaml",
+              "RelativeDocumentMoniker": "PokeUI\\UserControls\\FitxaReduida.xaml",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaReduida.xaml",
+              "RelativeToolTip": "PokeUI\\UserControls\\FitxaReduida.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-26T22:21:54.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FitxaReduida.xaml.cs",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaReduida.xaml.cs",
+              "RelativeDocumentMoniker": "PokeUI\\UserControls\\FitxaReduida.xaml.cs",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaReduida.xaml.cs",
+              "RelativeToolTip": "PokeUI\\UserControls\\FitxaReduida.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-26T22:21:54.158Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FitxaCompleta.xaml.cs",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaCompleta.xaml.cs",
+              "RelativeDocumentMoniker": "PokeUI\\UserControls\\FitxaCompleta.xaml.cs",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaCompleta.xaml.cs",
+              "RelativeToolTip": "PokeUI\\UserControls\\FitxaCompleta.xaml.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAAAGQAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-26T22:00:16.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FitxaCompleta.xaml",
+              "DocumentMoniker": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaCompleta.xaml",
+              "RelativeDocumentMoniker": "PokeUI\\UserControls\\FitxaCompleta.xaml",
+              "ToolTip": "D:\\DAM2\\Interficies\\practiques_interficies\\PokeApp\\PokeUI\\UserControls\\FitxaCompleta.xaml",
+              "RelativeToolTip": "PokeUI\\UserControls\\FitxaCompleta.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-26T22:00:15.364Z",
               "EditorCaption": ""
             }
           ]
