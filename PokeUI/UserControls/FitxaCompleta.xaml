@@ -54,7 +54,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="5,0,0,0" Text="Abilities: " FontWeight="SemiBold"/>
-                            <ItemsControl Margin="5,0,0,0" ItemsSource="{Binding ElementName=Fitxa, Path=ThePokemon.PokemonAbilities}">
+                            <ItemsControl Margin="5,0,0,5" ItemsSource="{Binding ElementName=Fitxa, Path=ThePokemon.PokemonAbilities}">
                                 <!--Com que pot haver mes duna habilitat necessitem un itemscontorl-->
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -63,7 +63,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Abil.AbilName}" Margin="0,10,0,0"></TextBlock>
+                                        <TextBlock Text="{Binding Abil.AbilName}" Margin="10,0,0,0"></TextBlock>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                                 
@@ -91,21 +91,21 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
+                <!--DamageModifiers-->
                 <Border Background="DarkGreen" Padding="10" Grid.Row="0">
                     <TextBlock Text="Damage Modifiers" 
-       Foreground="White" FontSize="24"  HorizontalAlignment="Center"/>
+                               Foreground="White" FontSize="24"  
+                               HorizontalAlignment="Center"/>
                 </Border>
 
                 <ScrollViewer Grid.Row="1" 
-              HorizontalScrollBarVisibility="Auto" 
-              VerticalScrollBarVisibility="Disabled"
-              Margin="0,10">
-                    <StackPanel x:Name="stkDamageModifiers" 
-                Orientation="Horizontal">
-                    </StackPanel>
-
+                              HorizontalScrollBarVisibility="Auto" 
+                              VerticalScrollBarVisibility="Disabled"
+                              Margin="0,10">
+                    <StackPanel x:Name="stkDamageModifiers" Orientation="Horizontal"/>
                 </ScrollViewer>
 
+                <!--Evolutions-->
                 <Border Background="DarkGreen" Padding="10"  Grid.Row="2">
                     <TextBlock Text="Evolutions" 
        Foreground="White" FontSize="24"  HorizontalAlignment="Center"/>
