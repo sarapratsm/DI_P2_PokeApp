@@ -95,15 +95,11 @@ namespace PokeUI.UserControls
 
             foreach (var grupo in gruposParaPintar)
             {
-                // Instanciamos TU control personalizado
                 var damageControl = new DamageModifiers();
-
                 // Le ponemos el texto: x4, x2, x0.25...
                 damageControl.MultiplierText = "x" + grupo.Key.ToString("0.##");
-
                 // Le pasamos la lista de tipos de ese grupo (para que pinte las chapitas)
                 damageControl.TypeList = grupo.Select(x => x.TipoAtacante).ToList();
-
                 //Enxufar els DamageModifiers al stkDamageModifiers
                 stkDamageModifiers.Children.Add(damageControl);
             }
