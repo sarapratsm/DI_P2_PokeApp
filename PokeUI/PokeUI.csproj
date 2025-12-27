@@ -29,9 +29,9 @@
     <Resource Include="Imatges\TheAmazingPokedex (1).png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imatges\TheAmazingPokedex (2).png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <SplashScreen Include="Imatges\TheAmazingPokedex (2).png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </SplashScreen>
   </ItemGroup>
 
   <ItemGroup>
