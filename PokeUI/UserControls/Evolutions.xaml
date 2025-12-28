@@ -21,7 +21,8 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
 
-                    <StackPanel Margin="15,5" Cursor="Hand" MouseLeftButtonUp="Pokemon_Click">
+                    <StackPanel Margin="15,5" >
+                        <!--Cursor="Hand" MouseLeftButtonUp="Pokemon_Click"-->
 
                         <Grid>
                             <Border Width="80" Height="80" CornerRadius="40" Background="#DDD" Margin="2,2,-2,-2"/>
