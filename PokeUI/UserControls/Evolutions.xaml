@@ -5,8 +5,64 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PokeUI.UserControls"
              mc:Ignorable="d" 
+             x:Name="Evos"
+             Loaded="Evos_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <ItemsControl ItemsSource="{Binding ElementName=Evos, Path=EvolutionChain}">
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="15,5" Cursor="Hand">
+
+                        <Grid>
+                            <Border Width="80" Height="80" CornerRadius="40" Background="#DDD" Margin="2,2,-2,-2"/>
+
+                            <Border x:Name="bdrCircle" 
+                                    Width="80" Height="80" 
+                                    CornerRadius="40" 
+                                    Background="White" 
+                                    BorderBrush="#DDD" 
+                                    BorderThickness="2">
+                                <Image Source="{Binding PokImage}" Margin="10"/>
+                            </Border>
+
+                            <Border x:Name="bdrIndicator" 
+                                    Width="20" Height="20" 
+                                    CornerRadius="10" 
+                                    Background="#4CAF50" 
+                                    BorderBrush="White" BorderThickness="2"
+                                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                    Visibility="Collapsed"/>
+                        </Grid>
+
+                        <TextBlock Text="{Binding PokName}" 
+                                   HorizontalAlignment="Center" 
+                                   FontWeight="SemiBold" 
+                                   Margin="0,5,0,0"
+                                   Foreground="#333"/>
+
+                        <TextBlock Text="{Binding PokId, StringFormat='#{0}'}" 
+                                   HorizontalAlignment="Center" 
+                                   FontSize="10" 
+                                   Foreground="Gray"/>
+
+                    </StackPanel>
+
+                    <DataTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bdrCircle" Property="BorderBrush" Value="#2196F3"/>
+                            <Setter TargetName="bdrCircle" Property="Background" Value="#E3F2FD"/>
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>
