@@ -19,7 +19,7 @@ using System.Collections.ObjectModel;
 
 namespace PokeUI.UserControls
 {
-    [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon")]
+    [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon", OnChanged ="OnThePokemonChanged")]
     [DependencyProperty<ObservableCollection<Pokemon>>("EvolutionChain", Category = "OC", Description = "Cadena Evolutiva")]
 
     /// <summary>
@@ -36,6 +36,11 @@ namespace PokeUI.UserControls
         }
 
         private void Evos_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        public void OnThePokemonChanged()
         {
             if (ThePokemon == null) return;
             CarregarEvolucions();
