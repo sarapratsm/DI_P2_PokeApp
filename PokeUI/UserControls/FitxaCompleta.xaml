@@ -39,7 +39,6 @@
                     </Border>
 
                     <StackPanel Grid.Row="1">
-
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Margin="5,5,0,0" Text="Height: " FontWeight="SemiBold"/>
                             <TextBlock Margin="5,5,0,0"  Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokHeight}"/>

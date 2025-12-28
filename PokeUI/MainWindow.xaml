@@ -75,6 +75,7 @@
                    Grid.Row="1" 
                    Grid.Column="1"
                    NavigationUIVisibility="Hidden" 
-                   Background="White"/>
+                   Background="White"
+               Navigated="frm_Navigated"/>
     </Grid>
 </Window>

@@ -18,9 +18,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DependencyPropertyGenerator;
 
 namespace PokeUI.Pagines
 {
+    [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon", OnChanged = "OnThePokemonChanged")]
+
     /// <summary>
     /// Lógica de interacción para LlistaPrincipal.xaml
     /// </summary>
@@ -89,8 +92,12 @@ namespace PokeUI.Pagines
 
         private void lsvPokedex_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //selectedPokemon = lsvPokedex.SelectedItem as Pokemon;
-            //MasterDetail.ThePokemon = selectedPokemon;
+            ThePokemon = lsvPokedex.SelectedItem as Pokemon;
+        }
+
+        public void OnThePokemonChanged()
+        {
+
         }
     }
 }
