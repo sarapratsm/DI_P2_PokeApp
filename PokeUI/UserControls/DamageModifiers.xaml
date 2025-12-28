@@ -21,13 +21,13 @@
                        Foreground="Black"
                    Margin="5"/>
 
-            <StackPanel x:Name="stkTypes" Grid.Column="1"></StackPanel>
+            <!--<StackPanel x:Name="stkTypes" Grid.Column="1"></StackPanel>-->
             <ListBox x:Name="lsbTipus" Grid.Column="1"
-         ItemsSource="{Binding ElementName=Root, Path=TypeList}"
-         BorderThickness="0" 
-         Background="Transparent"
-         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-         ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                 ItemsSource="{Binding ElementName=Root, Path=TypeList}"
+                 BorderThickness="0" 
+                 Background="Transparent"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
 
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

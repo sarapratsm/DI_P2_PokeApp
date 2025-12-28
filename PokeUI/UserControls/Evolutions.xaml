@@ -8,6 +8,7 @@
              x:Name="Evos"
              Loaded="Evos_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid>
         <ItemsControl ItemsSource="{Binding ElementName=Evos, Path=EvolutionChain}">
 
@@ -19,7 +20,8 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="15,5" Cursor="Hand">
+
+                    <StackPanel Margin="15,5" Cursor="Hand" MouseLeftButtonUp="Pokemon_Click">
 
                         <Grid>
                             <Border Width="80" Height="80" CornerRadius="40" Background="#DDD" Margin="2,2,-2,-2"/>
@@ -40,6 +42,7 @@
                                     BorderBrush="White" BorderThickness="2"
                                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                                     Visibility="Collapsed"/>
+
                         </Grid>
 
                         <TextBlock Text="{Binding PokName}" 
@@ -52,7 +55,6 @@
                                    HorizontalAlignment="Center" 
                                    FontSize="10" 
                                    Foreground="Gray"/>
-
                     </StackPanel>
 
                     <DataTemplate.Triggers>

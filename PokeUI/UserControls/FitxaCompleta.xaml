@@ -110,7 +110,12 @@
                     <TextBlock Text="Evolutions" 
        Foreground="White" FontSize="24"  HorizontalAlignment="Center"/>
                 </Border>
+<<<<<<< HEAD
                 <local:Evolutions Grid.Row="3" x:Name="evolutions" ThePokemon="{Binding ElementName=Fitxa, Path=ThePokemon}"/>
+=======
+                <local:Evolutions Grid.Row="3" x:Name="evolutions"
+                                  ThePokemon="{Binding ElementName=Fitxa, Path=ThePokemon}"/>
+>>>>>>> 8d86b033637667f410cdd0ce56677e06909b0124
             </Grid>
         </Grid>
     </ScrollViewer>
