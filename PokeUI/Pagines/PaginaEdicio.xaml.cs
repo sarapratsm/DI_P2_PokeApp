@@ -24,6 +24,7 @@ namespace PokeUI.Pagines
     /// </summary>
     public partial class PaginaEdicio : Page
     {
+        AppDbContext context = new AppDbContext();
         public PaginaEdicio()
         {
             InitializeComponent();
@@ -42,6 +43,22 @@ namespace PokeUI.Pagines
                 Els camps numèrics han de validar-se dins un rang raonable.
                 Si hi ha qualsevol camp erroni, el botó desar es deshabilita i es mostra el fons del Textbox de color
                 vermell suau.*/
+        }
+
+        
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Utils.Carregas.carregarTipus(context, cmbType1);
+            
+            //Utils.Carregas.carregarTipus(context, cmbType2);
+            
+            
+        }
+
+        private void cmbType1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

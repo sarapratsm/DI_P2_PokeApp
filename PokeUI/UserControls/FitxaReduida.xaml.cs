@@ -44,26 +44,21 @@ namespace PokeUI.UserControls
 
         private void generarEtiquetesTipus()
         {
-            // A. Limpiamos las etiquetas del Pokémon anterior
             stkTypes.Children.Clear();
 
             if (ThePokemon.PokemonTypes == null) return;
 
-            // B. Para cada tipo, creamos los controles visuales
             foreach (var pt in ThePokemon.PokemonTypes)
             {
                 if (pt.Type == null) continue;
 
-                // --- 1. Crear el Borde (La "chapita") ---
                 Border borde = new Border();
                 borde.CornerRadius = new CornerRadius(3);
                 borde.Margin = new Thickness(0, 0, 5, 0);
                 borde.Padding = new Thickness(8, 2, 8, 2);
 
-                // --- 2. Asignar el Color desde la BD ---
                 try
                 {
-                    // Si el color viene como Hexadecimal ("#FF0000" o "Red")
                     if (!string.IsNullOrEmpty(pt.Type.Color))
                     {
                         var converter = new BrushConverter();
@@ -79,14 +74,12 @@ namespace PokeUI.UserControls
                     borde.Background = Brushes.Gray; // Fallback si el formato del color es inválido
                 }
 
-                // --- 3. Crear el Texto ---
                 TextBlock texto = new TextBlock();
                 texto.Text = pt.Type.TypeName; // El nombre del tipo
                 texto.Foreground = Brushes.White;
                 texto.FontSize = 11;
                 texto.FontWeight = FontWeights.SemiBold;
 
-                // --- 4. Ensamblar ---
                 borde.Child = texto;          // Meter texto en borde
                 stkTypes.Children.Add(borde); // Meter borde en el panel XAML
             }

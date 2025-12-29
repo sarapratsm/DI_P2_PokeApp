@@ -22,8 +22,8 @@
         </Grid.RowDefinitions>
         <Image Source="/Imatges/Ball-Pokedex.png" Height="50"></Image>
         <StackPanel Orientation="Horizontal" x:Name="stpFiltres" Grid.Column="1">
-            <TextBox Width="150" Margin="10"></TextBox>
-            <ComboBox x:Name="cmbTipus" Margin="10"/>
+            <TextBox x:Name="txbFiltreNom" Width="150" Margin="10" TextChanged="TextBox_TextChanged"></TextBox>
+            <ComboBox x:Name="cmbTipus" Margin="10" Width="100" SelectionChanged="cmbTipus_SelectionChanged" />
             <Button x:Name="btnNetejaFiltres"  Click="btnNetejaFiltres_Click" Style="{StaticResource PokedexButtonStyle}">Neteja</Button>
         </StackPanel>
         <ListView x:Name="lsvPokedex" Grid.Row="2" HorizontalContentAlignment="Stretch" SelectionChanged="lsvPokedex_SelectionChanged">

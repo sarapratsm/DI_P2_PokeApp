@@ -1,11 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <None Remove="Imatges\avatar.ico" />
     <None Remove="Imatges\Ball-Pokedex.png" />
     <None Remove="Imatges\pokeball.png" />
     <None Remove="Imatges\Pokedex.png" />
+    <None Remove="Imatges\Pokeicon.ico" />
     <None Remove="Imatges\TheAmazingPokedex %281%29.png" />
     <None Remove="Imatges\TheAmazingPokedex %282%29.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Imatges\avatar.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Imatges\Pokeicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

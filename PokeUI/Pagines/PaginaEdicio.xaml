@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:PokeUI.Pagines" xmlns:uc="clr-namespace:PokeUI.UserControls"
       mc:Ignorable="d" 
       x:Name="Page"
-      
+      Loaded="Page_Loaded"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PaginaEdicio">
 
@@ -20,7 +20,7 @@
         <Grid x:Name="grdEsquerra" Grid.Column="0" Background="White" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -36,6 +36,9 @@
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
@@ -59,18 +62,34 @@
 
 
                 <TextBlock Margin="5,0,0,0" Text="Image: " FontWeight="SemiBold" Grid.Column="0" Grid.Row="3"/>
-                <TextBox Margin="5,0,0,0" Grid.ColumnSpan="3" Grid.Row="4" Text="{Binding ElementName=Page, Path=ThePokemon.PokImage, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Margin="5,5,0,5" Grid.ColumnSpan="3" Grid.Row="4" Text="{Binding ElementName=Page, Path=ThePokemon.PokImage, UpdateSourceTrigger=PropertyChanged}"/>
 
+                <TextBlock  Grid.Column="0" Grid.Row="5" Text="Type: " FontWeight="SemiBold" Margin="5,0,0,0"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
+                    <ComboBox Width="80" x:Name="cmbType1"
+                              IsEditable="True"
+                              IsTextSearchEnabled="True" 
+                              SelectionChanged="cmbType1_SelectionChanged"
+                              />
+                </StackPanel>
+                
+                <TextBlock  Grid.Column="0" Grid.Row="6" Text="Abilities: " FontWeight="SemiBold" Margin="5,0,0,0"/>
+                
+                
             </Grid>
 
             <!--PkmName here-->
-            <Border Background="LightGreen" Padding="10" Grid.ColumnSpan="2" Margin="0,5,10,5" BorderThickness="5" BorderBrush="Green">
-                <TextBlock Text="{Binding ElementName=Page, Path=ThePokemon.PokName, FallbackValue=Charmander}" 
-   FontSize="24" FontWeight="SemiBold"/>
+            <Border Background="DarkGreen" Padding="10" Grid.ColumnSpan="2" Margin="0,5,10,5" BorderThickness="5" BorderBrush="Green">
+                <StackPanel Orientation="Horizontal">
+                    
+                    <Image Source="/Imatges/pokeball.png" Width="20" Height="20" Margin="10,0,10,0"></Image>
+                    <TextBlock Text="{Binding ElementName=Page, Path=ThePokemon.PokName, FallbackValue=Charmander}" 
+                               Foreground="White" FontSize="24" FontWeight="Bold" />
+                </StackPanel>
             </Border>
 
             <Border Grid.Column="1" Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Background="white" MaxHeight="300" Margin="10">
-                <Image  Source="{Binding ElementName=Page, Path=ThePokemon.PokImage}"></Image>
+                <Image  Source="{Binding ElementName=Page, Path=ThePokemon.PokImage}" Stretch="Uniform"></Image>
             </Border>
 
             <!--UC-->

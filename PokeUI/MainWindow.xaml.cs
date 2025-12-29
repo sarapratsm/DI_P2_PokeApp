@@ -1,4 +1,5 @@
-﻿using PokeUI.Pagines;
+﻿using PokeData.Models;
+using PokeUI.Pagines;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -118,4 +119,6 @@ public partial class MainWindow : Window
     {
         actualitzaBotons();
     }
+
+  
 }

@@ -39,7 +39,7 @@ namespace PokeUI.UserControls
 
         private void calcularDebilitats()
         {
-            throw new NotImplementedException();
+            //Todo
         }
     }
 }

@@ -28,7 +28,8 @@
                 <TextBlock Text="{Binding ElementName=Fitxa, Path=ThePokemon.PokName, FallbackValue=Charmander}" 
                         FontWeight="Bold" FontSize="16" Margin="20,0,0,0"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" x:Name="stkTypes" Margin="0,10,0,0"/>
+            
+            <StackPanel Orientation="Horizontal" x:Name="stkTypes" Margin="0,10,0,0"/> <!--Tipus-->
 
 
         </StackPanel>
