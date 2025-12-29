@@ -33,5 +33,15 @@ namespace PokeUI.Pagines
         {
 
         }
+        
+
+        private void validatePokemon()
+        {
+            /*Tots els camps són obligatoris, i han de tenir un caràcter diferent d’espai com a mínim.
+                Com a mínim, ha de tenir un tipus.
+                Els camps numèrics han de validar-se dins un rang raonable.
+                Si hi ha qualsevol camp erroni, el botó desar es deshabilita i es mostra el fons del Textbox de color
+                vermell suau.*/
+        }
     }
 }
