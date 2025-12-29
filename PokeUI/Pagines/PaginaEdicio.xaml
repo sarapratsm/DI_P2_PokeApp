@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
 
         <!--Esquerra-->
-        <Grid x:Name="grdEsquerra" Grid.Column="0" Background="White">
+        <Grid x:Name="grdEsquerra" Grid.Column="0" Background="White" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="100"/>
@@ -25,10 +25,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             
             <!--Subgrid-->
-            <Grid Grid.Row="0" Margin="10" x:Name="grdAtributs">
+            <Grid Grid.Row="1" Margin="10" x:Name="grdAtributs">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="2*"/>
@@ -75,21 +76,27 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>-->
             </Grid>
+            
+            <!--PkmName here-->
+            <Border Background="LightGreen" Padding="10" Grid.ColumnSpan="2" Margin="0,5,10,5" BorderThickness="5" BorderBrush="Green">
+                <TextBlock Text="{Binding ElementName=Page, Path=ThePokemon.PokName, FallbackValue=Charmander}" 
+   FontSize="24" FontWeight="SemiBold"/>
+            </Border>
 
-            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Background="white" MaxHeight="300" Margin="10">
+            <Border Grid.Column="1" Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Background="white" MaxHeight="300" Margin="10">
                 <Image  Source="{Binding ElementName=Page, Path=ThePokemon.PokImage}"></Image>
             </Border>
 
         </Grid>
         <!--Dreta-->
         <Grid x:Name="grdDreta" Grid.Column="1" Background="LightGreen">
-            <StackPanel>
-                <uc:SlidingStatBar StatText="HP:"       Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BHp}"/>
-                <uc:SlidingStatBar StatText="Attack:"   Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BAtk}"/>
-                <uc:SlidingStatBar StatText="Defense:"  Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BDef}"/>
-                <uc:SlidingStatBar StatText="SpAtk:"    Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpAtk}"/>
-                <uc:SlidingStatBar StatText="SpDef:"    Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpDef}"/>
-                <uc:SlidingStatBar StatText="Speed;"    Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpeed}"/>
+            <StackPanel Margin="10">
+                <uc:SlidingStatBar StatText="HP:"      Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BHp}"/>
+                <uc:SlidingStatBar StatText="Attack:"  Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BAtk}"/>
+                <uc:SlidingStatBar StatText="Defense:" Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BDef}"/>
+                <uc:SlidingStatBar StatText="SpAtk:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpAtk}"/>
+                <uc:SlidingStatBar StatText="SpDef:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpDef}"/>
+                <uc:SlidingStatBar StatText="Speed;"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpeed}"/>
             </StackPanel>
         </Grid>
 

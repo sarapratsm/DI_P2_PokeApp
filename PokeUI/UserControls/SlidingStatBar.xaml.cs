@@ -31,7 +31,7 @@ namespace PokeUI.UserControls
 
         private void SlidingBar_Loaded(object sender, RoutedEventArgs e)
         {
-
+            sld.Value = Valor;
         }
 
         
@@ -39,6 +39,11 @@ namespace PokeUI.UserControls
         private void sld_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Valor = (int) sld.Value;
+        }
+
+        private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -55,14 +55,14 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Button Style="{StaticResource TransparentBackgroundButton}" x:Name="btnBack" Click="btnBack_Click" Content="&#xE72B;" FontFamily="Segoe MDL2 Assets"></Button>
-                        <Button Style="{StaticResource TransparentBackgroundButton}" x:Name="btnEdit" Click="btnEdit_Click" Content="&#xE70F;" FontFamily="Segoe MDL2 Assets"></Button>
-                        <Button Style="{StaticResource TransparentBackgroundButton}" x:Name="btnCancel" Click="btnCancel_Click" Content="&#xE711;" FontFamily="Segoe MDL2 Assets"></Button>
+                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnBack" Click="btnBack_Click" Content="&#xE72B;" FontFamily="Segoe MDL2 Assets"></Button>
+                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0" x:Name="btnEdit" Click="btnEdit_Click" Content="&#xE70F;" FontFamily="Segoe MDL2 Assets"></Button>
+                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnCancel" Click="btnCancel_Click" Content="&#xE711;" FontFamily="Segoe MDL2 Assets"></Button>
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                        <Button Style="{StaticResource TransparentBackgroundButton}" Content="&#xE74E;" Click="btnSave_Click" x:Name="btnSave" FontFamily="Segoe MDL2 Assets"></Button>
-                        <Button Style="{StaticResource TransparentBackgroundButton}" Content="&#xE948;" Click="btnAdd_Click" x:Name="btnAdd" FontFamily="Segoe MDL2 Assets"></Button>
+                        <Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE74E;" Click="btnSave_Click" x:Name="btnSave" FontFamily="Segoe MDL2 Assets"></Button>
+                        <Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE948;" Click="btnAdd_Click" x:Name="btnAdd" FontFamily="Segoe MDL2 Assets"></Button>
 
                     </StackPanel>
                 </Grid>

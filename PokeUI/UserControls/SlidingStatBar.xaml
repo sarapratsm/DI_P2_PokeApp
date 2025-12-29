@@ -14,12 +14,12 @@
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="255"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding ElementName=Stat, Path=StatText}" 
+        <TextBlock Text="{Binding ElementName=Stat, Path=StatText, FallbackValue=Stat}" 
                Width="60" FontWeight="Bold" VerticalAlignment="Center"
            Grid.Column="0"/>
 
-        <TextBlock Text="{Binding ElementName=Stat, Path=Valor}"
-   Foreground="LightGray" Grid.Column="1" Margin="35,0,0,0" VerticalAlignment="Center"></TextBlock>
+        <TextBox Text="{Binding ElementName=Stat, Path=Valor}"
+            Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center"></TextBox>
 
         <Slider  x:Name="sld" Maximum="255" Minimum="0" 
                  Height="20" Width="200"
