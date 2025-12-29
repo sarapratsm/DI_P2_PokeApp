@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PokeUI.Pagines"
-      xmlns:uc="clr-namespace:PokeUI.UserControls"
+      xmlns:uc="clr-namespace:PokeUI.UserControls" 
+      xmlns:ut="clr-namespace:PokeUI.Utils"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Loaded="Page_Loaded"
@@ -22,8 +23,19 @@
         </Grid.RowDefinitions>
         <Image Source="/Imatges/Ball-Pokedex.png" Height="50"></Image>
         <StackPanel Orientation="Horizontal" x:Name="stpFiltres" Grid.Column="1">
-            <TextBox x:Name="txbFiltreNom" Width="150" Margin="10" TextChanged="TextBox_TextChanged"></TextBox>
-            <ComboBox x:Name="cmbTipus" Margin="10" Width="100" SelectionChanged="cmbTipus_SelectionChanged" />
+            <AdornerDecorator>
+                <TextBox x:Name="txbFiltreNom" Width="150" Margin="10" TextChanged="TextBox_TextChanged" >
+                    <ut:WatermarkService.Watermark>
+                        <TextBlock>Nom o codi</TextBlock>
+                    </ut:WatermarkService.Watermark>
+                </TextBox>
+            </AdornerDecorator>
+            <!-- El ComboBox NO debe estar dentro de un AdornerDecorator -->
+            <ComboBox x:Name="cmbTipus" Margin="10" Width="150" SelectionChanged="cmbTipus_SelectionChanged">
+                <ut:WatermarkService.Watermark>
+                    <TextBlock>Selecciona tipus</TextBlock>
+                </ut:WatermarkService.Watermark>
+            </ComboBox>
             <Button x:Name="btnNetejaFiltres"  Click="btnNetejaFiltres_Click" Style="{StaticResource PokedexButtonStyle}">Neteja</Button>
         </StackPanel>
         <ListView x:Name="lsvPokedex" Grid.Row="2" HorizontalContentAlignment="Stretch" SelectionChanged="lsvPokedex_SelectionChanged">

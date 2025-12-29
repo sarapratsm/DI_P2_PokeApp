@@ -110,6 +110,11 @@ public partial class MainWindow : Window
         btnBack.IsEnabled = frm.NavigationService.CanGoBack;
    
         btnAdd.IsEnabled= pagina== 1;
+        if (!btnAdd.IsEnabled)
+        {
+            btnAdd.Visibility = Visibility.Collapsed;
+        }
+        
         btnEdit.IsEnabled= pagina== 1;
         btnCancel.IsEnabled= pagina== 2;
         btnSave.IsEnabled=  pagina ==2;
