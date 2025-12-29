@@ -34,24 +34,19 @@ public partial class MainWindow : Window
 
 
     /// <summary>
-    /// 
+    /// Al principi aquest mètode era més útil...
     /// </summary>
     /// <param name="lloc">1 és la Llista Principal</param>
     private void Navegacio(int lloc)
     {
         if (lloc == 1)
         {
-            pagina = 1;
             frm.Navigate(principal);
         }
         else if (lloc == 2)
         {
-            pagina= 2;
             frm.Navigate(edicio);
         }
-
-            btnBack.IsEnabled = frm.NavigationService.CanGoBack;
-
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -64,7 +59,9 @@ public partial class MainWindow : Window
         if (frm.NavigationService.CanGoBack)
         {
             frm.NavigationService.GoBack();
+            
         }
+
 
     }
 
@@ -107,21 +104,31 @@ public partial class MainWindow : Window
 
     public void actualitzaBotons()
     {
-        btnBack.IsEnabled = frm.NavigationService.CanGoBack;
-   
-        btnAdd.IsEnabled= pagina== 1;
-        if (!btnAdd.IsEnabled)
-        {
-            btnAdd.Visibility = Visibility.Collapsed;
-        }
-        
-        btnEdit.IsEnabled= pagina== 1;
-        btnCancel.IsEnabled= pagina== 2;
-        btnSave.IsEnabled=  pagina ==2;
+        bool canGoBack = frm.NavigationService.CanGoBack;
+        bool esPagina1 = (pagina == 1);
+        bool esPagina2 = (pagina == 2);
+
+        btnBack.IsEnabled = canGoBack;
+        btnBack.Visibility = canGoBack ? Visibility.Visible : Visibility.Collapsed;
+
+
+        btnAdd.IsEnabled = esPagina1;
+        btnAdd.Visibility = esPagina1 ? Visibility.Visible : Visibility.Collapsed;
+
+        btnEdit.IsEnabled = esPagina1;
+        btnEdit.Visibility = esPagina1 ? Visibility.Visible : Visibility.Collapsed;
+
+        btnCancel.IsEnabled = esPagina2;
+        btnCancel.Visibility = esPagina2 ? Visibility.Visible : Visibility.Collapsed;
+
+        btnSave.IsEnabled = esPagina2;
+        btnSave.Visibility = esPagina2 ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void frm_Navigated(object sender, NavigationEventArgs e)
     {
+        if (frm.Content == principal) pagina = 1;
+        if (frm.Content == edicio) pagina = 2;
         actualitzaBotons();
     }
 
