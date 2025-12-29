@@ -65,19 +65,19 @@ namespace PokeUI.Pagines
         /// </summary>
         private void carregarPokemons()
         {
-            string filtreNom = null;
+            string filtreNomCodi = null;
             string filtreTipus = null;
 
             if (txbFiltreNom.Text.Trim() != string.Empty)
             {
-                filtreNom = txbFiltreNom.Text.Trim();
+                filtreNomCodi = txbFiltreNom.Text.Trim();
             }
             if (cmbTipus.SelectedIndex != -1)
             {
-                Type tipusFiltre=cmbTipus.SelectedItem as Type;
-                filtreTipus=tipusFiltre.TypeName;
+                Type tipusFiltre = cmbTipus.SelectedItem as Type;
+                filtreTipus = tipusFiltre.TypeName;
             }
-            
+
             // 2. Empezamos la consulta como "Queryable" (aún no se ejecuta en BD)
             var query = context.Pokemons.AsQueryable();
 
@@ -87,10 +87,19 @@ namespace PokeUI.Pagines
                          .Include(p => p.PokemonAbilities).ThenInclude(pa => pa.Abil);
 
             // 4. APLICAR FILTRO DE NOMBRE (si nos han pasado uno)
-            if (!string.IsNullOrEmpty(filtreNom))
+            if (!string.IsNullOrEmpty(filtreNomCodi))
             {
-                // Usamos Contains para que busque "Pika" y encuentre "Pikachu"
-                query = query.Where(p => p.PokName.Contains(filtreNom));
+                int codi = 0;
+                bool esCodi = Int32.TryParse(filtreNomCodi, out codi);
+
+                if (esCodi)
+                {
+                    query = query.Where(p => p.PokId.ToString().StartsWith(filtreNomCodi));
+                }
+                else
+                {
+                    query = query.Where(p => p.PokName.Contains(filtreNomCodi));
+                }
             }
 
             // 5. APLICAR FILTRO DE TIPO (si nos han pasado uno)
@@ -109,21 +118,15 @@ namespace PokeUI.Pagines
                 lsvPokedex.SelectedIndex = 0;
             }
 
-            //var pokemons = context.Pokemons
-            //                                  .Include(p => p.PokemonTypes)
-            //                                  .ThenInclude(pt => pt.Type)
-            //                                  .Include(p => p.BaseStat)
-            //                                  .Include(p => p.PokemonAbilities).ThenInclude(pa => pa.Abil)
-            //                                  .ToList();
-            //lsvPokedex.ItemsSource = pokemons;
-            //lsvPokedex.SelectedIndex = 0;
 
 
         }
+        
 
         private void btnNetejaFiltres_Click(object sender, RoutedEventArgs e)
         {
             cmbTipus.SelectedIndex = -1;
+            txbFiltreNom.Text = "";
             carregarPokemons();
         }
 
