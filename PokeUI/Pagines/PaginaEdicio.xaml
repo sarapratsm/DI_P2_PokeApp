@@ -66,11 +66,20 @@
 
                 <TextBlock  Grid.Column="0" Grid.Row="5" Text="Type: " FontWeight="SemiBold" Margin="5,0,0,0"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
-                    <ComboBox Width="80" x:Name="cmbType1"
-                              IsEditable="True"
-                              IsTextSearchEnabled="True" 
-                              SelectionChanged="cmbType1_SelectionChanged"
-                              />
+                    <ComboBox Width="100" x:Name="cmbType1"
+          SelectionChanged="cmbType1_SelectionChanged">
+
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Color}" Padding="5" CornerRadius="4" Margin="2">
+                                    <TextBlock Text="{Binding TypeName}" 
+                           Foreground="White" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
                 
                 <TextBlock  Grid.Column="0" Grid.Row="6" Text="Abilities: " FontWeight="SemiBold" Margin="5,0,0,0"/>

@@ -16,8 +16,9 @@ namespace PokeUI.Utils
         /// </summary>
         public static void carregarTipus(AppDbContext context, ComboBox cb)
         {
-            var llistaTipus = context.Types.ToList();
-            cb.DisplayMemberPath = "TypeName";
+            var llistaTipus = context.Types
+                .OrderBy(t=>t.TypeName)
+                .ToList();
             cb.SelectedValuePath = "TypeId";
             cb.ItemsSource = llistaTipus;
         }

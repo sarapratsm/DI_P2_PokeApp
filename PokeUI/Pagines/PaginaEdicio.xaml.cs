@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DependencyPropertyGenerator;
+using Type = PokeData.Models.Type;
 
 namespace PokeUI.Pagines
 {
@@ -32,7 +33,9 @@ namespace PokeUI.Pagines
 
         public void OnThePokemonChanged()
         {
+            if (ThePokemon == null || context == null) return;
 
+            
         }
         
 
@@ -50,15 +53,46 @@ namespace PokeUI.Pagines
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             Utils.Carregas.carregarTipus(context, cmbType1);
+
+            if (ThePokemon == null || context == null) return;
             
-            //Utils.Carregas.carregarTipus(context, cmbType2);
-            
-            
+            var pt = ThePokemon.PokemonTypes.FirstOrDefault();
+
+            if (pt != null && pt.Type != null)
+            {
+                foreach (var item in cmbType1.Items)
+                {
+                    var type1 = item as PokeData.Models.Type;
+
+                    if (type1 != null && type1.TypeId == pt.Type.TypeId)
+                    {
+                        cmbType1.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+
+
         }
 
         private void cmbType1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var selectedType = cmbType1.SelectedItem as PokeData.Models.Type;
 
+            if (selectedType != null && !string.IsNullOrEmpty(selectedType.Color))
+            {
+                try
+                {
+                    var converter = new BrushConverter();
+                    var brush = (Brush)converter.ConvertFromString(selectedType.Color);
+
+                    cmbType1.Background = brush;
+                }
+                catch(Exception ex)
+                {
+                    cmbType1.Background = Brushes.White;
+                }
+            }
         }
     }
 }
