@@ -130,6 +130,12 @@ namespace PokeUI.Pagines
             }
             cmb.SelectionChanged -= Cmb_SelectionChanged;
             GenerarCombosDinamicament();
+
+            if (ucDfModif != null)
+            {
+                ucDfModif.calcularResistencies();
+            }
+
             validatePokemon();
         }
         #endregion

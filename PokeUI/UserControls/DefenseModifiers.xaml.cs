@@ -37,17 +37,11 @@ namespace PokeUI.UserControls
             calcularResistencies();
         }
 
-        private void calcularResistencies()
+        public void calcularResistencies()
         {
             if (ThePokemon == null) return;
 
             wrpModifiers.Children.Clear();
-
-            //Weak4x.Clear();
-            //Weak2x.Clear();
-            //Resist05x.Clear();
-            //Resist025x.Clear();
-            //Immune0x.Clear();
 
             var tipusDelPokemon = context.PokemonTypes
                                   .Where(pt => pt.PokId == ThePokemon.PokId)
