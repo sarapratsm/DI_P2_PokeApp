@@ -52,8 +52,8 @@
 
         <Grid x:Name="grdEsquerra" Grid.Column="0" Background="White" Margin="0,0,10,0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
