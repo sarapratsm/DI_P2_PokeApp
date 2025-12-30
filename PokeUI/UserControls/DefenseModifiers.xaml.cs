@@ -26,7 +26,7 @@ namespace PokeUI.UserControls
     /// </summary>
     public partial class DefenseModifiers : UserControl
     {
-        private AppDbContext _context = new AppDbContext();
+        private AppDbContext context = new AppDbContext();
         public DefenseModifiers()
         {
             InitializeComponent();
@@ -34,12 +34,59 @@ namespace PokeUI.UserControls
 
         public void OnPokemonChanged()
         {
-            calcularDebilitats();
+            calcularResistencies();
         }
 
-        private void calcularDebilitats()
+        private void calcularResistencies()
         {
-            //Todo
+            if (ThePokemon == null) return;
+
+            wrpModifiers.Children.Clear();
+
+            //Weak4x.Clear();
+            //Weak2x.Clear();
+            //Resist05x.Clear();
+            //Resist025x.Clear();
+            //Immune0x.Clear();
+
+            var tipusDelPokemon = context.PokemonTypes
+                                  .Where(pt => pt.PokId == ThePokemon.PokId)
+                                  .Select(pt => pt.TypeId)
+                                  .ToList();
+
+            if (tipusDelPokemon.Count == 0) return;
+
+            var relacions = context.TypeEfficacies
+                .Include(te => te.DamageType)
+                .Where(te => tipusDelPokemon.Contains(te.TargetTypeId))
+                .ToList();
+
+            var listaCalculada = relacions
+                .GroupBy(te => te.DamageType) // Agrupamos por el tipo que nos ataca
+                .Select(grupo => new
+                {
+                    TipoAtacante = grupo.Key, // El objeto Tipo (Roca)
+
+                    // Calculamos el factor final multiplicando todos los daños recibidos
+                    Factor = grupo.Aggregate(1.0, (acumulado, te) => acumulado * (te.DamageFactor / 100.0))
+                })
+                .OrderByDescending(x => x.Factor) // Ordenamos: x4, x2, x0.5, x0
+                .ToList();
+            //.Where(x => x.Factor != 1.0) // Quitamos los x1 (daño normal) porque aburren
+
+            foreach (var item in listaCalculada)
+            {
+                DefenseModifierAux aux = new DefenseModifierAux();
+
+                aux.stringColor = item.TipoAtacante.Color;
+                aux.stringType = item.TipoAtacante.TypeName;
+                aux.Multiplier = item.Factor;
+
+                wrpModifiers.Children.Add(aux);
+            }
+
+
+
         }
     }
 }

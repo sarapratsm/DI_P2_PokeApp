@@ -173,5 +173,11 @@ namespace PokeUI.Pagines
         {
             carregarPokemons();
         }
+
+        private void lsvPokedex_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+           //Hauriem de cridar la main window per poder navegar... Es pot fer però quina mandra
+           //toDo
+        }
     }
 }

@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel x:Name="stkRows" Orientation="Vertical" />
+        <UniformGrid x:Name="wrpModifiers" Rows="2" Columns="9" Margin="5"/>
     </Grid>
 </UserControl>

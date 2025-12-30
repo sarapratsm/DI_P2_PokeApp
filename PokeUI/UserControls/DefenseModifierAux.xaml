@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="PokeUI.UserControls.DefenseModifierAux"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PokeUI.UserControls"
+             mc:Ignorable="d" 
+             x:Name="Aux"
+             d:DesignHeight="400" d:DesignWidth="200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border x:Name="bdrType" CornerRadius="3" Margin="5,5,5,0" Padding="2" Background="{Binding ElementName=Aux, Path=stringColor}">
+            <TextBlock x:Name="txbType" FontSize="16" Padding="5,5,5,0" TextAlignment="Center" Text="{Binding ElementName=Aux, Path=stringType}"></TextBlock>
+        </Border>
+
+        <Border x:Name="bdrMulti" Grid.Row="1" CornerRadius="3" Margin="5,0,5,5" Padding="2" BorderBrush="LightGray" BorderThickness="1">
+            <TextBlock x:Name="txbMultiplier" FontSize="16"  Padding="5,5,5,0" TextAlignment="Center" Text="{Binding ElementName=Aux, Path=stringMultiplier}"></TextBlock>
+        </Border>
+    </Grid>
+</UserControl>
