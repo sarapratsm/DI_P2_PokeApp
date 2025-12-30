@@ -21,6 +21,7 @@ using Type = PokeData.Models.Type;
 namespace PokeUI.Pagines
 {
     [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon", OnChanged = "OnThePokemonChanged")]
+    [DependencyProperty<bool>("hiHaModificacions", Category = "controlador", Description = "Mira si hi ha canvis al Pokemon")]
 
     /// <summary>
     /// Lógica de interacción para PaginaEdicio.xaml
@@ -30,7 +31,7 @@ namespace PokeUI.Pagines
         AppDbContext context = new AppDbContext();
 
         private List<Type> _llistaTipus;
-        private ObservableCollection<Pokemon> _llistaEvos = new ObservableCollection<Pokemon>();
+        private ObservableCollection<EvolutionEditableItem> _llistaEvos = new ObservableCollection<EvolutionEditableItem>(); 
         private ObservableCollection<Pokemon> _llistaTotsPokemons;
         public PaginaEdicio()
         {
@@ -160,27 +161,33 @@ namespace PokeUI.Pagines
         #region evolucions
         private void CarregarEvosUI()
         {
-            // 1. Buscador (Carga Lazy)
+            // ... (Tu parte del buscador se queda igual) ...
             if (this._llistaTotsPokemons == null)
             {
                 _llistaTotsPokemons = new ObservableCollection<Pokemon>(context.Pokemons.OrderBy(p => p.PokName).ToList());
                 cmbEvoSearch.ItemsSource = _llistaTotsPokemons;
             }
 
-            // 2. Vincular lista visual
             lstEvoluciones.ItemsSource = this._llistaEvos;
             _llistaEvos.Clear();
 
-            // 3. ¡AQUÍ ESTÁ LA MAGIA DRY!
             if (ThePokemon != null)
             {
-                // Llamamos a nuestra clase Utils en lugar de escribir 50 líneas de código aquí
-                var familia = EvolutionUtils.GetFamiliaCompleta(context, ThePokemon.PokId);
+                // Usamos el método de ETAPAS que ya programamos para el UserControl
+                // Esto nos devuelve: List[0] = {Bulbasaur}, List[1] = {Ivysaur}, List[2] = {Venusaur}
+                var etapas = EvolutionUtils.GetEvolucionesPorEtapas(context, ThePokemon.PokId);
 
-                // Rellenamos la ObservableCollection con los resultados
-                foreach (var p in familia)
+                for (int i = 0; i < etapas.Count; i++)
                 {
-                    _llistaEvos.Add(p);
+                    int numeroEtapa = i + 1; // Etapa 1, 2, 3...
+                    foreach (var poke in etapas[i])
+                    {
+                        _llistaEvos.Add(new EvolutionEditableItem
+                        {
+                            Pokemon = poke,
+                            Stage = numeroEtapa
+                        });
+                    }
                 }
             }
         }
@@ -195,43 +202,56 @@ namespace PokeUI.Pagines
             if (seleccionado != null)
             {
                 // Evitar duplicados
-                if (!_llistaEvos.Any(p => p.PokId == seleccionado.PokId))
+                if (!_llistaEvos.Any(item => item.Pokemon.PokId == seleccionado.PokId))
                 {
-                    _llistaEvos.Add(seleccionado);
+                    // Por defecto lo añadimos como Etapa 2 (o la última + 1)
+                    int nuevaEtapa = 2;
+                    if (_llistaEvos.Count > 0) nuevaEtapa = _llistaEvos.Max(x => x.Stage);
+
+                    _llistaEvos.Add(new EvolutionEditableItem { Pokemon = seleccionado, Stage = nuevaEtapa });
                 }
             }
         }
 
-        // BOTÓN ELIMINAR (X)
         private void btnDelEvo_Click(object sender, RoutedEventArgs e)
         {
-            var item = lstEvoluciones.SelectedItem as Pokemon;
+            var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
             if (item != null)
             {
                 _llistaEvos.Remove(item);
             }
         }
 
-        // BOTÓN SUBIR (↑)
+        // BOTÓN SUBIR NIVEL (Ahora resta el número de etapa)
         private void btnUpEvo_Click(object sender, RoutedEventArgs e)
         {
-            int index = lstEvoluciones.SelectedIndex;
-            // Si hay algo seleccionado y no es el primero
-            if (index > 0)
+            var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
+            if (item != null && item.Stage > 1)
             {
-                _llistaEvos.Move(index, index - 1);
+                item.Stage--; // Pasa de Etapa 2 a Etapa 1
+
+                // Opcional: Reordenar la lista visualmente
+                OrdenarLista();
             }
         }
 
-        // BOTÓN BAJAR (↓)
+        // BOTÓN BAJAR NIVEL (Ahora suma el número de etapa)
         private void btnDownEvo_Click(object sender, RoutedEventArgs e)
         {
-            int index = lstEvoluciones.SelectedIndex;
-            // Si hay algo seleccionado y no es el último
-            if (index >= 0 && index < _llistaEvos.Count - 1)
+            var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
+            if (item != null)
             {
-                _llistaEvos.Move(index, index + 1);
+                item.Stage++; // Pasa de Etapa 1 a Etapa 2
+                OrdenarLista();
             }
+        }
+
+        // Pequeño helper para mantener la lista ordenada por etapas (1, 1, 2, 2, 2...)
+        private void OrdenarLista()
+        {
+            var listaOrdenada = _llistaEvos.OrderBy(x => x.Stage).ThenBy(x => x.Pokemon.PokId).ToList();
+            _llistaEvos.Clear();
+            foreach (var item in listaOrdenada) _llistaEvos.Add(item);
         }
         #endregion
 
@@ -244,5 +264,29 @@ namespace PokeUI.Pagines
                 Si hi ha qualsevol camp erroni, el botó desar es deshabilita i es mostra el fons del Textbox de color
                 vermell suau.*/
         }
+
+
+       
+    }
+
+
+    public class EvolutionEditableItem : System.ComponentModel.INotifyPropertyChanged
+    {
+        private int _stage;
+        public Pokemon Pokemon { get; set; }
+
+        public int Stage
+        {
+            get { return _stage; }
+            set
+            {
+                _stage = value;
+                OnPropertyChanged("Stage");
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name) =>
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
     }
 }
