@@ -5,17 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Type = PokeData.Models.Type;
 
 namespace PokeUI.Pagines
@@ -23,35 +15,37 @@ namespace PokeUI.Pagines
     [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon", OnChanged = "OnThePokemonChanged")]
     [DependencyProperty<bool>("hiHaModificacions", Category = "controlador", Description = "Mira si hi ha canvis al Pokemon")]
 
-    /// <summary>
-    /// Lógica de interacción para PaginaEdicio.xaml
-    /// </summary>
     public partial class PaginaEdicio : Page
     {
         AppDbContext context = new AppDbContext();
 
         private List<Type> _llistaTipus;
-        private ObservableCollection<EvolutionEditableItem> _llistaEvos = new ObservableCollection<EvolutionEditableItem>(); 
+        private ObservableCollection<EvolutionEditableItem> _llistaEvos = new ObservableCollection<EvolutionEditableItem>();
         private ObservableCollection<Pokemon> _llistaTotsPokemons;
+
+        private List<Ability> _todasLasHabilidades;
+        private ObservableCollection<PokemonAbility> _habilidadesDelPokemon = new ObservableCollection<PokemonAbility>();
+
         public PaginaEdicio()
         {
             InitializeComponent();
         }
 
-
-
-
-
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (ThePokemon == null || context == null) return;
 
+            // 1. Tipos
             _llistaTipus = context.Types.OrderBy(t => t.TypeName).ToList();
             _llistaTipus.Insert(0, new Type { TypeId = -1, TypeName = "---", Color = "#F0F0F0" });
 
             GenerarCombosDinamicament();
+
+            // 2. Evoluciones
             CarregarEvosUI();
 
+            // 3. Habilidades
+            CargarHabilidadesUI();
         }
 
         public void OnThePokemonChanged()
@@ -61,14 +55,19 @@ namespace PokeUI.Pagines
             {
                 GenerarCombosDinamicament();
                 CarregarEvosUI();
+                CargarHabilidadesUI();
             }
+        }
+
+        private void ValidarTexto_Changed(object sender, TextChangedEventArgs e)
+        {
+            validatePokemon();
         }
 
         #region Comboboxes
         private void GenerarCombosDinamicament()
         {
             stpTipos.Children.Clear();
-
             var tipusDelPokemon = ThePokemon.PokemonTypes.Select(pt => pt.Type).ToList();
             int maxTipus = 2;
 
@@ -76,13 +75,9 @@ namespace PokeUI.Pagines
             {
                 var tipoActual = (i < tipusDelPokemon.Count) ? tipusDelPokemon[i] : null;
 
-                // Lógica para pintar huecos:
-                // - Si el tipo es null y ya llevamos maxTipos, paramos.
-                // - Si estamos en el 2º hueco y el 1º estaba vacío, paramos (no dejar huecos intercalados).
                 if (tipoActual == null && tipusDelPokemon.Count >= maxTipus) continue;
                 if (i > 0 && tipusDelPokemon.Count == 0) continue;
 
-                // Creamos y añadimos el combo
                 ComboBox cmb = CrearComboTipo(tipoActual);
                 stpTipos.Children.Add(cmb);
             }
@@ -93,48 +88,33 @@ namespace PokeUI.Pagines
             ComboBox cmb = new ComboBox();
             cmb.Width = 100;
             cmb.Margin = new Thickness(0, 0, 5, 0);
-
             cmb.ItemsSource = _llistaTipus;
             cmb.ItemTemplate = (DataTemplate)this.FindResource("PlantillaComboBox");
 
-            // Seleccionar el ítem correcto
             if (tipoSeleccionado != null)
             {
                 cmb.SelectedItem = _llistaTipus.FirstOrDefault(t => t.TypeId == tipoSeleccionado.TypeId);
                 cmb.Background = UIUtils.GetBrushFromHex(tipoSeleccionado.Color);
-              
             }
             else
             {
-                cmb.SelectedIndex = 0; //Hem fet l'insert de la llista a l'index 0.
-                //pintarFondoCombo(cmb, "#F0F0F0");
+                cmb.SelectedIndex = 0;
             }
-
-            // Suscribir al evento de cambio
             cmb.SelectionChanged += Cmb_SelectionChanged;
-
             return cmb;
         }
-
-
-
-
 
         private void Cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var cmb = sender as ComboBox;
             var nuevoTipo = cmb.SelectedItem as PokeData.Models.Type;
 
-            // 1. Efecto visual inmediato
             if (nuevoTipo != null) cmb.Background = UIUtils.GetBrushFromHex(nuevoTipo.Color);
             else cmb.Background = Brushes.White;
 
-            // 2. Actualizar la lista real del Pokémon
             ThePokemon.PokemonTypes.Clear();
-
             foreach (var control in stpTipos.Children)
             {
-                // Añadimos una condición extra: t.TypeId != -1
                 if (control is ComboBox c && c.SelectedItem is PokeData.Models.Type t && t.TypeId != -1)
                 {
                     if (!ThePokemon.PokemonTypes.Any(pt => pt.TypeId == t.TypeId))
@@ -148,20 +128,15 @@ namespace PokeUI.Pagines
                     }
                 }
             }
-
-            // 3. Regenerar combos para mostrar/ocultar el hueco vacío siguiente
-            cmb.SelectionChanged -= Cmb_SelectionChanged; // Desconectar para evitar bucles
+            cmb.SelectionChanged -= Cmb_SelectionChanged;
             GenerarCombosDinamicament();
-
+            validatePokemon();
         }
         #endregion
 
-
-
-        #region evolucions
+        #region Evoluciones (Logica)
         private void CarregarEvosUI()
         {
-            // ... (Tu parte del buscador se queda igual) ...
             if (this._llistaTotsPokemons == null)
             {
                 _llistaTotsPokemons = new ObservableCollection<Pokemon>(context.Pokemons.OrderBy(p => p.PokName).ToList());
@@ -173,13 +148,11 @@ namespace PokeUI.Pagines
 
             if (ThePokemon != null)
             {
-                // Usamos el método de ETAPAS que ya programamos para el UserControl
-                // Esto nos devuelve: List[0] = {Bulbasaur}, List[1] = {Ivysaur}, List[2] = {Venusaur}
                 var etapas = EvolutionUtils.GetEvolucionesPorEtapas(context, ThePokemon.PokId);
 
                 for (int i = 0; i < etapas.Count; i++)
                 {
-                    int numeroEtapa = i + 1; // Etapa 1, 2, 3...
+                    int numeroEtapa = i + 1;
                     foreach (var poke in etapas[i])
                     {
                         _llistaEvos.Add(new EvolutionEditableItem
@@ -193,21 +166,86 @@ namespace PokeUI.Pagines
         }
         #endregion
 
-        #region ClicksBotons
+        #region Habilidades (ABILITIES) - CORREGIDO
 
-        // BOTÓN AÑADIR (+)
+        private void CargarHabilidadesUI()
+        {
+            // 1. Cargar el diccionario completo para el buscador
+            if (_todasLasHabilidades == null)
+            {
+                _todasLasHabilidades = context.Abilities.OrderBy(a => a.AbilName).ToList();
+                cmbAbilitySearch.ItemsSource = _todasLasHabilidades;
+            }
+
+            // 2. Vincular la lista visual
+            lstAbilities.ItemsSource = _habilidadesDelPokemon;
+            _habilidadesDelPokemon.Clear();
+
+            // 3. Rellenar asegurándonos de que tenemos el NOMBRE
+            foreach (var hab in ThePokemon.PokemonAbilities)
+            {
+                // --- FIX: Si falta el objeto Ability (el nombre), lo cargamos a mano ---
+                if (hab.Abil.AbilName == null)
+                {
+                    hab.Abil = context.Abilities.Find(hab.AbilId);
+                }
+                // ----------------------------------------------------------------------
+
+                _habilidadesDelPokemon.Add(hab);
+            }
+        }
+
+        private void btnAddAbility_Click(object sender, RoutedEventArgs e)
+        {
+            var habilidadSeleccionada = cmbAbilitySearch.SelectedItem as Ability;
+
+            if (habilidadSeleccionada != null)
+            {
+                // CAMBIO: Usar AbilId en lugar de AbilityId (tanto en la relación como en la habilidad)
+                if (!ThePokemon.PokemonAbilities.Any(pa => pa.AbilId == habilidadSeleccionada.AbilId))
+                {
+                    var nuevaRelacion = new PokemonAbility
+                    {
+                        PokId = ThePokemon.PokId,
+                        AbilId = habilidadSeleccionada.AbilId, // CORREGIDO
+                        Abil = habilidadSeleccionada,
+                        IsHidden = false,
+                        Slot = 1
+                    };
+
+                    ThePokemon.PokemonAbilities.Add(nuevaRelacion);
+                    _habilidadesDelPokemon.Add(nuevaRelacion);
+
+                    cmbAbilitySearch.SelectedItem = null;
+                    cmbAbilitySearch.Text = "";
+                }
+            }
+        }
+
+        private void btnRemoveAbility_Click(object sender, RoutedEventArgs e)
+        {
+            var boton = sender as Button;
+            var habilidadAQuitar = boton.DataContext as PokemonAbility;
+
+            if (habilidadAQuitar != null)
+            {
+                ThePokemon.PokemonAbilities.Remove(habilidadAQuitar);
+                _habilidadesDelPokemon.Remove(habilidadAQuitar);
+            }
+        }
+
+        #endregion
+
+        #region ClicksBotons (Evoluciones)
         private void btnAddEvo_Click(object sender, RoutedEventArgs e)
         {
             var seleccionado = cmbEvoSearch.SelectedItem as Pokemon;
             if (seleccionado != null)
             {
-                // Evitar duplicados
                 if (!_llistaEvos.Any(item => item.Pokemon.PokId == seleccionado.PokId))
                 {
-                    // Por defecto lo añadimos como Etapa 2 (o la última + 1)
                     int nuevaEtapa = 2;
                     if (_llistaEvos.Count > 0) nuevaEtapa = _llistaEvos.Max(x => x.Stage);
-
                     _llistaEvos.Add(new EvolutionEditableItem { Pokemon = seleccionado, Stage = nuevaEtapa });
                 }
             }
@@ -216,37 +254,29 @@ namespace PokeUI.Pagines
         private void btnDelEvo_Click(object sender, RoutedEventArgs e)
         {
             var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
-            if (item != null)
-            {
-                _llistaEvos.Remove(item);
-            }
+            if (item != null) _llistaEvos.Remove(item);
         }
 
-        // BOTÓN SUBIR NIVEL (Ahora resta el número de etapa)
         private void btnUpEvo_Click(object sender, RoutedEventArgs e)
         {
             var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
             if (item != null && item.Stage > 1)
             {
-                item.Stage--; // Pasa de Etapa 2 a Etapa 1
-
-                // Opcional: Reordenar la lista visualmente
+                item.Stage--;
                 OrdenarLista();
             }
         }
 
-        // BOTÓN BAJAR NIVEL (Ahora suma el número de etapa)
         private void btnDownEvo_Click(object sender, RoutedEventArgs e)
         {
             var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
             if (item != null)
             {
-                item.Stage++; // Pasa de Etapa 1 a Etapa 2
+                item.Stage++;
                 OrdenarLista();
             }
         }
 
-        // Pequeño helper para mantener la lista ordenada por etapas (1, 1, 2, 2, 2...)
         private void OrdenarLista()
         {
             var listaOrdenada = _llistaEvos.OrderBy(x => x.Stage).ThenBy(x => x.Pokemon.PokId).ToList();
@@ -255,20 +285,57 @@ namespace PokeUI.Pagines
         }
         #endregion
 
-
+        #region Validacion
         private void validatePokemon()
         {
-            /*Tots els camps són obligatoris, i han de tenir un caràcter diferent d’espai com a mínim.
-                Com a mínim, ha de tenir un tipus.
-                Els camps numèrics han de validar-se dins un rang raonable.
-                Si hi ha qualsevol camp erroni, el botó desar es deshabilita i es mostra el fons del Textbox de color
-                vermell suau.*/
+            bool hayErrores = false;
+
+            if (string.IsNullOrWhiteSpace(ThePokemon.PokName)) hayErrores = true;
+
+            bool heightError = ThePokemon.PokHeight == null || ThePokemon.PokHeight <= 0;
+            PintarError(ObtenerTextBox(0), heightError);
+            if (heightError) hayErrores = true;
+
+            bool weightError = ThePokemon.PokWeight == null || ThePokemon.PokWeight <= 0;
+            PintarError(ObtenerTextBox(1), weightError);
+            if (weightError) hayErrores = true;
+
+            bool expError = ThePokemon.PokBaseExperience == null || ThePokemon.PokBaseExperience < 0;
+            PintarError(ObtenerTextBox(2), expError);
+            if (expError) hayErrores = true;
+
+            bool typeError = ThePokemon.PokemonTypes.Count == 0;
+            stpTipos.Background = typeError ? new SolidColorBrush(Color.FromArgb(50, 255, 0, 0)) : Brushes.Transparent;
+            if (typeError) hayErrores = true;
+
+            // btnSave.IsEnabled = !hayErrores;
         }
 
+        private void PintarError(TextBox txt, bool error)
+        {
+            if (txt == null) return;
+            if (error)
+            {
+                txt.Background = new SolidColorBrush(Color.FromRgb(255, 200, 200));
+                txt.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                txt.Background = Brushes.White;
+                txt.BorderBrush = Brushes.Gray;
+            }
+        }
 
-       
+        private TextBox ObtenerTextBox(int row)
+        {
+            foreach (var child in grdAtributs.Children)
+            {
+                if (child is TextBox txt && Grid.GetRow(txt) == row) return txt;
+            }
+            return null;
+        }
+        #endregion
     }
-
 
     public class EvolutionEditableItem : System.ComponentModel.INotifyPropertyChanged
     {
@@ -278,11 +345,7 @@ namespace PokeUI.Pagines
         public int Stage
         {
             get { return _stage; }
-            set
-            {
-                _stage = value;
-                OnPropertyChanged("Stage");
-            }
+            set { _stage = value; OnPropertyChanged("Stage"); }
         }
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
