@@ -5,6 +5,8 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <!--colors-->
             <SolidColorBrush x:Key="PokedexRedBrush" Color="#F25C78"/>
             <SolidColorBrush x:Key="PokedexDarkRedBrush" Color="#89061C"/>

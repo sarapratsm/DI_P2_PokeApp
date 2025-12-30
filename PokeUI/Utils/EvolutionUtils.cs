@@ -78,5 +78,40 @@ namespace PokeUI.Utils
                 }
             }
         }
+
+        // En EvolutionUtils.cs
+        public static List<List<Pokemon>> GetEvolucionesPorEtapas(AppDbContext context, int pokemonId)
+        {
+            var resultado = new List<List<Pokemon>>();
+            int rootId = BuscarBasePokemon(context, pokemonId);
+            var idsNivelActual = new List<int> { rootId };
+
+            while (idsNivelActual.Count > 0)
+            {
+                // CAMBIO AQUÍ: Añadimos los Includes para traer los TIPOS también
+                var pokemonsNivel = context.Pokemons
+                                           .Where(p => idsNivelActual.Contains(p.PokId))
+                                           .Include(p => p.PokemonTypes)       // <--- NUEVO
+                                              .ThenInclude(pt => pt.Type)      // <--- NUEVO
+                                           .OrderBy(p => p.PokId)
+                                           .ToList();
+
+                if (pokemonsNivel.Count > 0)
+                {
+                    resultado.Add(pokemonsNivel);
+                }
+
+                // Buscar hijos (igual que antes)
+                var idsSiguienteNivel = context.PokemonEvolutionMatchups
+                               .Where(m => m.EvolvesFromSpeciesId != null &&
+                                           idsNivelActual.Contains(m.EvolvesFromSpeciesId.Value))
+                               .Select(m => m.PokId)
+                               .ToList();
+
+                idsNivelActual = idsSiguienteNivel;
+            }
+
+            return resultado;
+        }
     }
 }
