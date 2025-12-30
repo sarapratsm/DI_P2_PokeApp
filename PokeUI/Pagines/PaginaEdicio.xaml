@@ -10,6 +10,17 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PaginaEdicio">
 
+    <Page.Resources>
+        <DataTemplate x:Key="PlantillaComboBox">
+            <Border Background="{Binding Color}" Padding="5" CornerRadius="4" Margin="2">
+                <TextBlock Text="{Binding TypeName}" 
+                Foreground="White" 
+                FontWeight="Bold" 
+                HorizontalAlignment="Center"/>
+            </Border>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid x:Name="grdMainStructure" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -64,24 +75,14 @@
                 <TextBlock Margin="5,0,0,0" Text="Image: " FontWeight="SemiBold" Grid.Column="0" Grid.Row="3"/>
                 <TextBox Margin="5,5,0,5" Grid.ColumnSpan="3" Grid.Row="4" Text="{Binding ElementName=Page, Path=ThePokemon.PokImage, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock  Grid.Column="0" Grid.Row="5" Text="Type: " FontWeight="SemiBold" Margin="5,0,0,0"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
-                    <ComboBox Width="100" x:Name="cmbType1"
-          SelectionChanged="cmbType1_SelectionChanged">
+       
+                <TextBlock Grid.Column="0" Grid.Row="5" Text="Type: " FontWeight="SemiBold" Margin="5,0,0,0"/>
 
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="{Binding Color}" Padding="5" CornerRadius="4" Margin="2">
-                                    <TextBlock Text="{Binding TypeName}" 
-                           Foreground="White" 
-                           FontWeight="Bold" 
-                           HorizontalAlignment="Center"/>
-                                </Border>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                
+                <StackPanel x:Name="stpTipos" 
+                        Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" 
+                        Orientation="Horizontal" 
+                        Margin="0,0,0,5"/>
+
                 <TextBlock  Grid.Column="0" Grid.Row="6" Text="Abilities: " FontWeight="SemiBold" Margin="5,0,0,0"/>
                 
                 

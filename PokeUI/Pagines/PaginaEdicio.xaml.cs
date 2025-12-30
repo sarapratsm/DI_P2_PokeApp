@@ -26,18 +26,86 @@ namespace PokeUI.Pagines
     public partial class PaginaEdicio : Page
     {
         AppDbContext context = new AppDbContext();
+        private List<Type> llistaTipus;
         public PaginaEdicio()
         {
             InitializeComponent();
         }
 
-        public void OnThePokemonChanged()
+
+
+
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (ThePokemon == null || context == null) return;
 
-            
+            llistaTipus = context.Types.OrderBy(t => t.TypeName).ToList();
+            llistaTipus.Insert(0, new Type { TypeId = -1, TypeName = "---", Color = "#F0F0F0" });
+
+            GenerarCombosDinamicament();
+
         }
-        
+
+        public void OnThePokemonChanged()
+        {
+            if (ThePokemon == null || context == null) return;
+            if (llistaTipus != null)
+            {
+                GenerarCombosDinamicament();
+            }
+        }
+
+
+        private void GenerarCombosDinamicament()
+        {
+            stpTipos.Children.Clear();
+
+            var tipusDelPokemon = ThePokemon.PokemonTypes.Select(pt => pt.Type).ToList();
+            int maxTipus = 2;
+
+            for (int i = 0; i < maxTipus; i++)
+            {
+                var tipoActual = (i < tipusDelPokemon.Count) ? tipusDelPokemon[i] : null;
+
+                // Lógica para pintar huecos:
+                // - Si el tipo es null y ya llevamos maxTipos, paramos.
+                // - Si estamos en el 2º hueco y el 1º estaba vacío, paramos (no dejar huecos intercalados).
+                if (tipoActual == null && tipusDelPokemon.Count >= maxTipus) continue;
+                if (i > 0 && tipusDelPokemon.Count == 0) continue;
+
+                // Creamos y añadimos el combo
+                ComboBox cmb = CrearComboTipo(tipoActual);
+                stpTipos.Children.Add(cmb);
+            }
+        }
+
+        private ComboBox CrearComboTipo(PokeData.Models.Type tipoSeleccionado)
+        {
+            ComboBox cmb = new ComboBox();
+            cmb.Width = 100;
+            cmb.Margin = new Thickness(0, 0, 5, 0);
+
+            cmb.ItemsSource = llistaTipus;
+            cmb.ItemTemplate = (DataTemplate)this.FindResource("PlantillaComboBox");
+
+            // Seleccionar el ítem correcto
+            if (tipoSeleccionado != null)
+            {
+                cmb.SelectedItem = llistaTipus.FirstOrDefault(t => t.TypeId == tipoSeleccionado.TypeId);
+                pintarFondoCombo(cmb, tipoSeleccionado.Color);
+            }
+            else
+            {
+                cmb.SelectedIndex = 0; //Hem fet l'insert de la llista a l'index 0.
+                pintarFondoCombo(cmb, "#F0F0F0");
+            }
+
+            // Suscribir al evento de cambio
+            cmb.SelectionChanged += Cmb_SelectionChanged;
+
+            return cmb;
+        }
 
         private void validatePokemon()
         {
@@ -48,51 +116,51 @@ namespace PokeUI.Pagines
                 vermell suau.*/
         }
 
-        
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Utils.Carregas.carregarTipus(context, cmbType1);
+            var cmb = sender as ComboBox;
+            var nuevoTipo = cmb.SelectedItem as PokeData.Models.Type;
 
-            if (ThePokemon == null || context == null) return;
-            
-            var pt = ThePokemon.PokemonTypes.FirstOrDefault();
+            // 1. Efecto visual inmediato
+            if (nuevoTipo != null) pintarFondoCombo(cmb, nuevoTipo.Color);
+            else cmb.Background = Brushes.White;
 
-            if (pt != null && pt.Type != null)
+            // 2. Actualizar la lista real del Pokémon
+            ThePokemon.PokemonTypes.Clear();
+
+            foreach (var control in stpTipos.Children)
             {
-                foreach (var item in cmbType1.Items)
+                // Añadimos una condición extra: t.TypeId != -1
+                if (control is ComboBox c && c.SelectedItem is PokeData.Models.Type t && t.TypeId != -1)
                 {
-                    var type1 = item as PokeData.Models.Type;
-
-                    if (type1 != null && type1.TypeId == pt.Type.TypeId)
+                    if (!ThePokemon.PokemonTypes.Any(pt => pt.TypeId == t.TypeId))
                     {
-                        cmbType1.SelectedItem = item;
-                        break;
+                        ThePokemon.PokemonTypes.Add(new PokemonType
+                        {
+                            PokId = ThePokemon.PokId,
+                            TypeId = t.TypeId,
+                            Type = t
+                        });
                     }
                 }
             }
 
+            // 3. Regenerar combos para mostrar/ocultar el hueco vacío siguiente
+            cmb.SelectionChanged -= Cmb_SelectionChanged; // Desconectar para evitar bucles
+            GenerarCombosDinamicament();
 
         }
 
-        private void cmbType1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void pintarFondoCombo(ComboBox cmb, string colorHex)
         {
-            var selectedType = cmbType1.SelectedItem as PokeData.Models.Type;
-
-            if (selectedType != null && !string.IsNullOrEmpty(selectedType.Color))
+            try
             {
-                try
-                {
-                    var converter = new BrushConverter();
-                    var brush = (Brush)converter.ConvertFromString(selectedType.Color);
-
-                    cmbType1.Background = brush;
-                }
-                catch(Exception ex)
-                {
-                    cmbType1.Background = Brushes.White;
-                }
+                if (!string.IsNullOrEmpty(colorHex))
+                    cmb.Background = (Brush)new BrushConverter().ConvertFromString(colorHex);
+                else
+                    cmb.Background = Brushes.White;
             }
+            catch { cmb.Background = Brushes.White; }
         }
     }
 }
