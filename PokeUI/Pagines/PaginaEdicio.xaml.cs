@@ -25,7 +25,6 @@ namespace PokeUI.Pagines
 
         // Variables de datos
         private List<Type> _llistaTipus;
-        public List<Type> LlistaTipusPublica { get { return _llistaTipus; } } // Propiedad pública para el XAML
 
         private ObservableCollection<EvolutionEditableItem> _llistaEvos = new ObservableCollection<EvolutionEditableItem>();
         private ObservableCollection<Pokemon> _llistaTotsPokemons;
