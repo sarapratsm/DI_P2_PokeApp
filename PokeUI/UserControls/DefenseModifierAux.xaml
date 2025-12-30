@@ -16,7 +16,7 @@
             <TextBlock x:Name="txbType" FontSize="16" Padding="5,5,5,0" TextAlignment="Center" Text="{Binding ElementName=Aux, Path=stringType}"></TextBlock>
         </Border>
 
-        <Border x:Name="bdrMulti" Grid.Row="1" CornerRadius="3" Margin="5,0,5,5" Padding="2" BorderBrush="LightGray" BorderThickness="1">
+        <Border x:Name="bdrMulti" Grid.Row="1" CornerRadius="3" Margin="5,1,5,5" Padding="2">
             <TextBlock x:Name="txbMultiplier" FontSize="16"  Padding="5,5,5,0" TextAlignment="Center" Text="{Binding ElementName=Aux, Path=stringMultiplier}"></TextBlock>
         </Border>
     </Grid>

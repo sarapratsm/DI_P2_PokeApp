@@ -107,7 +107,7 @@
                     <TextBlock Text="Defense Modifiers" 
                         Foreground="White" FontSize="16" FontWeight="Bold"/>
                 </Border>
-                <uc:DefenseModifiers x:Name="ucDfModif" ThePokemon="{Binding ElementName=Page, Path=ThePokemon}"></uc:DefenseModifiers>
+                <uc:DefenseModifiers x:Name="ucDfModif" ThePokemon="{Binding ElementName=Page, Path=ThePokemon}" Margin="5,0,20,0"></uc:DefenseModifiers>
             </StackPanel>
 
         </Grid>
