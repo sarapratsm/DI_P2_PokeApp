@@ -15,16 +15,25 @@ namespace PokeUI.Pagines
     [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon", OnChanged = "OnThePokemonChanged")]
     [DependencyProperty<bool>("hiHaModificacions", Category = "controlador", Description = "Mira si hi ha canvis al Pokemon")]
 
+    // PROPIEDADES NUEVAS PARA LOS COMBOS
+    [DependencyProperty<Type>("SelectedType1", OnChanged = "OnSelectedType1Changed")]
+    [DependencyProperty<Type>("SelectedType2", OnChanged = "OnSelectedType2Changed")]
+
     public partial class PaginaEdicio : Page
     {
         AppDbContext context = new AppDbContext();
 
+        // Variables de datos
         private List<Type> _llistaTipus;
+        public List<Type> LlistaTipusPublica { get { return _llistaTipus; } } // Propiedad pública para el XAML
+
         private ObservableCollection<EvolutionEditableItem> _llistaEvos = new ObservableCollection<EvolutionEditableItem>();
         private ObservableCollection<Pokemon> _llistaTotsPokemons;
-
         private List<Ability> _todasLasHabilidades;
         private ObservableCollection<PokemonAbility> _habilidadesDelPokemon = new ObservableCollection<PokemonAbility>();
+
+        // Flag para evitar bucles infinitos al cargar
+        private bool _isUpdatingTypes = false;
 
         public PaginaEdicio()
         {
@@ -35,112 +44,173 @@ namespace PokeUI.Pagines
         {
             if (ThePokemon == null || context == null) return;
 
-            // 1. Tipos
+            // 1. Cargar Tipos
             _llistaTipus = context.Types.OrderBy(t => t.TypeName).ToList();
             _llistaTipus.Insert(0, new Type { TypeId = -1, TypeName = "---", Color = "#F0F0F0" });
 
-            GenerarCombosDinamicament();
+            cmbType1.ItemsSource = _llistaTipus;
+            cmbType2.ItemsSource = _llistaTipus;
 
-            // 2. Evoluciones
+            // 2. Cargar datos del Pokémon actual
+            OnThePokemonChanged();
+
+            // 3. Cargar Evoluciones
             CarregarEvosUI();
 
-            // 3. Habilidades
+            // 4. Cargar Habilidades
             CargarHabilidadesUI();
         }
 
         public void OnThePokemonChanged()
         {
             if (ThePokemon == null || context == null) return;
+
             if (_llistaTipus != null)
             {
-                GenerarCombosDinamicament();
+                // Sincronizar Combos con la lista real del Pokémon
+                _isUpdatingTypes = true; // Bloqueamos eventos
+
+                var tipos = ThePokemon.PokemonTypes.ToList();
+
+                // Tipo 1
+                if (tipos.Count > 0)
+                    SelectedType1 = _llistaTipus.FirstOrDefault(t => t.TypeId == tipos[0].TypeId);
+                else
+                    SelectedType1 = _llistaTipus.FirstOrDefault(t => t.TypeId == -1); // "---"
+
+                // Tipo 2
+                if (tipos.Count > 1)
+                    SelectedType2 = _llistaTipus.FirstOrDefault(t => t.TypeId == tipos[1].TypeId);
+                else
+                    SelectedType2 = _llistaTipus.FirstOrDefault(t => t.TypeId == -1); // "---"
+
+                _isUpdatingTypes = false; // Desbloqueamos
+
+                // Otras recargas
                 CarregarEvosUI();
                 CargarHabilidadesUI();
             }
         }
 
+        // --- CALLBACKS DE CAMBIO DE TIPO (Disparados por Binding) ---
+        public void OnSelectedType1Changed()
+        {
+            if (_isUpdatingTypes || ThePokemon == null) return;
+            ActualizarListaTipos();
+        }
+
+        public void OnSelectedType2Changed()
+        {
+            if (_isUpdatingTypes || ThePokemon == null) return;
+            ActualizarListaTipos();
+        }
+
+        // --- MÉTODO CENTRAL PARA ACTUALIZAR TIPOS ---
+        private void ActualizarListaTipos()
+        {
+            ThePokemon.PokemonTypes.Clear();
+
+            // Añadir Tipo 1
+            if (SelectedType1 != null && SelectedType1.TypeId != -1)
+            {
+                ThePokemon.PokemonTypes.Add(new PokemonType
+                {
+                    PokId = ThePokemon.PokId,
+                    TypeId = SelectedType1.TypeId,
+                    Type = SelectedType1
+                });
+            }
+
+            // Añadir Tipo 2 (Si es válido y diferente al 1)
+            if (SelectedType2 != null && SelectedType2.TypeId != -1)
+            {
+                if (SelectedType1 == null || SelectedType2.TypeId != SelectedType1.TypeId)
+                {
+                    ThePokemon.PokemonTypes.Add(new PokemonType
+                    {
+                        PokId = ThePokemon.PokId,
+                        TypeId = SelectedType2.TypeId,
+                        Type = SelectedType2
+                    });
+                }
+            }
+
+            // Recalcular defensas
+            if (ucDfModif != null) ucDfModif.calcularResistencies();
+
+            // Validar formulario
+            validatePokemon();
+        }
+
+        // --- VALIDACIÓN ---
         private void ValidarTexto_Changed(object sender, TextChangedEventArgs e)
         {
             validatePokemon();
         }
 
-        #region Comboboxes
-        private void GenerarCombosDinamicament()
+        private void validatePokemon()
         {
-            stpTipos.Children.Clear();
-            var tipusDelPokemon = ThePokemon.PokemonTypes.Select(pt => pt.Type).ToList();
-            int maxTipus = 2;
+            bool hayErrores = false;
 
-            for (int i = 0; i < maxTipus; i++)
+            if (string.IsNullOrWhiteSpace(ThePokemon.PokName)) hayErrores = true;
+
+            bool heightError = ThePokemon.PokHeight == null || ThePokemon.PokHeight <= 0;
+            PintarError(ObtenerTextBox(0), heightError);
+            if (heightError) hayErrores = true;
+
+            bool weightError = ThePokemon.PokWeight == null || ThePokemon.PokWeight <= 0;
+            PintarError(ObtenerTextBox(1), weightError);
+            if (weightError) hayErrores = true;
+
+            bool expError = ThePokemon.PokBaseExperience == null || ThePokemon.PokBaseExperience < 0;
+            PintarError(ObtenerTextBox(2), expError);
+            if (expError) hayErrores = true;
+
+            // Validar Tipos (usando las propiedades seleccionadas)
+            bool typeError = (SelectedType1 == null || SelectedType1.TypeId == -1) && (SelectedType2 == null || SelectedType2.TypeId == -1);
+
+            // Pintar los combos de rojo si no hay tipos
+            if (typeError)
             {
-                var tipoActual = (i < tipusDelPokemon.Count) ? tipusDelPokemon[i] : null;
-
-                if (tipoActual == null && tipusDelPokemon.Count >= maxTipus) continue;
-                if (i > 0 && tipusDelPokemon.Count == 0) continue;
-
-                ComboBox cmb = CrearComboTipo(tipoActual);
-                stpTipos.Children.Add(cmb);
-            }
-        }
-
-        private ComboBox CrearComboTipo(PokeData.Models.Type tipoSeleccionado)
-        {
-            ComboBox cmb = new ComboBox();
-            cmb.Width = 100;
-            cmb.Margin = new Thickness(0, 0, 5, 0);
-            cmb.ItemsSource = _llistaTipus;
-            cmb.ItemTemplate = (DataTemplate)this.FindResource("PlantillaComboBox");
-
-            if (tipoSeleccionado != null)
-            {
-                cmb.SelectedItem = _llistaTipus.FirstOrDefault(t => t.TypeId == tipoSeleccionado.TypeId);
-                cmb.Background = UIUtils.GetBrushFromHex(tipoSeleccionado.Color);
+                cmbType1.BorderBrush = Brushes.Red;
+                cmbType2.BorderBrush = Brushes.Red;
+                hayErrores = true;
             }
             else
             {
-                cmb.SelectedIndex = 0;
+                cmbType1.ClearValue(Border.BorderBrushProperty);
+                cmbType2.ClearValue(Border.BorderBrushProperty);
             }
-            cmb.SelectionChanged += Cmb_SelectionChanged;
-            return cmb;
+
+            // btnSave.IsEnabled = !hayErrores;
         }
 
-        private void Cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PintarError(TextBox txt, bool error)
         {
-            var cmb = sender as ComboBox;
-            var nuevoTipo = cmb.SelectedItem as PokeData.Models.Type;
-
-            if (nuevoTipo != null) cmb.Background = UIUtils.GetBrushFromHex(nuevoTipo.Color);
-            else cmb.Background = Brushes.White;
-
-            ThePokemon.PokemonTypes.Clear();
-            foreach (var control in stpTipos.Children)
+            if (txt == null) return;
+            if (error)
             {
-                if (control is ComboBox c && c.SelectedItem is PokeData.Models.Type t && t.TypeId != -1)
-                {
-                    if (!ThePokemon.PokemonTypes.Any(pt => pt.TypeId == t.TypeId))
-                    {
-                        ThePokemon.PokemonTypes.Add(new PokemonType
-                        {
-                            PokId = ThePokemon.PokId,
-                            TypeId = t.TypeId,
-                            Type = t
-                        });
-                    }
-                }
+                txt.Background = new SolidColorBrush(Color.FromRgb(255, 200, 200));
+                txt.BorderBrush = Brushes.Red;
             }
-            cmb.SelectionChanged -= Cmb_SelectionChanged;
-            GenerarCombosDinamicament();
-
-            if (ucDfModif != null)
+            else
             {
-                ucDfModif.calcularResistencies();
+                txt.Background = Brushes.White;
+                txt.BorderBrush = Brushes.Gray;
             }
-
-            validatePokemon();
         }
-        #endregion
 
-        #region Evoluciones (Logica)
+        private TextBox ObtenerTextBox(int row)
+        {
+            foreach (var child in grdAtributs.Children)
+            {
+                if (child is TextBox txt && Grid.GetRow(txt) == row) return txt;
+            }
+            return null;
+        }
+
+
+        #region Evoluciones
         private void CarregarEvosUI()
         {
             if (this._llistaTotsPokemons == null)
@@ -170,79 +240,7 @@ namespace PokeUI.Pagines
                 }
             }
         }
-        #endregion
 
-        #region Habilidades (ABILITIES) - CORREGIDO
-
-        private void CargarHabilidadesUI()
-        {
-            // 1. Cargar el diccionario completo para el buscador
-            if (_todasLasHabilidades == null)
-            {
-                _todasLasHabilidades = context.Abilities.OrderBy(a => a.AbilName).ToList();
-                cmbAbilitySearch.ItemsSource = _todasLasHabilidades;
-            }
-
-            // 2. Vincular la lista visual
-            lstAbilities.ItemsSource = _habilidadesDelPokemon;
-            _habilidadesDelPokemon.Clear();
-
-            // 3. Rellenar asegurándonos de que tenemos el NOMBRE
-            foreach (var hab in ThePokemon.PokemonAbilities)
-            {
-                // --- FIX: Si falta el objeto Ability (el nombre), lo cargamos a mano ---
-                if (hab.Abil.AbilName == null)
-                {
-                    hab.Abil = context.Abilities.Find(hab.AbilId);
-                }
-                // ----------------------------------------------------------------------
-
-                _habilidadesDelPokemon.Add(hab);
-            }
-        }
-
-        private void btnAddAbility_Click(object sender, RoutedEventArgs e)
-        {
-            var habilidadSeleccionada = cmbAbilitySearch.SelectedItem as Ability;
-
-            if (habilidadSeleccionada != null)
-            {
-                // CAMBIO: Usar AbilId en lugar de AbilityId (tanto en la relación como en la habilidad)
-                if (!ThePokemon.PokemonAbilities.Any(pa => pa.AbilId == habilidadSeleccionada.AbilId))
-                {
-                    var nuevaRelacion = new PokemonAbility
-                    {
-                        PokId = ThePokemon.PokId,
-                        AbilId = habilidadSeleccionada.AbilId, // CORREGIDO
-                        Abil = habilidadSeleccionada,
-                        IsHidden = false,
-                        Slot = 1
-                    };
-
-                    ThePokemon.PokemonAbilities.Add(nuevaRelacion);
-                    _habilidadesDelPokemon.Add(nuevaRelacion);
-
-                    cmbAbilitySearch.SelectedItem = null;
-                    cmbAbilitySearch.Text = "";
-                }
-            }
-        }
-
-        private void btnRemoveAbility_Click(object sender, RoutedEventArgs e)
-        {
-            var boton = sender as Button;
-            var habilidadAQuitar = boton.DataContext as PokemonAbility;
-
-            if (habilidadAQuitar != null)
-            {
-                ThePokemon.PokemonAbilities.Remove(habilidadAQuitar);
-                _habilidadesDelPokemon.Remove(habilidadAQuitar);
-            }
-        }
-
-        #endregion
-
-        #region ClicksBotons (Evoluciones)
         private void btnAddEvo_Click(object sender, RoutedEventArgs e)
         {
             var seleccionado = cmbEvoSearch.SelectedItem as Pokemon;
@@ -291,54 +289,63 @@ namespace PokeUI.Pagines
         }
         #endregion
 
-        #region Validacion
-        private void validatePokemon()
+        #region Habilidades
+        private void CargarHabilidadesUI()
         {
-            bool hayErrores = false;
-
-            if (string.IsNullOrWhiteSpace(ThePokemon.PokName)) hayErrores = true;
-
-            bool heightError = ThePokemon.PokHeight == null || ThePokemon.PokHeight <= 0;
-            PintarError(ObtenerTextBox(0), heightError);
-            if (heightError) hayErrores = true;
-
-            bool weightError = ThePokemon.PokWeight == null || ThePokemon.PokWeight <= 0;
-            PintarError(ObtenerTextBox(1), weightError);
-            if (weightError) hayErrores = true;
-
-            bool expError = ThePokemon.PokBaseExperience == null || ThePokemon.PokBaseExperience < 0;
-            PintarError(ObtenerTextBox(2), expError);
-            if (expError) hayErrores = true;
-
-            bool typeError = ThePokemon.PokemonTypes.Count == 0;
-            stpTipos.Background = typeError ? new SolidColorBrush(Color.FromArgb(50, 255, 0, 0)) : Brushes.Transparent;
-            if (typeError) hayErrores = true;
-
-            // btnSave.IsEnabled = !hayErrores;
-        }
-
-        private void PintarError(TextBox txt, bool error)
-        {
-            if (txt == null) return;
-            if (error)
+            if (_todasLasHabilidades == null)
             {
-                txt.Background = new SolidColorBrush(Color.FromRgb(255, 200, 200));
-                txt.BorderBrush = Brushes.Red;
+                _todasLasHabilidades = context.Abilities.OrderBy(a => a.AbilName).ToList();
+                cmbAbilitySearch.ItemsSource = _todasLasHabilidades;
             }
-            else
+
+            lstAbilities.ItemsSource = _habilidadesDelPokemon;
+            _habilidadesDelPokemon.Clear();
+
+            foreach (var hab in ThePokemon.PokemonAbilities)
             {
-                txt.Background = Brushes.White;
-                txt.BorderBrush = Brushes.Gray;
+                if (hab.Abil == null)
+                {
+                    hab.Abil = context.Abilities.Find(hab.AbilId);
+                }
+                _habilidadesDelPokemon.Add(hab);
             }
         }
 
-        private TextBox ObtenerTextBox(int row)
+        private void btnAddAbility_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var child in grdAtributs.Children)
+            var habilidadSeleccionada = cmbAbilitySearch.SelectedItem as Ability;
+
+            if (habilidadSeleccionada != null)
             {
-                if (child is TextBox txt && Grid.GetRow(txt) == row) return txt;
+                if (!ThePokemon.PokemonAbilities.Any(pa => pa.AbilId == habilidadSeleccionada.AbilId))
+                {
+                    var nuevaRelacion = new PokemonAbility
+                    {
+                        PokId = ThePokemon.PokId,
+                        AbilId = habilidadSeleccionada.AbilId,
+                        Abil = habilidadSeleccionada,
+                        IsHidden = false,
+                        Slot = 1
+                    };
+
+                    ThePokemon.PokemonAbilities.Add(nuevaRelacion);
+                    _habilidadesDelPokemon.Add(nuevaRelacion);
+                    cmbAbilitySearch.SelectedItem = null;
+                    cmbAbilitySearch.Text = "";
+                }
             }
-            return null;
+        }
+
+        private void btnRemoveAbility_Click(object sender, RoutedEventArgs e)
+        {
+            var boton = sender as Button;
+            var habilidadAQuitar = boton.DataContext as PokemonAbility;
+
+            if (habilidadAQuitar != null)
+            {
+                ThePokemon.PokemonAbilities.Remove(habilidadAQuitar);
+                _habilidadesDelPokemon.Remove(habilidadAQuitar);
+            }
         }
         #endregion
     }
