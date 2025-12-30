@@ -16,7 +16,7 @@ using DependencyPropertyGenerator;
 
 namespace PokeUI.UserControls
 {
-    [DependencyProperty<int>("Valor", DefaultValue = 0, Description = "El valor")]
+    [DependencyProperty<int>("Valor", DefaultValue = 0, Description = "El valor", OnChanged ="OnValorChanged")]
     [DependencyProperty<string>("StatText", DefaultValue = null, Description = "La estadistica associada")]
 
     /// <summary>
@@ -31,19 +31,34 @@ namespace PokeUI.UserControls
 
         private void SlidingBar_Loaded(object sender, RoutedEventArgs e)
         {
-            sld.Value = Valor;
         }
-
-        
 
         private void sld_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Valor = (int) sld.Value;
+            if (Valor != (int)sld.Value)
+            {
+                Valor = (int)sld.Value;
+            }
         }
 
-        private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        public void OnValorChanged()
         {
-
+            //Comprovacions validesa
+            if (Valor > 255)
+            {
+                Valor = 255;
+            }
+            else if (Valor < 0)
+            {
+                Valor = 0;
+            }
+            //Actualitzar slider
+            if ((int)sld.Value != Valor)
+            {
+                sld.Value = Valor;
+            }
         }
+
+      
     }
 }

@@ -41,7 +41,8 @@ namespace PokeUI.Pagines
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error en carregar els pokémons des de la base de dades: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error en carregar els pokémons des de la base de dades. Comprova que la base de dades és accessible. Es tancarà la aplicació.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
             }
 
 

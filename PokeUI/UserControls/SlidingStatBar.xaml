@@ -7,24 +7,91 @@
              mc:Ignorable="d" 
              x:Name="SlidingBar"
              Loaded="SlidingBar_Loaded"
-             d:DesignHeight="70" d:DesignWidth="350">
-    <Grid>
+             d:DesignHeight="40" d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <Style x:Key="GreenSliderStyle" TargetType="Slider">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid VerticalAlignment="Center">
+
+                            <Border Name="TrackBackground" 
+                                    Background="#E0E0E0" 
+                                    Height="17" 
+                                    CornerRadius="9" 
+                                    VerticalAlignment="Center" />
+
+                            <Track x:Name="PART_Track" Height="17">
+
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="RepeatButton">
+                                                <Border Background="#A8D586" CornerRadius="7,0,0,7" Margin="0,0,-5,0" Height="17"/>
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+
+                                <Track.Thumb>
+                                    <Thumb>
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Grid>
+                                                    <Ellipse Fill="#2E8B57" Width="17" Height="17"/>
+                                                    <Ellipse Stroke="White" StrokeThickness="1" Width="17" Height="17" Opacity="0.3"/>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge" Opacity="0"/>
+                                </Track.IncreaseRepeatButton>
+
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="0,5">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="255"/>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding ElementName=Stat, Path=StatText, FallbackValue=Stat}" 
-               Width="60" FontWeight="Bold" VerticalAlignment="Center"
-           Grid.Column="0"/>
 
-        <TextBox Text="{Binding ElementName=Stat, Path=Valor}"
-            Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center"></TextBox>
+        <TextBlock Text="{Binding ElementName=SlidingBar, Path=StatText, FallbackValue=Stat:}" 
+                   FontWeight="Bold" 
+                   FontSize="14"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Foreground="Black"
+                   Grid.Column="0"
+                   />
 
-        <Slider  x:Name="sld" Maximum="255" Minimum="0" 
-                 Height="20" Width="200"
-                 Foreground="Green"
-                 ValueChanged="sld_ValueChanged"
-                 Grid.Column="2"/>
+        <TextBox Text="{Binding ElementName=SlidingBar, Path=Valor}"
+                 Grid.Column="1" 
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                 BorderThickness="0" 
+                 Background="Transparent"
+                 Foreground="#2E8B57" 
+                 FontWeight="Bold"
+                 FontSize="14"/>
+
+        <Slider  x:Name="sld" 
+         Grid.Column="2"
+         Maximum="255" Minimum="0" 
+         ValueChanged="sld_ValueChanged"
+         Style="{StaticResource GreenSliderStyle}"
+         VerticalAlignment="Center"
+         Height="17" />
     </Grid>
 </UserControl>
