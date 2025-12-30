@@ -1,6 +1,9 @@
-﻿using PokeData.Models;
+﻿using DependencyPropertyGenerator;
+using PokeData.Models;
+using PokeUI.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DependencyPropertyGenerator;
 using Type = PokeData.Models.Type;
 
 namespace PokeUI.Pagines
@@ -26,7 +28,10 @@ namespace PokeUI.Pagines
     public partial class PaginaEdicio : Page
     {
         AppDbContext context = new AppDbContext();
-        private List<Type> llistaTipus;
+
+        private List<Type> _llistaTipus;
+        private ObservableCollection<Pokemon> _llistaEvos = new ObservableCollection<Pokemon>();
+        private ObservableCollection<Pokemon> _llistaTotsPokemons;
         public PaginaEdicio()
         {
             InitializeComponent();
@@ -40,23 +45,25 @@ namespace PokeUI.Pagines
         {
             if (ThePokemon == null || context == null) return;
 
-            llistaTipus = context.Types.OrderBy(t => t.TypeName).ToList();
-            llistaTipus.Insert(0, new Type { TypeId = -1, TypeName = "---", Color = "#F0F0F0" });
+            _llistaTipus = context.Types.OrderBy(t => t.TypeName).ToList();
+            _llistaTipus.Insert(0, new Type { TypeId = -1, TypeName = "---", Color = "#F0F0F0" });
 
             GenerarCombosDinamicament();
+            CarregarEvosUI();
 
         }
 
         public void OnThePokemonChanged()
         {
             if (ThePokemon == null || context == null) return;
-            if (llistaTipus != null)
+            if (_llistaTipus != null)
             {
                 GenerarCombosDinamicament();
+                CarregarEvosUI();
             }
         }
 
-
+        #region Comboboxes
         private void GenerarCombosDinamicament()
         {
             stpTipos.Children.Clear();
@@ -86,19 +93,20 @@ namespace PokeUI.Pagines
             cmb.Width = 100;
             cmb.Margin = new Thickness(0, 0, 5, 0);
 
-            cmb.ItemsSource = llistaTipus;
+            cmb.ItemsSource = _llistaTipus;
             cmb.ItemTemplate = (DataTemplate)this.FindResource("PlantillaComboBox");
 
             // Seleccionar el ítem correcto
             if (tipoSeleccionado != null)
             {
-                cmb.SelectedItem = llistaTipus.FirstOrDefault(t => t.TypeId == tipoSeleccionado.TypeId);
-                pintarFondoCombo(cmb, tipoSeleccionado.Color);
+                cmb.SelectedItem = _llistaTipus.FirstOrDefault(t => t.TypeId == tipoSeleccionado.TypeId);
+                cmb.Background = UIUtils.GetBrushFromHex(tipoSeleccionado.Color);
+              
             }
             else
             {
                 cmb.SelectedIndex = 0; //Hem fet l'insert de la llista a l'index 0.
-                pintarFondoCombo(cmb, "#F0F0F0");
+                //pintarFondoCombo(cmb, "#F0F0F0");
             }
 
             // Suscribir al evento de cambio
@@ -107,14 +115,9 @@ namespace PokeUI.Pagines
             return cmb;
         }
 
-        private void validatePokemon()
-        {
-            /*Tots els camps són obligatoris, i han de tenir un caràcter diferent d’espai com a mínim.
-                Com a mínim, ha de tenir un tipus.
-                Els camps numèrics han de validar-se dins un rang raonable.
-                Si hi ha qualsevol camp erroni, el botó desar es deshabilita i es mostra el fons del Textbox de color
-                vermell suau.*/
-        }
+
+
+
 
         private void Cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -122,7 +125,7 @@ namespace PokeUI.Pagines
             var nuevoTipo = cmb.SelectedItem as PokeData.Models.Type;
 
             // 1. Efecto visual inmediato
-            if (nuevoTipo != null) pintarFondoCombo(cmb, nuevoTipo.Color);
+            if (nuevoTipo != null) cmb.Background = UIUtils.GetBrushFromHex(nuevoTipo.Color);
             else cmb.Background = Brushes.White;
 
             // 2. Actualizar la lista real del Pokémon
@@ -150,17 +153,96 @@ namespace PokeUI.Pagines
             GenerarCombosDinamicament();
 
         }
+        #endregion
 
-        private void pintarFondoCombo(ComboBox cmb, string colorHex)
+
+
+        #region evolucions
+        private void CarregarEvosUI()
         {
-            try
+            // 1. Buscador (Carga Lazy)
+            if (this._llistaTotsPokemons == null)
             {
-                if (!string.IsNullOrEmpty(colorHex))
-                    cmb.Background = (Brush)new BrushConverter().ConvertFromString(colorHex);
-                else
-                    cmb.Background = Brushes.White;
+                _llistaTotsPokemons = new ObservableCollection<Pokemon>(context.Pokemons.OrderBy(p => p.PokName).ToList());
+                cmbEvoSearch.ItemsSource = _llistaTotsPokemons;
             }
-            catch { cmb.Background = Brushes.White; }
+
+            // 2. Vincular lista visual
+            lstEvoluciones.ItemsSource = this._llistaEvos;
+            _llistaEvos.Clear();
+
+            // 3. ¡AQUÍ ESTÁ LA MAGIA DRY!
+            if (ThePokemon != null)
+            {
+                // Llamamos a nuestra clase Utils en lugar de escribir 50 líneas de código aquí
+                var familia = EvolutionUtils.GetFamiliaCompleta(context, ThePokemon.PokId);
+
+                // Rellenamos la ObservableCollection con los resultados
+                foreach (var p in familia)
+                {
+                    _llistaEvos.Add(p);
+                }
+            }
+        }
+        #endregion
+
+        #region ClicksBotons
+
+        // BOTÓN AÑADIR (+)
+        private void btnAddEvo_Click(object sender, RoutedEventArgs e)
+        {
+            var seleccionado = cmbEvoSearch.SelectedItem as Pokemon;
+            if (seleccionado != null)
+            {
+                // Evitar duplicados
+                if (!_llistaEvos.Any(p => p.PokId == seleccionado.PokId))
+                {
+                    _llistaEvos.Add(seleccionado);
+                }
+            }
+        }
+
+        // BOTÓN ELIMINAR (X)
+        private void btnDelEvo_Click(object sender, RoutedEventArgs e)
+        {
+            var item = lstEvoluciones.SelectedItem as Pokemon;
+            if (item != null)
+            {
+                _llistaEvos.Remove(item);
+            }
+        }
+
+        // BOTÓN SUBIR (↑)
+        private void btnUpEvo_Click(object sender, RoutedEventArgs e)
+        {
+            int index = lstEvoluciones.SelectedIndex;
+            // Si hay algo seleccionado y no es el primero
+            if (index > 0)
+            {
+                _llistaEvos.Move(index, index - 1);
+            }
+        }
+
+        // BOTÓN BAJAR (↓)
+        private void btnDownEvo_Click(object sender, RoutedEventArgs e)
+        {
+            int index = lstEvoluciones.SelectedIndex;
+            // Si hay algo seleccionado y no es el último
+            if (index >= 0 && index < _llistaEvos.Count - 1)
+            {
+                _llistaEvos.Move(index, index + 1);
+            }
+        }
+        #endregion
+
+
+        private void validatePokemon()
+        {
+            /*Tots els camps són obligatoris, i han de tenir un caràcter diferent d’espai com a mínim.
+                Com a mínim, ha de tenir un tipus.
+                Els camps numèrics han de validar-se dins un rang raonable.
+                Si hi ha qualsevol camp erroni, el botó desar es deshabilita i es mostra el fons del Textbox de color
+                vermell suau.*/
         }
     }
 }
