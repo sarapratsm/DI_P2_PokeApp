@@ -3,7 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:PokeUI.Pagines" xmlns:uc="clr-namespace:PokeUI.UserControls"
+      xmlns:local="clr-namespace:PokeUI.Pagines" 
+      xmlns:uc="clr-namespace:PokeUI.UserControls"
+      xmlns:dotNetKitControls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
       mc:Ignorable="d" 
       x:Name="Page"
       Loaded="Page_Loaded"
@@ -88,7 +90,6 @@
 
             </Grid>
 
-            <!--PkmName here-->
             <Border Background="DarkGreen" Padding="10" Grid.ColumnSpan="2" Margin="0,5,10,5" BorderThickness="5" BorderBrush="Green">
                 <StackPanel Orientation="Horizontal">
 
