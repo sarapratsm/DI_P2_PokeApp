@@ -51,8 +51,32 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
 
-            <Grid x:Name="grdEsquerra" Grid.Column="0" Background="White" Margin="0,0,10,0">
+            <Border Grid.Row="0" Background="DarkGreen" Grid.ColumnSpan="2" Height="50">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnBack" Click="btnBack_Click" Content="&#xE72B;" FontFamily="Segoe MDL2 Assets"></Button>
+                        <!--<Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0" x:Name="btnEdit" Click="btnEdit_Click" Content="&#xE70F;" FontFamily="Segoe MDL2 Assets"></Button>
+                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnCancel" Click="btnCancel_Click" Content="&#xE711;" FontFamily="Segoe MDL2 Assets"></Button>-->
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                        <Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE74E;" Click="btnSave_Click" x:Name="btnSave" FontFamily="Segoe MDL2 Assets"></Button>
+                        <!--<Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE948;" Click="btnAdd_Click" x:Name="btnAdd" FontFamily="Segoe MDL2 Assets"></Button>-->
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid x:Name="grdEsquerra" Grid.Column="0" Grid.Row="1" Background="White" Margin="0,0,10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
@@ -180,7 +204,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="grdDreta" Grid.Column="1" Background="LightGreen">
+            <Grid x:Name="grdDreta" Grid.Column="1" Grid.Row="1" Background="LightGreen">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>

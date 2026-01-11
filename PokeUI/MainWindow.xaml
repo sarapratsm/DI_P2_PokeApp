@@ -16,10 +16,10 @@
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
 
 
 
@@ -31,8 +31,7 @@
 
 
 
-                <Grid Height="60">
-
+                <Grid Height="60" x:Name="grdColumnaLateral">
                     <Image Source="/Imatges/pokeball.png" 
                            Width="25" 
                            Height="25"
@@ -49,25 +48,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="DarkGreen">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnBack" Click="btnBack_Click" Content="&#xE72B;" FontFamily="Segoe MDL2 Assets"></Button>
-                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0" x:Name="btnEdit" Click="btnEdit_Click" Content="&#xE70F;" FontFamily="Segoe MDL2 Assets"></Button>
-                        <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnCancel" Click="btnCancel_Click" Content="&#xE711;" FontFamily="Segoe MDL2 Assets"></Button>
-
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-                        <Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE74E;" Click="btnSave_Click" x:Name="btnSave" FontFamily="Segoe MDL2 Assets"></Button>
-                        <Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE948;" Click="btnAdd_Click" x:Name="btnAdd" FontFamily="Segoe MDL2 Assets"></Button>
-
-                    </StackPanel>
-                </Grid>
-            </Border>
+            
 
 
         </Grid>

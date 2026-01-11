@@ -19,10 +19,32 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Image Source="/Imatges/Ball-Pokedex.png" Height="50"></Image>
-        <StackPanel Orientation="Horizontal" x:Name="stpFiltres" Grid.Column="1">
+
+        <Border Grid.Row="0" Background="DarkGreen" Grid.ColumnSpan="2" Height="50">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <!--<Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnBack" Click="btnBack_Click" Content="&#xE72B;" FontFamily="Segoe MDL2 Assets"></Button>-->
+                    <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0" x:Name="btnEdit" Click="btnEdit_Click" Content="&#xE70F;" FontFamily="Segoe MDL2 Assets"></Button>
+                    <Button Style="{StaticResource TransparentBackgroundButton}" Margin="20,0,20,0"  x:Name="btnCancel" Click="btnCancel_Click" Content="&#xE711;" FontFamily="Segoe MDL2 Assets"></Button>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <!--<Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE74E;" Click="btnSave_Click" x:Name="btnSave" FontFamily="Segoe MDL2 Assets"></Button>-->
+                    <Button Style="{StaticResource TransparentBackgroundButton}"  Margin="20,0,20,0" Content="&#xE948;" Click="btnAdd_Click" x:Name="btnAdd" FontFamily="Segoe MDL2 Assets"></Button>
+
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <Image Source="/Imatges/Ball-Pokedex.png" Height="50" Grid.Row="1"></Image>
+        <StackPanel Orientation="Horizontal" x:Name="stpFiltres" Grid.Column="1" Grid.Row="1">
             <AdornerDecorator>
                 <TextBox x:Name="txbFiltreNom" Width="150" Margin="10" TextChanged="TextBox_TextChanged" Padding="5" >
                     <ut:WatermarkService.Watermark>
@@ -64,7 +86,7 @@
 
         <uc:FitxaCompleta x:Name="MasterDetail" 
                   Grid.Column="1" 
-                  Grid.Row="1"
+                  Grid.Row="2"
                   ThePokemon="{Binding ElementName=lsvPokedex, Path=SelectedItem}" />
     </Grid>
 </Page>

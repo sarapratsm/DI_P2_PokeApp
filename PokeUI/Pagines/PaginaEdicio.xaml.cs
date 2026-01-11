@@ -1,4 +1,5 @@
 ﻿using DependencyPropertyGenerator;
+using Microsoft.EntityFrameworkCore;
 using PokeData.Models;
 using PokeUI.Utils;
 using System;
@@ -347,6 +348,24 @@ namespace PokeUI.Pagines
             }
         }
         #endregion
+
+        #region Banner
+        // Añade/Sustituye estos métodos en PaginaEdicio.xaml.cs
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
     }
 
     public class EvolutionEditableItem : System.ComponentModel.INotifyPropertyChanged

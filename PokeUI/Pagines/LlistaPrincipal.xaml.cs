@@ -180,5 +180,40 @@ namespace PokeUI.Pagines
            //Hauriem de cridar la main window per poder navegar... Es pot fer però quina mandra
            //toDo
         }
+
+        // Añade/Sustituye estos métodos en LlistaPrincipal.xaml.cs
+
+        // Añade/Sustituye estos métodos en LlistaPrincipal.xaml.cs
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            // Opción A: Cerrar la aplicación
+            Application.Current.Shutdown();
+
+            // Opción B: Limpiar selección/filtros (Si prefieres esto, descomenta)
+            // lsvPokedex.SelectedItem = null;
+            // btnNetejaFiltres_Click(sender, e);
+        }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (lsvPokedex.SelectedItem is PokeData.Models.Pokemon seleccionado)
+            {
+                var paginaEdicion = new PaginaEdicio();
+                paginaEdicion.ThePokemon = seleccionado;
+                NavigationService.Navigate(paginaEdicion);
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un Pokémon per editar.");
+            }
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var paginaEdicion = new PaginaEdicio();
+            paginaEdicion.ThePokemon = new PokeData.Models.Pokemon(); // Nuevo Pokemon vacío
+            NavigationService.Navigate(paginaEdicion);
+        }
     }
 }
