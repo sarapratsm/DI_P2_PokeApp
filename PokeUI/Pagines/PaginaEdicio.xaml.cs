@@ -362,7 +362,71 @@ namespace PokeUI.Pagines
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (ThePokemon == null) return;
 
+                //Mirem si el poke existeix a la BD
+                var pokemonDb = context.Pokemons
+                            .Include(p => p.PokemonTypes)
+                            .Include(p => p.PokemonAbilities)
+                            .FirstOrDefault(p => p.PokId == ThePokemon.PokId);
+
+                if(pokemonDb == null)
+                {
+                    pokemonDb = new Pokemon();
+                    context.Pokemons.Add(pokemonDb);
+                }
+
+                pokemonDb.PokName = ThePokemon.PokName;
+                pokemonDb.PokHeight = ThePokemon.PokHeight;
+                pokemonDb.PokWeight = ThePokemon.PokWeight;
+                pokemonDb.PokBaseExperience = ThePokemon.PokBaseExperience;
+                pokemonDb.PokImage = ThePokemon.PokImage;
+
+                // 3. ACTUALIZAR TIPOS (Estrategia: Borrar los viejos y poner los nuevos)
+                pokemonDb.PokemonTypes.Clear();
+                    int slot = 1;
+                foreach (var t in ThePokemon.PokemonTypes)
+                {
+                    pokemonDb.PokemonTypes.Add(new PokemonType
+                    {
+                        TypeId = t.TypeId,
+                        Slot = slot
+                    });
+                    slot++;
+                }
+
+                //Habilitats
+                pokemonDb.PokemonAbilities.Clear();
+                slot = 1;
+                foreach (var a in ThePokemon.PokemonAbilities)
+                {
+                    pokemonDb.PokemonAbilities.Add(new PokemonAbility
+                    {
+                        AbilId = a.AbilId,
+                        IsHidden = a.IsHidden,
+                        Slot = a.Slot
+                    });
+                }
+
+                //Evolucions:
+                //todo
+                
+
+                // 6. GUARDAR CAMBIOS DEFINITIVAMENTE
+                context.SaveChanges();
+
+                MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Volver atrás (a la lista)
+                if (NavigationService.CanGoBack) NavigationService.GoBack();
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Error al guardar: {ex.Message} \n\n {ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
 
