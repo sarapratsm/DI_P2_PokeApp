@@ -13,39 +13,7 @@
       d:DesignHeight="650" d:DesignWidth="1000"
       Title="PaginaEdicio">
 
-    <Page.Resources>
-        <DataTemplate x:Key="PlantillaComboBox">
-            <Border Background="{Binding Color}" Padding="5" CornerRadius="4" Margin="2">
-                <TextBlock Text="{Binding TypeName}" 
-                           Foreground="White" 
-                           FontWeight="Bold" 
-                           HorizontalAlignment="Center"/>
-            </Border>
-        </DataTemplate>
-
-        <Style x:Key="RoundAddButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#87CEFA"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="15" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <utils:IntToDecimalConverter x:Key="DecimalConv"/>
-
-        <utils:StringToBrushConverter x:Key="ColorConv"/>
-    </Page.Resources>
-
     <ScrollViewer>
-
         <Grid x:Name="grdMainStructure" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
@@ -138,14 +106,16 @@
             Orientation="Horizontal" Margin="0,0,0,15">
 
                         <ComboBox x:Name="cmbType1" Width="100" Margin="0,0,5,0"
-              SelectedItem="{Binding ElementName=Page, Path=SelectedType1, Mode=TwoWay}"
-              ItemTemplate="{StaticResource PlantillaComboBox}"
-              TextSearch.TextPath="TypeName"/>
+                            SelectedItem="{Binding ElementName=Page, Path=SelectedType1, Mode=TwoWay}"
+                            ItemContainerStyle="{StaticResource FullWidthComboBoxItem}"
+                            ItemTemplate="{StaticResource PlantillaComboBox}"
+                            TextSearch.TextPath="TypeName"/>
 
                         <ComboBox x:Name="cmbType2" Width="100" Margin="0,0,5,0"
-              SelectedItem="{Binding ElementName=Page, Path=SelectedType2, Mode=TwoWay}"
-              ItemTemplate="{StaticResource PlantillaComboBox}"
-              TextSearch.TextPath="TypeName"/>
+                            SelectedItem="{Binding ElementName=Page, Path=SelectedType2, Mode=TwoWay}"
+                            ItemContainerStyle="{StaticResource FullWidthComboBoxItem}"
+                            ItemTemplate="{StaticResource PlantillaComboBox}"
+                            TextSearch.TextPath="TypeName"/>
                     </StackPanel>
 
 

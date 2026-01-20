@@ -56,22 +56,13 @@
             <ComboBox x:Name="cmbTipus" 
           Margin="10" 
           Width="150" 
-          SelectionChanged="cmbTipus_SelectionChanged">
+          SelectionChanged="cmbTipus_SelectionChanged"
+          ItemTemplate="{StaticResource PlantillaComboBox}"
+          ItemContainerStyle="{StaticResource FullWidthComboBoxItem}">
 
                 <ut:WatermarkService.Watermark>
                     <TextBlock>Selecciona tipus</TextBlock>
                 </ut:WatermarkService.Watermark>
-
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Background="{Binding Color}" Padding="5" CornerRadius="4" Margin="2">
-                            <TextBlock Text="{Binding TypeName}" 
-                           Foreground="White" 
-                           FontWeight="Bold" 
-                           HorizontalAlignment="Center"/>
-                        </Border>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
 
             </ComboBox>
             <Button x:Name="btnNetejaFiltres"  Click="btnNetejaFiltres_Click" Style="{StaticResource PokedexButtonStyle}">Neteja</Button>
