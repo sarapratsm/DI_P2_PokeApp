@@ -362,75 +362,138 @@ namespace PokeUI.Pagines
         /// Verifica si el Pokémon existeix a la base de dades per actualitzar-lo o crear-ne un de nou.
         /// Gestiona la persistència de propietats bàsiques, així com les relacions de tipus, habilitats i evolucions.
         /// </summary>
-        /// <param name="sender">L'objecte que ha originat l'esdeveniment.</param>
-        /// <param name="e">Els arguments de l'esdeveniment.</param>
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                // ---------------------------------------------------------
+                // 1. VALIDACIÓ DE DADES (Nom, stats, etc.)
+                // ---------------------------------------------------------
                 if (ThePokemon == null) return;
 
-                var pokemonDb = context.Pokemons
-                            .Include(p => p.PokemonTypes)
-                            .Include(p => p.PokemonAbilities)
-                            .FirstOrDefault(p => p.PokId == ThePokemon.PokId);
+                // Cridem al mètode que pinta de vermell si falta alguna cosa
+                validatePokemon();
 
+                // ---------------------------------------------------------
+                // 2. PROTECCIÓ DE SEGURETAT (Anti-Bucles Infinits) 🛡️
+                // ---------------------------------------------------------
+                // Busquem qui és el pare actual d'aquest Pokémon a la BD (lectura ràpida)
+                var infoPadre = context.PokemonEvolutionMatchups
+                                       .AsNoTracking()
+                                       .FirstOrDefault(m => m.PokId == ThePokemon.PokId);
+
+                int? idDelPare = infoPadre?.EvolvesFromSpeciesId;
+
+                // Revisem la llista de fills que volem guardar
+                foreach (var evoItem in _llistaEvos)
+                {
+                    // A) No puc evolucionar a mi mateix
+                    if (evoItem.Pokemon.PokId == ThePokemon.PokId)
+                    {
+                        MessageBox.Show($"Error de Lògica: {ThePokemon.PokName} no pot evolucionar a si mateix!",
+                                        "Bucle detectat", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return; // Cancelem guardar
+                    }
+
+                    // B) No puc evolucionar al meu propi pare (crearia un cercle infinit)
+                    if (idDelPare != null && evoItem.Pokemon.PokId == idDelPare)
+                    {
+                        MessageBox.Show($"Error Crític: No pots afegir a {evoItem.Pokemon.PokName} com a evolució perquè ja és el PARE de {ThePokemon.PokName}.\n\nAixò trencaria la base de dades!",
+                                        "Paradoxa Temporal Detectada", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return; // Cancelem guardar
+                    }
+                }
+
+                // ---------------------------------------------------------
+                // 3. RECUPERAR O CREAR EL POKÉMON A LA BASE DE DADES
+                // ---------------------------------------------------------
+                var pokemonDb = context.Pokemons
+                                       .Include(p => p.PokemonTypes)
+                                       .Include(p => p.PokemonAbilities)
+                                       .FirstOrDefault(p => p.PokId == ThePokemon.PokId);
+
+                // Si no existeix, és un INSERT (Nou Pokémon)
                 if (pokemonDb == null)
                 {
                     pokemonDb = new Pokemon();
                     context.Pokemons.Add(pokemonDb);
                 }
 
+                // ---------------------------------------------------------
+                // 4. ACTUALITZAR DADES BÀSIQUES
+                // ---------------------------------------------------------
                 pokemonDb.PokName = ThePokemon.PokName;
                 pokemonDb.PokHeight = ThePokemon.PokHeight;
                 pokemonDb.PokWeight = ThePokemon.PokWeight;
                 pokemonDb.PokBaseExperience = ThePokemon.PokBaseExperience;
-                pokemonDb.PokImage = ThePokemon.PokImage;
+                pokemonDb.PokImage = ThePokemon.PokImage; // Si has implementat la imatge
 
+                // ---------------------------------------------------------
+                // 5. ACTUALITZAR TIPUS (Esborrar els vells i posar els nous)
+                // ---------------------------------------------------------
                 pokemonDb.PokemonTypes.Clear();
-                int slot = 1;
-                foreach (var t in ThePokemon.PokemonTypes)
+
+                // Afegim Tipus 1
+                if (SelectedType1 != null && SelectedType1.TypeId != -1)
                 {
-                    pokemonDb.PokemonTypes.Add(new PokemonType
-                    {
-                        TypeId = t.TypeId,
-                        Slot = slot
-                    });
-                    slot++;
+                    pokemonDb.PokemonTypes.Add(new PokemonType { TypeId = SelectedType1.TypeId, Slot = 1 });
                 }
 
+                // Afegim Tipus 2 (si n'hi ha)
+                if (SelectedType2 != null && SelectedType2.TypeId != -1)
+                {
+                    pokemonDb.PokemonTypes.Add(new PokemonType { TypeId = SelectedType2.TypeId, Slot = 2 });
+                }
+
+                // ---------------------------------------------------------
+                // 6. ACTUALITZAR HABILITATS (Opcional, segons la teva lògica)
+                // ---------------------------------------------------------
+                // Nota: Aquí mantinc la lògica que tenies, assumint que 'ThePokemon.PokemonAbilities' ve ple.
+                // Si les gestiones diferent a la UI, potser caldria canviar això.
                 pokemonDb.PokemonAbilities.Clear();
-                slot = 1;
+                int slotAbil = 1;
                 foreach (var a in ThePokemon.PokemonAbilities)
                 {
                     pokemonDb.PokemonAbilities.Add(new PokemonAbility
                     {
                         AbilId = a.AbilId,
                         IsHidden = a.IsHidden,
-                        Slot = a.Slot
+                        Slot = a.Slot > 0 ? a.Slot : slotAbil // Assegurar slot vàlid
                     });
+                    slotAbil++;
                 }
 
+                // ---------------------------------------------------------
+                // 7. ACTUALITZAR EVOLUCIONS (FILLS)
+                // ---------------------------------------------------------
+
+                // Pas A: "Divorciar" els fills antics (trencar relació antiga)
                 var oldChildren = context.PokemonEvolutionMatchups
-                            .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
-                            .ToList();
+                                         .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
+                                         .ToList();
 
                 foreach (var child in oldChildren)
                 {
-                    child.EvolvesFromSpeciesId = null;
+                    child.EvolvesFromSpeciesId = null; // Ja no vénen d'aquest pare
                 }
 
+                // Pas B: "Adoptar" els nous fills seleccionats a la llista
                 foreach (var evoItem in _llistaEvos)
                 {
+                    // Busquem la fitxa d'evolució del fill
                     var hijoMatchup = context.PokemonEvolutionMatchups
                                              .FirstOrDefault(m => m.PokId == evoItem.Pokemon.PokId);
 
+                    // Si el fill té fitxa, li diem que nosaltres som el seu pare
                     if (hijoMatchup != null)
                     {
                         hijoMatchup.EvolvesFromSpeciesId = pokemonDb.PokId;
                     }
                 }
 
+                // ---------------------------------------------------------
+                // 8. GUARDAR CANVIS I SORTIR
+                // ---------------------------------------------------------
                 context.SaveChanges();
 
                 MessageBox.Show("Guardat correctament", "Èxit", MessageBoxButton.OK, MessageBoxImage.Information);
