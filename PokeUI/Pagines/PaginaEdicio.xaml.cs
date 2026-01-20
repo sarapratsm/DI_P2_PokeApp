@@ -13,26 +13,32 @@ using Type = PokeData.Models.Type;
 
 namespace PokeUI.Pagines
 {
-    [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El pokemon", OnChanged = "OnThePokemonChanged")]
-    [DependencyProperty<bool>("hiHaModificacions", Category = "controlador", Description = "Mira si hi ha canvis al Pokemon")]
+    [DependencyProperty<Pokemon>("ThePokemon", Category = "Pokemon", Description = "El Pokémon actual que s'està editant", OnChanged = "OnThePokemonChanged")]
+    [DependencyProperty<bool>("hiHaModificacions", Category = "Controlador", Description = "Indica si hi ha canvis no guardats al Pokémon")]
 
-    // PROPIEDADES NUEVAS PARA LOS COMBOS
+    // Propietats per fer Binding als ComboBox de tipus
     [DependencyProperty<Type>("SelectedType1", OnChanged = "OnSelectedType1Changed")]
     [DependencyProperty<Type>("SelectedType2", OnChanged = "OnSelectedType2Changed")]
 
+    /// <summary>
+    /// Pàgina d'edició per modificar o crear nous Pokémon.
+    /// Gestiona dades bàsiques, tipus, habilitats i evolucions.
+    /// </summary>
     public partial class PaginaEdicio : Page
     {
-        AppDbContext context = new AppDbContext();
+        private AppDbContext context = new AppDbContext();
 
-        // Variables de datos
+        // Variables de dades
         private List<Type> _llistaTipus;
+        public List<Type> LlistaTipusPublica { get { return _llistaTipus; } }
 
         private ObservableCollection<EvolutionEditableItem> _llistaEvos = new ObservableCollection<EvolutionEditableItem>();
         private ObservableCollection<Pokemon> _llistaTotsPokemons;
+
         private List<Ability> _todasLasHabilidades;
         private ObservableCollection<PokemonAbility> _habilidadesDelPokemon = new ObservableCollection<PokemonAbility>();
 
-        // Flag para evitar bucles infinitos al cargar
+        // Bandera per evitar bucles infinits quan actualitzem els combos des del codi
         private bool _isUpdatingTypes = false;
 
         public PaginaEdicio()
@@ -40,76 +46,94 @@ namespace PokeUI.Pagines
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Mètode que s'executa quan es carrega la pàgina.
+        /// Inicialitza les llistes mestres i carrega les dades inicials.
+        /// </summary>
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (ThePokemon == null || context == null) return;
 
-            // 1. Cargar Tipos
+            // 1. Carregar llista de Tipus disponibles
             _llistaTipus = context.Types.OrderBy(t => t.TypeName).ToList();
             _llistaTipus.Insert(0, new Type { TypeId = -1, TypeName = "---", Color = "#F0F0F0" });
 
+            // Assignació directa per evitar problemes de binding
             cmbType1.ItemsSource = _llistaTipus;
             cmbType2.ItemsSource = _llistaTipus;
 
-            // 2. Cargar datos del Pokémon actual
+            // 2. Carregar dades del Pokémon actual a la interfície
             OnThePokemonChanged();
 
-            // 3. Cargar Evoluciones
+            // 3. Carregar Evolucions
             CarregarEvosUI();
 
-            // 4. Cargar Habilidades
+            // 4. Carregar Habilitats
             CargarHabilidadesUI();
         }
 
+        /// <summary>
+        /// Es dispara automàticament quan canvia l'objecte ThePokemon (o al carregar la pàgina).
+        /// Sincronitza els controls visuals amb les dades del model.
+        /// </summary>
         public void OnThePokemonChanged()
         {
             if (ThePokemon == null || context == null) return;
 
             if (_llistaTipus != null)
             {
-                // Sincronizar Combos con la lista real del Pokémon
-                _isUpdatingTypes = true; // Bloqueamos eventos
+                // Bloquegem esdeveniments per evitar que el canvi de combo dispari lògica de guardat
+                _isUpdatingTypes = true;
 
                 var tipos = ThePokemon.PokemonTypes.ToList();
 
-                // Tipo 1
+                // Assignar Tipus 1
                 if (tipos.Count > 0)
                     SelectedType1 = _llistaTipus.FirstOrDefault(t => t.TypeId == tipos[0].TypeId);
                 else
                     SelectedType1 = _llistaTipus.FirstOrDefault(t => t.TypeId == -1); // "---"
 
-                // Tipo 2
+                // Assignar Tipus 2
                 if (tipos.Count > 1)
                     SelectedType2 = _llistaTipus.FirstOrDefault(t => t.TypeId == tipos[1].TypeId);
                 else
                     SelectedType2 = _llistaTipus.FirstOrDefault(t => t.TypeId == -1); // "---"
 
-                _isUpdatingTypes = false; // Desbloqueamos
+                _isUpdatingTypes = false; // Desbloquegem esdeveniments
 
-                // Otras recargas
+                // Recarregar altres llistes dependents
                 CarregarEvosUI();
                 CargarHabilidadesUI();
             }
         }
 
+        /// <summary>
+        /// Callback quan l'usuari canvia el primer tipus al ComboBox.
+        /// </summary>
         public void OnSelectedType1Changed()
         {
             if (_isUpdatingTypes || ThePokemon == null) return;
             ActualizarListaTipos();
         }
 
+        /// <summary>
+        /// Callback quan l'usuari canvia el segon tipus al ComboBox.
+        /// </summary>
         public void OnSelectedType2Changed()
         {
             if (_isUpdatingTypes || ThePokemon == null) return;
             ActualizarListaTipos();
         }
 
-        // --- MÉTODO CENTRAL PARA ACTUALIZAR TIPOS ---
+        /// <summary>
+        /// Sincronitza els tipus seleccionats als ComboBox amb la llista real del Pokémon (ThePokemon.PokemonTypes).
+        /// També recalcula les resistències i valida el formulari.
+        /// </summary>
         private void ActualizarListaTipos()
         {
             ThePokemon.PokemonTypes.Clear();
 
-            // Añadir Tipo 1
+            // Afegir Tipus 1
             if (SelectedType1 != null && SelectedType1.TypeId != -1)
             {
                 ThePokemon.PokemonTypes.Add(new PokemonType
@@ -120,7 +144,7 @@ namespace PokeUI.Pagines
                 });
             }
 
-            // Añadir Tipo 2 (Si es válido y diferente al 1)
+            // Afegir Tipus 2 (Només si és vàlid i diferent del primer)
             if (SelectedType2 != null && SelectedType2.TypeId != -1)
             {
                 if (SelectedType1 == null || SelectedType2.TypeId != SelectedType1.TypeId)
@@ -134,41 +158,52 @@ namespace PokeUI.Pagines
                 }
             }
 
-            // Recalcular defensas
+            // Recalcular taula de debilitats/resistències en temps real
             if (ucDfModif != null) ucDfModif.calcularResistencies();
 
-            // Validar formulario
+            // Validar estat del formulari
             validatePokemon();
         }
 
-        // --- VALIDACIÓN ---
+        #region Validació
+
+        /// <summary>
+        /// Esdeveniment genèric per validar quan canvia text als TextBox.
+        /// </summary>
         private void ValidarTexto_Changed(object sender, TextChangedEventArgs e)
         {
             validatePokemon();
         }
 
+        /// <summary>
+        /// Comprova les regles de negoci i pinta els camps erronis de vermell.
+        /// </summary>
         private void validatePokemon()
         {
             bool hayErrores = false;
 
+            // Validar Nom
             if (string.IsNullOrWhiteSpace(ThePokemon.PokName)) hayErrores = true;
 
+            // Validar Alçada
             bool heightError = ThePokemon.PokHeight == null || ThePokemon.PokHeight <= 0;
             PintarError(ObtenerTextBox(0), heightError);
             if (heightError) hayErrores = true;
 
+            // Validar Pes
             bool weightError = ThePokemon.PokWeight == null || ThePokemon.PokWeight <= 0;
             PintarError(ObtenerTextBox(1), weightError);
             if (weightError) hayErrores = true;
 
+            // Validar Experiència Base
             bool expError = ThePokemon.PokBaseExperience == null || ThePokemon.PokBaseExperience < 0;
             PintarError(ObtenerTextBox(2), expError);
             if (expError) hayErrores = true;
 
-            // Validar Tipos (usando las propiedades seleccionadas)
-            bool typeError = (SelectedType1 == null || SelectedType1.TypeId == -1) && (SelectedType2 == null || SelectedType2.TypeId == -1);
+            // Validar Tipus (Ha de tenir almenys un tipus vàlid)
+            bool typeError = (SelectedType1 == null || SelectedType1.TypeId == -1) &&
+                             (SelectedType2 == null || SelectedType2.TypeId == -1);
 
-            // Pintar los combos de rojo si no hay tipos
             if (typeError)
             {
                 cmbType1.BorderBrush = Brushes.Red;
@@ -180,10 +215,11 @@ namespace PokeUI.Pagines
                 cmbType1.ClearValue(Border.BorderBrushProperty);
                 cmbType2.ClearValue(Border.BorderBrushProperty);
             }
-
-            // btnSave.IsEnabled = !hayErrores;
         }
 
+        /// <summary>
+        /// Helper per canviar el color de fons d'un TextBox segons si té error.
+        /// </summary>
         private void PintarError(TextBox txt, bool error)
         {
             if (txt == null) return;
@@ -199,6 +235,9 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Busca un TextBox específic dins del Grid d'atributs segons la fila.
+        /// </summary>
         private TextBox ObtenerTextBox(int row)
         {
             foreach (var child in grdAtributs.Children)
@@ -208,10 +247,16 @@ namespace PokeUI.Pagines
             return null;
         }
 
+        #endregion
 
-        #region Evoluciones
+        #region Evolucions
+
+        /// <summary>
+        /// Prepara i carrega la llista visual d'evolucions, calculant les etapes.
+        /// </summary>
         private void CarregarEvosUI()
         {
+            // Càrrega mandrosa (lazy) de tots els Pokémon pel cercador
             if (this._llistaTotsPokemons == null)
             {
                 _llistaTotsPokemons = new ObservableCollection<Pokemon>(context.Pokemons.OrderBy(p => p.PokName).ToList());
@@ -240,11 +285,15 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Afegeix una nova evolució a la llista visual.
+        /// </summary>
         private void btnAddEvo_Click(object sender, RoutedEventArgs e)
         {
             var seleccionado = cmbEvoSearch.SelectedItem as Pokemon;
             if (seleccionado != null)
             {
+                // Evitar duplicats
                 if (!_llistaEvos.Any(item => item.Pokemon.PokId == seleccionado.PokId))
                 {
                     int nuevaEtapa = 2;
@@ -254,12 +303,18 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Elimina l'evolució seleccionada de la llista visual.
+        /// </summary>
         private void btnDelEvo_Click(object sender, RoutedEventArgs e)
         {
             var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
             if (item != null) _llistaEvos.Remove(item);
         }
 
+        /// <summary>
+        /// Mou l'evolució a una etapa anterior (Stage - 1).
+        /// </summary>
         private void btnUpEvo_Click(object sender, RoutedEventArgs e)
         {
             var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
@@ -270,6 +325,9 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Mou l'evolució a una etapa posterior (Stage + 1).
+        /// </summary>
         private void btnDownEvo_Click(object sender, RoutedEventArgs e)
         {
             var item = lstEvoluciones.SelectedItem as EvolutionEditableItem;
@@ -280,6 +338,9 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Reordena la llista d'evolucions visualment per etapa i després per ID.
+        /// </summary>
         private void OrdenarLista()
         {
             var listaOrdenada = _llistaEvos.OrderBy(x => x.Stage).ThenBy(x => x.Pokemon.PokId).ToList();
@@ -288,7 +349,11 @@ namespace PokeUI.Pagines
         }
         #endregion
 
-        #region Habilidades
+        #region Habilitats
+
+        /// <summary>
+        /// Carrega les habilitats del Pokémon a la llista visual.
+        /// </summary>
         private void CargarHabilidadesUI()
         {
             if (_todasLasHabilidades == null)
@@ -302,6 +367,7 @@ namespace PokeUI.Pagines
 
             foreach (var hab in ThePokemon.PokemonAbilities)
             {
+                // Assegurar que l'objecte Abil està carregat
                 if (hab.Abil == null)
                 {
                     hab.Abil = context.Abilities.Find(hab.AbilId);
@@ -310,6 +376,9 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Afegeix una habilitat seleccionada al Pokémon.
+        /// </summary>
         private void btnAddAbility_Click(object sender, RoutedEventArgs e)
         {
             var habilidadSeleccionada = cmbAbilitySearch.SelectedItem as Ability;
@@ -335,6 +404,9 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Elimina una habilitat del Pokémon.
+        /// </summary>
         private void btnRemoveAbility_Click(object sender, RoutedEventArgs e)
         {
             var boton = sender as Button;
@@ -348,7 +420,11 @@ namespace PokeUI.Pagines
         }
         #endregion
 
-        #region Banner
+        #region Navegació i Guardat
+
+        /// <summary>
+        /// Torna a la pàgina anterior sense guardar.
+        /// </summary>
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             if (NavigationService.CanGoBack)
@@ -362,14 +438,13 @@ namespace PokeUI.Pagines
         /// Verifica si el Pokémon existeix a la base de dades per actualitzar-lo o crear-ne un de nou.
         /// Gestiona la persistència de propietats bàsiques, així com les relacions de tipus, habilitats i evolucions.
         /// </summary>
-        /// <param name="sender">L'objecte que ha originat l'esdeveniment.</param>
-        /// <param name="e">Els arguments de l'esdeveniment.</param>
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (ThePokemon == null) return;
 
+                // 1. Busquem o preparem l'entitat de Base de Dades
                 var pokemonDb = context.Pokemons
                             .Include(p => p.PokemonTypes)
                             .Include(p => p.PokemonAbilities)
@@ -377,16 +452,19 @@ namespace PokeUI.Pagines
 
                 if (pokemonDb == null)
                 {
+                    // Si no existeix, és un INSERT
                     pokemonDb = new Pokemon();
                     context.Pokemons.Add(pokemonDb);
                 }
 
+                // 2. Mapejar propietats simples
                 pokemonDb.PokName = ThePokemon.PokName;
                 pokemonDb.PokHeight = ThePokemon.PokHeight;
                 pokemonDb.PokWeight = ThePokemon.PokWeight;
                 pokemonDb.PokBaseExperience = ThePokemon.PokBaseExperience;
                 pokemonDb.PokImage = ThePokemon.PokImage;
 
+                // 3. Actualitzar Tipus (Esborrar i re-inserir)
                 pokemonDb.PokemonTypes.Clear();
                 int slot = 1;
                 foreach (var t in ThePokemon.PokemonTypes)
@@ -399,6 +477,7 @@ namespace PokeUI.Pagines
                     slot++;
                 }
 
+                // 4. Actualitzar Habilitats
                 pokemonDb.PokemonAbilities.Clear();
                 slot = 1;
                 foreach (var a in ThePokemon.PokemonAbilities)
@@ -411,15 +490,19 @@ namespace PokeUI.Pagines
                     });
                 }
 
+                // 5. Actualitzar Evolucions (Relació Pare-Fill)
+
+                // Pas A: "Divorciar" els fills antics (deixar-los orfes)
                 var oldChildren = context.PokemonEvolutionMatchups
-                            .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
-                            .ToList();
+                           .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
+                           .ToList();
 
                 foreach (var child in oldChildren)
                 {
                     child.EvolvesFromSpeciesId = null;
                 }
 
+                // Pas B: "Adoptar" els nous fills de la llista
                 foreach (var evoItem in _llistaEvos)
                 {
                     var hijoMatchup = context.PokemonEvolutionMatchups
@@ -431,6 +514,7 @@ namespace PokeUI.Pagines
                     }
                 }
 
+                // 6. Guardar canvis definitivament
                 context.SaveChanges();
 
                 MessageBox.Show("Guardat correctament", "Èxit", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -443,9 +527,11 @@ namespace PokeUI.Pagines
             }
         }
         #endregion
-
     }
 
+    /// <summary>
+    /// Classe auxiliar per gestionar els ítems de la llista d'evolucions (Pokémon + Etapa).
+    /// </summary>
     public class EvolutionEditableItem : System.ComponentModel.INotifyPropertyChanged
     {
         private int _stage;
