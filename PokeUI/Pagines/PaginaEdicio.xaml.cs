@@ -92,7 +92,6 @@ namespace PokeUI.Pagines
             }
         }
 
-        // --- CALLBACKS DE CAMBIO DE TIPO (Disparados por Binding) ---
         public void OnSelectedType1Changed()
         {
             if (_isUpdatingTypes || ThePokemon == null) return;
@@ -350,8 +349,6 @@ namespace PokeUI.Pagines
         #endregion
 
         #region Banner
-        // Añade/Sustituye estos métodos en PaginaEdicio.xaml.cs
-
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             if (NavigationService.CanGoBack)
@@ -360,19 +357,25 @@ namespace PokeUI.Pagines
             }
         }
 
+        /// <summary>
+        /// Gestiona l'esdeveniment de clic del botó de Guardar.
+        /// Verifica si el Pokémon existeix a la base de dades per actualitzar-lo o crear-ne un de nou.
+        /// Gestiona la persistència de propietats bàsiques, així com les relacions de tipus, habilitats i evolucions.
+        /// </summary>
+        /// <param name="sender">L'objecte que ha originat l'esdeveniment.</param>
+        /// <param name="e">Els arguments de l'esdeveniment.</param>
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (ThePokemon == null) return;
 
-                //Mirem si el poke existeix a la BD
                 var pokemonDb = context.Pokemons
                             .Include(p => p.PokemonTypes)
                             .Include(p => p.PokemonAbilities)
                             .FirstOrDefault(p => p.PokId == ThePokemon.PokId);
 
-                if(pokemonDb == null)
+                if (pokemonDb == null)
                 {
                     pokemonDb = new Pokemon();
                     context.Pokemons.Add(pokemonDb);
@@ -384,9 +387,8 @@ namespace PokeUI.Pagines
                 pokemonDb.PokBaseExperience = ThePokemon.PokBaseExperience;
                 pokemonDb.PokImage = ThePokemon.PokImage;
 
-                // 3. ACTUALIZAR TIPOS (Estrategia: Borrar los viejos y poner los nuevos)
                 pokemonDb.PokemonTypes.Clear();
-                    int slot = 1;
+                int slot = 1;
                 foreach (var t in ThePokemon.PokemonTypes)
                 {
                     pokemonDb.PokemonTypes.Add(new PokemonType
@@ -397,7 +399,6 @@ namespace PokeUI.Pagines
                     slot++;
                 }
 
-                //Habilitats
                 pokemonDb.PokemonAbilities.Clear();
                 slot = 1;
                 foreach (var a in ThePokemon.PokemonAbilities)
@@ -410,20 +411,33 @@ namespace PokeUI.Pagines
                     });
                 }
 
-                //Evolucions:
-                //todo
-                
+                var oldChildren = context.PokemonEvolutionMatchups
+                            .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
+                            .ToList();
 
-                // 6. GUARDAR CAMBIOS DEFINITIVAMENTE
+                foreach (var child in oldChildren)
+                {
+                    child.EvolvesFromSpeciesId = null;
+                }
+
+                foreach (var evoItem in _llistaEvos)
+                {
+                    var hijoMatchup = context.PokemonEvolutionMatchups
+                                             .FirstOrDefault(m => m.PokId == evoItem.Pokemon.PokId);
+
+                    if (hijoMatchup != null)
+                    {
+                        hijoMatchup.EvolvesFromSpeciesId = pokemonDb.PokId;
+                    }
+                }
+
                 context.SaveChanges();
 
-                MessageBox.Show("Guardado correctamente", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Guardat correctament", "Èxit", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Volver atrás (a la lista)
                 if (NavigationService.CanGoBack) NavigationService.GoBack();
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Error al guardar: {ex.Message} \n\n {ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
