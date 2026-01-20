@@ -447,16 +447,8 @@ namespace PokeUI.Pagines
                 // ---------------------------------------------------------
                 if (ThePokemon == null) return;
 
-<<<<<<< HEAD
                 // Cridem al mètode que pinta de vermell si falta alguna cosa
                 validatePokemon();
-=======
-                // 1. Busquem o preparem l'entitat de Base de Dades
-                var pokemonDb = context.Pokemons
-                            .Include(p => p.PokemonTypes)
-                            .Include(p => p.PokemonAbilities)
-                            .FirstOrDefault(p => p.PokId == ThePokemon.PokId);
->>>>>>> e0bd4694642ef8bdc847ae14a15db42a2d518a13
 
                 // ---------------------------------------------------------
                 // 2. PROTECCIÓ DE SEGURETAT (Anti-Bucles Infinits) 🛡️
@@ -499,31 +491,22 @@ namespace PokeUI.Pagines
                 // Si no existeix, és un INSERT (Nou Pokémon)
                 if (pokemonDb == null)
                 {
-                    // Si no existeix, és un INSERT
                     pokemonDb = new Pokemon();
                     context.Pokemons.Add(pokemonDb);
                 }
 
-<<<<<<< HEAD
                 // ---------------------------------------------------------
                 // 4. ACTUALITZAR DADES BÀSIQUES
                 // ---------------------------------------------------------
-=======
-                // 2. Mapejar propietats simples
->>>>>>> e0bd4694642ef8bdc847ae14a15db42a2d518a13
                 pokemonDb.PokName = ThePokemon.PokName;
                 pokemonDb.PokHeight = ThePokemon.PokHeight;
                 pokemonDb.PokWeight = ThePokemon.PokWeight;
                 pokemonDb.PokBaseExperience = ThePokemon.PokBaseExperience;
                 pokemonDb.PokImage = ThePokemon.PokImage; // Si has implementat la imatge
 
-<<<<<<< HEAD
                 // ---------------------------------------------------------
                 // 5. ACTUALITZAR TIPUS (Esborrar els vells i posar els nous)
                 // ---------------------------------------------------------
-=======
-                // 3. Actualitzar Tipus (Esborrar i re-inserir)
->>>>>>> e0bd4694642ef8bdc847ae14a15db42a2d518a13
                 pokemonDb.PokemonTypes.Clear();
 
                 // Afegim Tipus 1
@@ -532,7 +515,6 @@ namespace PokeUI.Pagines
                     pokemonDb.PokemonTypes.Add(new PokemonType { TypeId = SelectedType1.TypeId, Slot = 1 });
                 }
 
-<<<<<<< HEAD
                 // Afegim Tipus 2 (si n'hi ha)
                 if (SelectedType2 != null && SelectedType2.TypeId != -1)
                 {
@@ -544,9 +526,6 @@ namespace PokeUI.Pagines
                 // ---------------------------------------------------------
                 // Nota: Aquí mantinc la lògica que tenies, assumint que 'ThePokemon.PokemonAbilities' ve ple.
                 // Si les gestiones diferent a la UI, potser caldria canviar això.
-=======
-                // 4. Actualitzar Habilitats
->>>>>>> e0bd4694642ef8bdc847ae14a15db42a2d518a13
                 pokemonDb.PokemonAbilities.Clear();
                 int slotAbil = 1;
                 foreach (var a in ThePokemon.PokemonAbilities)
@@ -560,7 +539,6 @@ namespace PokeUI.Pagines
                     slotAbil++;
                 }
 
-<<<<<<< HEAD
                 // ---------------------------------------------------------
                 // 7. ACTUALITZAR EVOLUCIONS (FILLS)
                 // ---------------------------------------------------------
@@ -569,25 +547,13 @@ namespace PokeUI.Pagines
                 var oldChildren = context.PokemonEvolutionMatchups
                                          .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
                                          .ToList();
-=======
-                // 5. Actualitzar Evolucions (Relació Pare-Fill)
-
-                // Pas A: "Divorciar" els fills antics (deixar-los orfes)
-                var oldChildren = context.PokemonEvolutionMatchups
-                           .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
-                           .ToList();
->>>>>>> e0bd4694642ef8bdc847ae14a15db42a2d518a13
 
                 foreach (var child in oldChildren)
                 {
                     child.EvolvesFromSpeciesId = null; // Ja no vénen d'aquest pare
                 }
 
-<<<<<<< HEAD
                 // Pas B: "Adoptar" els nous fills seleccionats a la llista
-=======
-                // Pas B: "Adoptar" els nous fills de la llista
->>>>>>> e0bd4694642ef8bdc847ae14a15db42a2d518a13
                 foreach (var evoItem in _llistaEvos)
                 {
                     // Busquem la fitxa d'evolució del fill
@@ -601,13 +567,9 @@ namespace PokeUI.Pagines
                     }
                 }
 
-<<<<<<< HEAD
                 // ---------------------------------------------------------
                 // 8. GUARDAR CANVIS I SORTIR
                 // ---------------------------------------------------------
-=======
-                // 6. Guardar canvis definitivament
->>>>>>> e0bd4694642ef8bdc847ae14a15db42a2d518a13
                 context.SaveChanges();
 
                 MessageBox.Show("Guardat correctament", "Èxit", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -619,6 +581,7 @@ namespace PokeUI.Pagines
                 MessageBox.Show($"Error al guardar: {ex.Message} \n\n {ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         #endregion
     }
 
