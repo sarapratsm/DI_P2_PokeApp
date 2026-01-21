@@ -351,32 +351,80 @@ namespace PokeUI.Pagines
 
         private void guardarEvolucions()
         {
-            //Netejem les evolucions de tots els pokemon que hi ha a la llista d'evolucions
+            // 1. Preparación y Limpieza
             Dictionary<EvolutionEditableItem, Pokemon> lineaEvo = new Dictionary<EvolutionEditableItem, Pokemon>();
 
             foreach (EvolutionEditableItem evo in lstEvoluciones.ItemsSource)
             {
                 var evoBd = context.Pokemons
-                    .Include(p => p.PokemonEvolutionMatchup).ThenInclude(p => p.PokemonEvolutions)
+                    .Include(p => p.PokemonEvolutionMatchup)
+                    // No necesitamos .ThenInclude(Evolutions) porque vamos a tocar el ID del padre directamente
                     .FirstOrDefault(p => p.PokId == evo.Pokemon.PokId);
 
-                if (evoBd != null && evoBd.PokemonEvolutionMatchup != null)
+                if (evoBd != null)
                 {
-                    evoBd.PokemonEvolutionMatchup.PokemonEvolutions.Clear();
+                    // Si la fitxa d'evolució no existeix (Pokémon nou), la creem
+                    if (evoBd.PokemonEvolutionMatchup == null)
+                    {
+                        evoBd.PokemonEvolutionMatchup = new PokemonEvolutionMatchup
+                        {
+                            PokId = evoBd.PokId,
+                            GenderRate = -1,
+                            CaptureRate = 45,
+                            BaseHappiness = 70 // Valors per defecte
+                        };
+                        context.PokemonEvolutionMatchups.Add(evoBd.PokemonEvolutionMatchup);
+                    }
+
+                    // RESET: Trenquem la relació amb el pare actual per evitar errors
+                    // Això deixa el Pokémon "orfe" momentàniament
+                    evoBd.PokemonEvolutionMatchup.EvolvesFromSpeciesId = null;
+
                     lineaEvo.Add(evo, evoBd);
                 }
             }
-            //Tenim la llista de pokemon i la seva stage. Asssumim que no pot haver més d'un pokemon en una etapa que no sea la mes alta.
-            //Assumim que la primera etapa també és única
+
+            // 2. Validació de l'Etapa 1
             EvolutionEditableItem eeiAux = lineaEvo.Keys.FirstOrDefault(e => e.Stage == 1);
             if (eeiAux == null)
             {
-                throw new Exception("La llista d'evolucions no té un primer pokémon. Posa com a mínim el pokémon actual en la Stage 1.");
+                // Si no hi ha ningú a l'Stage 1, no podem fer una línia evolutiva
+                if (lineaEvo.Count > 0)
+                    throw new Exception("La llista d'evolucions no té un primer pokémon (Stage 1).");
+                else
+                    return; // Llista buida, no fem res
             }
-            lineaEvo.TryGetValue(eeiAux, out var pokeAux);
-            //Ara cal mirar quins pokemon estan en l'stage 2 i fer els inserts a la base de dades.
-            //Després amb la stage 3 i aixi successivament.
 
+            // 3. Reconstrucció de la Línia (El bucle principal)
+            int maxStage = lineaEvo.Keys.Max(x => x.Stage);
+            int minStage = lineaEvo.Keys.Min(x => x.Stage);
+
+            // Recorrem etapa per etapa (de la 2 fins al final)
+            for (int i = minStage + 1; i <= maxStage; i++)
+            {
+                // Qui són els possibles pares? (Els de l'etapa anterior: i - 1)
+                var possiblesParesUI = lineaEvo.Keys.Where(x => x.Stage == i - 1).ToList();
+
+                // Qui són els fills d'aquesta etapa? (Etapa actual: i)
+                var fillsEtapaUI = lineaEvo.Keys.Where(x => x.Stage == i).ToList();
+
+                // Si no hi ha ningú a l'etapa anterior, tallem aquí
+                if (possiblesParesUI.Count == 0) continue;
+
+                // ESTRATÈGIA SIMPLE: Agafem el primer pare que trobem a l'etapa anterior.
+                // Per a línies simples (Charmander -> Charmeleon) això és perfecte perquè només n'hi ha un.
+                var itemPareUI = possiblesParesUI.First();
+                var entitatPare = lineaEvo[itemPareUI]; // Recuperem l'entitat de BD del pare
+
+                foreach (var itemFillUI in fillsEtapaUI)
+                {
+                    // Recuperem l'entitat de BD del fill usant el diccionari
+                    var entitatFill = lineaEvo[itemFillUI];
+
+                    // APLIQUEM LA RELACIÓ: "El meu pare ets tu"
+                    entitatFill.PokemonEvolutionMatchup.EvolvesFromSpeciesId = entitatPare.PokId;
+                }
+            }
         }
         #endregion
 
