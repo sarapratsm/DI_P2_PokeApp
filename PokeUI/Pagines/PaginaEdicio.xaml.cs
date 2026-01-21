@@ -170,35 +170,36 @@ namespace PokeUI.Pagines
         /// <summary>
         /// Esdeveniment genèric per validar quan canvia text als TextBox.
         /// </summary>
-        private void ValidarTexto_Changed(object sender, TextChangedEventArgs e)
+        private void ValidarText_Changed(object sender, TextChangedEventArgs e)
         {
             validatePokemon();
         }
 
         /// <summary>
         /// Comprova les regles de negoci i pinta els camps erronis de vermell.
+        /// Retorna true si el pokemon és vàlid i false si no ho és.
         /// </summary>
-        private void validatePokemon()
+        private bool validatePokemon()
         {
-            bool hayErrores = false;
+            bool valid = true;
 
             // Validar Nom
-            if (string.IsNullOrWhiteSpace(ThePokemon.PokName)) hayErrores = true;
+            if (string.IsNullOrWhiteSpace(ThePokemon.PokName)) valid = false;
 
             // Validar Alçada
             bool heightError = ThePokemon.PokHeight == null || ThePokemon.PokHeight <= 0;
             PintarError(ObtenerTextBox(0), heightError);
-            if (heightError) hayErrores = true;
+            if (heightError) valid = false;
 
             // Validar Pes
             bool weightError = ThePokemon.PokWeight == null || ThePokemon.PokWeight <= 0;
             PintarError(ObtenerTextBox(1), weightError);
-            if (weightError) hayErrores = true;
+            if (weightError) valid = false;
 
             // Validar Experiència Base
             bool expError = ThePokemon.PokBaseExperience == null || ThePokemon.PokBaseExperience < 0;
             PintarError(ObtenerTextBox(2), expError);
-            if (expError) hayErrores = true;
+            if (expError) valid = false;
 
             // Validar Tipus (Ha de tenir almenys un tipus vàlid)
             bool typeError = (SelectedType1 == null || SelectedType1.TypeId == -1) &&
@@ -208,13 +209,15 @@ namespace PokeUI.Pagines
             {
                 cmbType1.BorderBrush = Brushes.Red;
                 cmbType2.BorderBrush = Brushes.Red;
-                hayErrores = true;
+                valid = false;
             }
             else
             {
                 cmbType1.ClearValue(Border.BorderBrushProperty);
                 cmbType2.ClearValue(Border.BorderBrushProperty);
             }
+
+            return valid;
         }
 
         /// <summary>
@@ -460,22 +463,37 @@ namespace PokeUI.Pagines
 
             if (habilidadSeleccionada != null)
             {
-                if (!ThePokemon.PokemonAbilities.Any(pa => pa.AbilId == habilidadSeleccionada.AbilId))
-                {
-                    var nuevaRelacion = new PokemonAbility
-                    {
-                        PokId = ThePokemon.PokId,
-                        AbilId = habilidadSeleccionada.AbilId,
-                        Abil = habilidadSeleccionada,
-                        IsHidden = false,
-                        Slot = 1
-                    };
+                // 1. COMPROBACIÓN: ¿Ya tiene esta habilidad?
+                // Buscamos si existe alguna habilidad en la lista con el mismo ID
+                bool yaExiste = ThePokemon.PokemonAbilities.Any(pa => pa.AbilId == habilidadSeleccionada.AbilId);
 
-                    ThePokemon.PokemonAbilities.Add(nuevaRelacion);
-                    _habilidadesDelPokemon.Add(nuevaRelacion);
+                if (yaExiste)
+                {
+                    MessageBox.Show($"El Pokémon ja té l'habilitat '{habilidadSeleccionada.AbilName}'.",
+                                    "Habilitat duplicada", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                    // Limpiamos el buscador y salimos sin hacer nada
                     cmbAbilitySearch.SelectedItem = null;
                     cmbAbilitySearch.Text = "";
+                    return;
                 }
+
+                // 2. Si no existe, procedemos a añadirla (Tu código original)
+                var nuevaRelacion = new PokemonAbility
+                {
+                    PokId = ThePokemon.PokId,
+                    AbilId = habilidadSeleccionada.AbilId,
+                    Abil = habilidadSeleccionada,
+                    IsHidden = false,
+                    Slot = 1 // Podrías calcular el slot libre si quisieras (ej: Count + 1)
+                };
+
+                ThePokemon.PokemonAbilities.Add(nuevaRelacion);
+                _habilidadesDelPokemon.Add(nuevaRelacion);
+
+                // Limpiar selección
+                cmbAbilitySearch.SelectedItem = null;
+                cmbAbilitySearch.Text = "";
             }
         }
 
@@ -523,7 +541,10 @@ namespace PokeUI.Pagines
                 if (ThePokemon == null) return;
 
                 // Cridem al mètode que pinta de vermell si falta alguna cosa
-                validatePokemon();
+                if(!validatePokemon())
+                {
+                    throw new Exception("S'han de completar tots els camps!");
+                }
 
                 
 
@@ -606,9 +627,11 @@ namespace PokeUI.Pagines
             }
         }
 
-        
+
 
         #endregion
+
+        
     }
 
     /// <summary>
