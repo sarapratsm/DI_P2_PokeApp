@@ -296,8 +296,9 @@ namespace PokeUI.Pagines
                 // Evitar duplicats
                 if (!_llistaEvos.Any(item => item.Pokemon.PokId == seleccionado.PokId))
                 {
-                    int nuevaEtapa = 2;
-                    if (_llistaEvos.Count > 0) nuevaEtapa = _llistaEvos.Max(x => x.Stage);
+                    //int nuevaEtapa = 2;
+                    //if (_llistaEvos.Count > 0) nuevaEtapa = _llistaEvos.Max(x => x.Stage);
+                    int nuevaEtapa = _llistaEvos.Max(x => x.Stage);
                     _llistaEvos.Add(new EvolutionEditableItem { Pokemon = seleccionado, Stage = nuevaEtapa });
                 }
             }
@@ -346,6 +347,36 @@ namespace PokeUI.Pagines
             var listaOrdenada = _llistaEvos.OrderBy(x => x.Stage).ThenBy(x => x.Pokemon.PokId).ToList();
             _llistaEvos.Clear();
             foreach (var item in listaOrdenada) _llistaEvos.Add(item);
+        }
+
+        private void guardarEvolucions()
+        {
+            //Netejem les evolucions de tots els pokemon que hi ha a la llista d'evolucions
+            Dictionary<EvolutionEditableItem, Pokemon> lineaEvo = new Dictionary<EvolutionEditableItem, Pokemon>();
+
+            foreach (EvolutionEditableItem evo in lstEvoluciones.ItemsSource)
+            {
+                var evoBd = context.Pokemons
+                    .Include(p => p.PokemonEvolutionMatchup).ThenInclude(p => p.PokemonEvolutions)
+                    .FirstOrDefault(p => p.PokId == evo.Pokemon.PokId);
+
+                if (evoBd != null && evoBd.PokemonEvolutionMatchup != null)
+                {
+                    evoBd.PokemonEvolutionMatchup.PokemonEvolutions.Clear();
+                    lineaEvo.Add(evo, evoBd);
+                }
+            }
+            //Tenim la llista de pokemon i la seva stage. Asssumim que no pot haver més d'un pokemon en una etapa que no sea la mes alta.
+            //Assumim que la primera etapa també és única
+            EvolutionEditableItem eeiAux = lineaEvo.Keys.FirstOrDefault(e => e.Stage == 1);
+            if (eeiAux == null)
+            {
+                throw new Exception("La llista d'evolucions no té un primer pokémon. Posa com a mínim el pokémon actual en la Stage 1.");
+            }
+            lineaEvo.TryGetValue(eeiAux, out var pokeAux);
+            //Ara cal mirar quins pokemon estan en l'stage 2 i fer els inserts a la base de dades.
+            //Després amb la stage 3 i aixi successivament.
+
         }
         #endregion
 
@@ -540,32 +571,13 @@ namespace PokeUI.Pagines
                 }
 
                 // ---------------------------------------------------------
-                // 7. ACTUALITZAR EVOLUCIONS (FILLS)
+                // 7. ACTUALITZAR EVOLUCIONS (Estratègia: Delete & Re-Insert)
                 // ---------------------------------------------------------
+                guardarEvolucions();
 
-                // Pas A: "Divorciar" els fills antics (trencar relació antiga)
-                var oldChildren = context.PokemonEvolutionMatchups
-                                         .Where(m => m.EvolvesFromSpeciesId == pokemonDb.PokId)
-                                         .ToList();
+                
 
-                foreach (var child in oldChildren)
-                {
-                    child.EvolvesFromSpeciesId = null; // Ja no vénen d'aquest pare
-                }
 
-                // Pas B: "Adoptar" els nous fills seleccionats a la llista
-                foreach (var evoItem in _llistaEvos)
-                {
-                    // Busquem la fitxa d'evolució del fill
-                    var hijoMatchup = context.PokemonEvolutionMatchups
-                                             .FirstOrDefault(m => m.PokId == evoItem.Pokemon.PokId);
-
-                    // Si el fill té fitxa, li diem que nosaltres som el seu pare
-                    if (hijoMatchup != null)
-                    {
-                        hijoMatchup.EvolvesFromSpeciesId = pokemonDb.PokId;
-                    }
-                }
 
                 // ---------------------------------------------------------
                 // 8. GUARDAR CANVIS I SORTIR
@@ -581,6 +593,8 @@ namespace PokeUI.Pagines
                 MessageBox.Show($"Error al guardar: {ex.Message} \n\n {ex.InnerException?.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        
 
         #endregion
     }
