@@ -349,21 +349,30 @@ namespace PokeUI.Pagines
             foreach (var item in listaOrdenada) _llistaEvos.Add(item);
         }
 
+        /// <summary>
+        /// Mètode segur per guardar evolucions linealment.
+        /// Connecta Stage 1 -> Stage 2 -> Stage 3.
+        /// Si la llista està buida, no fa res (evita l'error).
+        /// </summary>
         private void guardarEvolucions()
         {
-            // 1. Preparación y Limpieza
+            // 1. PROTECCIÓ CRÍTICA: Si no hi ha llista o està buida, marxem.
+            // Això arregla l'error de "dades que ja estaven bé".
+            if (_llistaEvos == null || _llistaEvos.Count == 0) return;
+
+            // 2. Preparació i Neteja
             Dictionary<EvolutionEditableItem, Pokemon> lineaEvo = new Dictionary<EvolutionEditableItem, Pokemon>();
 
-            foreach (EvolutionEditableItem evo in lstEvoluciones.ItemsSource)
+            foreach (var evo in _llistaEvos)
             {
+                // Recuperem l'entitat real de la BD
                 var evoBd = context.Pokemons
                     .Include(p => p.PokemonEvolutionMatchup)
-                    // No necesitamos .ThenInclude(Evolutions) porque vamos a tocar el ID del padre directamente
                     .FirstOrDefault(p => p.PokId == evo.Pokemon.PokId);
 
                 if (evoBd != null)
                 {
-                    // Si la fitxa d'evolució no existeix (Pokémon nou), la creem
+                    // Si no té fitxa (Pokémon nou), la creem
                     if (evoBd.PokemonEvolutionMatchup == null)
                     {
                         evoBd.PokemonEvolutionMatchup = new PokemonEvolutionMatchup
@@ -371,57 +380,44 @@ namespace PokeUI.Pagines
                             PokId = evoBd.PokId,
                             GenderRate = -1,
                             CaptureRate = 45,
-                            BaseHappiness = 70 // Valors per defecte
+                            BaseHappiness = 70
                         };
                         context.PokemonEvolutionMatchups.Add(evoBd.PokemonEvolutionMatchup);
                     }
 
-                    // RESET: Trenquem la relació amb el pare actual per evitar errors
-                    // Això deixa el Pokémon "orfe" momentàniament
+                    // RESET: Trenquem la relació pare-fill momentàniament
                     evoBd.PokemonEvolutionMatchup.EvolvesFromSpeciesId = null;
 
                     lineaEvo.Add(evo, evoBd);
                 }
             }
 
-            // 2. Validació de l'Etapa 1
-            EvolutionEditableItem eeiAux = lineaEvo.Keys.FirstOrDefault(e => e.Stage == 1);
-            if (eeiAux == null)
-            {
-                // Si no hi ha ningú a l'Stage 1, no podem fer una línia evolutiva
-                if (lineaEvo.Count > 0)
-                    throw new Exception("La llista d'evolucions no té un primer pokémon (Stage 1).");
-                else
-                    return; // Llista buida, no fem res
-            }
+            // Guardem el reset (opcional però recomanable per netejar claus foranes)
+            // context.SaveChanges(); 
 
-            // 3. Reconstrucció de la Línia (El bucle principal)
-            int maxStage = lineaEvo.Keys.Max(x => x.Stage);
+            // 3. Reconstrucció de la Línia
+            // Com que ja hem comprovat que Count > 0 a l'inici, això ja no pot fallar.
             int minStage = lineaEvo.Keys.Min(x => x.Stage);
+            int maxStage = lineaEvo.Keys.Max(x => x.Stage);
 
-            // Recorrem etapa per etapa (de la 2 fins al final)
+            // Recorrem des de la segona etapa existent fins al final
             for (int i = minStage + 1; i <= maxStage; i++)
             {
-                // Qui són els possibles pares? (Els de l'etapa anterior: i - 1)
+                // Busquem Pares (Stage i - 1) i Fills (Stage i)
                 var possiblesParesUI = lineaEvo.Keys.Where(x => x.Stage == i - 1).ToList();
-
-                // Qui són els fills d'aquesta etapa? (Etapa actual: i)
                 var fillsEtapaUI = lineaEvo.Keys.Where(x => x.Stage == i).ToList();
 
-                // Si no hi ha ningú a l'etapa anterior, tallem aquí
+                // Si falta l'etlabó perdut (no hi ha pare a l'etapa anterior), saltem
                 if (possiblesParesUI.Count == 0) continue;
 
-                // ESTRATÈGIA SIMPLE: Agafem el primer pare que trobem a l'etapa anterior.
-                // Per a línies simples (Charmander -> Charmeleon) això és perfecte perquè només n'hi ha un.
+                // ESTRATÈGIA SIMPLE: El primer de l'etapa anterior és el pare de tots els d'ara.
                 var itemPareUI = possiblesParesUI.First();
-                var entitatPare = lineaEvo[itemPareUI]; // Recuperem l'entitat de BD del pare
+                var entitatPare = lineaEvo[itemPareUI];
 
                 foreach (var itemFillUI in fillsEtapaUI)
                 {
-                    // Recuperem l'entitat de BD del fill usant el diccionari
                     var entitatFill = lineaEvo[itemFillUI];
-
-                    // APLIQUEM LA RELACIÓ: "El meu pare ets tu"
+                    // "Jo sóc el teu pare"
                     entitatFill.PokemonEvolutionMatchup.EvolvesFromSpeciesId = entitatPare.PokId;
                 }
             }
@@ -529,35 +525,7 @@ namespace PokeUI.Pagines
                 // Cridem al mètode que pinta de vermell si falta alguna cosa
                 validatePokemon();
 
-                // ---------------------------------------------------------
-                // 2. PROTECCIÓ DE SEGURETAT (Anti-Bucles Infinits) 🛡️
-                // ---------------------------------------------------------
-                // Busquem qui és el pare actual d'aquest Pokémon a la BD (lectura ràpida)
-                var infoPadre = context.PokemonEvolutionMatchups
-                                       .AsNoTracking()
-                                       .FirstOrDefault(m => m.PokId == ThePokemon.PokId);
-
-                int? idDelPare = infoPadre?.EvolvesFromSpeciesId;
-
-                // Revisem la llista de fills que volem guardar
-                foreach (var evoItem in _llistaEvos)
-                {
-                    // A) No puc evolucionar a mi mateix
-                    if (evoItem.Pokemon.PokId == ThePokemon.PokId)
-                    {
-                        MessageBox.Show($"Error de Lògica: {ThePokemon.PokName} no pot evolucionar a si mateix!",
-                                        "Bucle detectat", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return; // Cancelem guardar
-                    }
-
-                    // B) No puc evolucionar al meu propi pare (crearia un cercle infinit)
-                    if (idDelPare != null && evoItem.Pokemon.PokId == idDelPare)
-                    {
-                        MessageBox.Show($"Error Crític: No pots afegir a {evoItem.Pokemon.PokName} com a evolució perquè ja és el PARE de {ThePokemon.PokName}.\n\nAixò trencaria la base de dades!",
-                                        "Paradoxa Temporal Detectada", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return; // Cancelem guardar
-                    }
-                }
+                
 
                 // ---------------------------------------------------------
                 // 3. RECUPERAR O CREAR EL POKÉMON A LA BASE DE DADES
@@ -622,10 +590,6 @@ namespace PokeUI.Pagines
                 // 7. ACTUALITZAR EVOLUCIONS (Estratègia: Delete & Re-Insert)
                 // ---------------------------------------------------------
                 guardarEvolucions();
-
-                
-
-
 
                 // ---------------------------------------------------------
                 // 8. GUARDAR CANVIS I SORTIR
