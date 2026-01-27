@@ -1,4 +1,6 @@
-# PokeApp 📱
+# PokeApp 
+Pràctica 2 de la asignatura de Disseny d'Interficies del CFGS de Desenvolupament d'Aplicacions Multiplataforma.
+
 **PokeApp** és una aplicació d'escriptori desenvolupada en **WPF (.NET 9)** per a la gestió integral d'una PokeDex. El projecte ha estat dissenyat seguint els requeriments de les unitats formatives RA2 i RA3, enfocant-se en la creació d'interfícies complexes, controls personalitzats i persistència de dades amb **MySQL**.
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
