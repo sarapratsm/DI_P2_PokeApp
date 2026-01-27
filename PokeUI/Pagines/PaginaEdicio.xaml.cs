@@ -637,10 +637,9 @@ namespace PokeUI.Pagines
                 }
 
                 // ---------------------------------------------------------
-                // 6. ACTUALITZAR HABILITATS (Opcional, segons la teva lògica)
+                // 6. ACTUALITZAR HABILITATS
                 // ---------------------------------------------------------
-                // Nota: Aquí mantinc la lògica que tenies, assumint que 'ThePokemon.PokemonAbilities' ve ple.
-                // Si les gestiones diferent a la UI, potser caldria canviar això.
+                
                 pokemonDb.PokemonAbilities.Clear();
                 int slotAbil = 1;
                 foreach (var a in ThePokemon.PokemonAbilities)
