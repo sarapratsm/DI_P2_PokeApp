@@ -1,33 +1,36 @@
-# 🚀 Funcionalidades Destacadas
+PokeApp
+=======
 
-### 1. Gestión de Pokédex (Vista Principal)
-* **Búsqueda Dinámica:** Filtrado en tiempo real por nombre o ID del Pokémon.
-* **Filtro por Tipos:** `ComboBox` con indicador visual de colores según el tipo seleccionado.
-* **Navegación Fluida:** Sistema de navegación integrado (`Frame`) entre la lista y la edición.
-* **Borrado Robusto (Safe Delete):** Implementación de un sistema de eliminación manual que gestiona las **Foreign Keys**. Elimina limpiamente Tipos, Habilidades, Estadísticas y desvincula Evoluciones antes de borrar el Pokémon para evitar errores de integridad en la base de datos.
+# 🚀 Funcionalitats Destacades
 
-### 2. Editor de Pokémon (Detalle)
-* **Validación de Datos:** Feedback visual (bordes rojos) y bloqueo de guardado si faltan campos obligatorios.
-* **Sistema de Evoluciones:** Lógica personalizada para gestionar cadenas evolutivas por etapas (Stage 1 → Stage 2 → Stage 3), evitando bucles lógicos y permitiendo reordenar o eliminar evoluciones.
-* **Estadísticas Base:** Edición visual mediante el UserControl personalizado `SlidingStatBar`, con *TwoWay Binding* para HP, Ataque, Defensa, etc.
-* **Gestión de Habilidades:** Adición dinámica de habilidades con control de duplicados.
+### 1. Gestió de Pokédex (Vista Principal)
+* **Cerca Dinàmica:** Filtre en temps real per nom o ID del Pokémon.
+* **Filtre per Tipus:** `ComboBox` amb indicador visual de colors segons el tipus seleccionat.
+* **Navegació Fluida:** Sistema de navegació integrat (`Frame`) entre la llista i l'edició.
+* **Esborrat Robust (Safe Delete):** Implementació d'un sistema d'eliminació manual que gestiona les **Foreign Keys**. Elimina netament Tipus, Habilitats, Estadístiques i desvincula Evolucions abans d'esborrar el Pokémon per evitar errors d'integritat a la base de dades.
+
+### 2. Editor de Pokémon (Detall)
+* **Validació de Dades:** Feedback visual (vores vermelles) i bloqueig de desat si falten camps obligatoris.
+* **Sistema d'Evolucions:** Lògica personalitzada per gestionar cadenes evolutives per etapes (Stage 1 → Stage 2 → Stage 3), evitant bucles lògics i permetent reordenar o eliminar evolucions.
+* **Estadístiques Base:** Edició visual mitjançant l'UserControl personalitzat `SlidingStatBar`, amb *TwoWay Binding* per a HP, Atac, Defensa, etc.
+* **Gestió d'Habilitats:** Addició dinàmica d'habilitats amb control de duplicats.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Stack Tecnològic
 
-| Componente | Tecnología |
+| Component | Tecnologia |
 | :--- | :--- |
 | **Framework** | .NET 9.0 |
 | **UI** | WPF (Windows Presentation Foundation) + XAML |
 | **ORM** | Entity Framework Core |
-| **Base de Datos** | SQL Server / LocalDB |
-| **Patrones** | MVVM (parcial), Data Binding, Dependency Properties |
+| **Base de Dades** | SQL Server / LocalDB |
+| **Patrons** | MVVM (parcial), Data Binding, Dependency Properties |
 
 ---
 
-## 🔧 Instalación y Ejecución
+## 🔧 Instal·lació i Execució
 
-### 1. Clonar el repositorio
+### 1. Clonar el repositori
 ```bash
-git clone [https://github.com/tu-usuario/tu-repositorio.git](https://github.com/tu-usuario/tu-repositorio.git)
+git clone [https://github.com/el-teu-usuari/el-teu-repositori.git](https://github.com/el-teu-usuari/el-teu-repositori.git)
