@@ -1,7 +1,8 @@
 PokeApp
 =======
+PokeApp és una aplicació d'escriptori WPF (.NET 9) dissenyada per a l'administració completa d'una base de dades Pokémon. El projecte implementa una arquitectura robusta que separa la lògica de dades de la interfície, oferint funcionalitats avançades com la gestió lineal d'evolucions, controls d'estadístiques personalitzats i un sistema d'eliminació segura per garantir la integritat referencial.
 
-# 🚀 Funcionalitats Destacades
+## 🚀 Funcionalitats Destacades
 
 ### 1. Gestió de Pokédex (Vista Principal)
 * **Cerca Dinàmica:** Filtre en temps real per nom o ID del Pokémon.
