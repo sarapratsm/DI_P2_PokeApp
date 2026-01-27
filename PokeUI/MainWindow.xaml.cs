@@ -4,30 +4,29 @@ using System.Windows.Navigation;
 
 namespace PokeUI;
 
-
 /// <summary>
-/// Interaction logic for MainWindow.xaml
+/// Lògica d'interacció per a MainWindow.xaml.
+/// Actua com a contenidor principal de l'aplicació i gestiona el Frame de navegació.
 /// </summary>
 public partial class MainWindow : Window
 {
+    // Instàncies de les pàgines (es mantenen en memòria per preservar l'estat bàsic)
     LlistaPrincipal principal = new LlistaPrincipal();
     PaginaEdicio edicio = new PaginaEdicio();
-    int pagina =1;
-    int nouPokemon = 2; //0 és un nou pokemon, 1 és una edicio, 2 quan no estem a la pagina correcta.
+
+    // Variables de control d'estat de navegació
+    int pagina = 1;     // 1: Llista, 2: Edició
+    int nouPokemon = 2; // 0: Nou, 1: Edició, 2: Indefinit
 
     public MainWindow()
     {
         InitializeComponent();
-
     }
 
-
-
-
     /// <summary>
-    /// Al principi aquest mètode era més útil...
+    /// Mètode auxiliar per centralitzar la navegació entre pàgines.
     /// </summary>
-    /// <param name="lloc">1 és la Llista Principal</param>
+    /// <param name="lloc">1 per anar a la Llista Principal, 2 per anar a l'Edició.</param>
     private void Navegacio(int lloc)
     {
         if (lloc == 1)
@@ -40,90 +39,22 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Esdeveniment que es dispara quan la finestra s'ha carregat completament.
+    /// Inicialitza la vista mostrant la llista principal.
+    /// </summary>
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        //frm.Navigate(principal);
         frm.Navigate(principal);
-
     }
 
-    //private void btnBack_Click(object sender, RoutedEventArgs e)
-    //{
-    //    if (frm.NavigationService.CanGoBack)
-    //    {
-    //        frm.NavigationService.GoBack();
-
-    //    }
-
-
-    //}
-
-    //private void btnEdit_Click(object sender, RoutedEventArgs e)
-    //{
-    //    edicio.ThePokemon = principal.ThePokemon;
-    //    nouPokemon = 1;
-    //    Navegacio(2);
-    //}
-
-    //private void btnCancel_Click(object sender, RoutedEventArgs e)
-    //{
-
-    //}
-
-    //private void btnSave_Click(object sender, RoutedEventArgs e)
-    //{
-    //    //Fer un insert o un update a la BBDD
-    //    if (nouPokemon == 0)
-    //    {
-    //        //insert
-
-    //    }
-    //    else if (nouPokemon == 1)
-    //    {
-    //        //update
-    //    }
-    //    else
-    //    {
-    //        //error.
-    //    }
-    //}
-
-    //private void btnAdd_Click(object sender, RoutedEventArgs e)
-    //{
-    //    edicio.ThePokemon = new PokeData.Models.Pokemon();
-    //    nouPokemon = 0;
-    //    Navegacio(2);
-    //}
-
-    //public void actualitzaBotons()
-    //{
-    //    bool canGoBack = frm.NavigationService.CanGoBack;
-    //    bool esPagina1 = (pagina == 1);
-    //    bool esPagina2 = (pagina == 2);
-
-    //    btnBack.IsEnabled = canGoBack;
-    //    btnBack.Visibility = canGoBack ? Visibility.Visible : Visibility.Collapsed;
-
-
-    //    btnAdd.IsEnabled = esPagina1;
-    //    btnAdd.Visibility = esPagina1 ? Visibility.Visible : Visibility.Collapsed;
-
-    //    btnEdit.IsEnabled = esPagina1;
-    //    btnEdit.Visibility = esPagina1 ? Visibility.Visible : Visibility.Collapsed;
-
-    //    btnCancel.IsEnabled = esPagina2;
-    //    btnCancel.Visibility = esPagina2 ? Visibility.Visible : Visibility.Collapsed;
-
-    //    btnSave.IsEnabled = esPagina2;
-    //    btnSave.Visibility = esPagina2 ? Visibility.Visible : Visibility.Collapsed;
-    //}
-
+    /// <summary>
+    /// Esdeveniment que es dispara cada vegada que el Frame completa una navegació.
+    /// Serveix per actualitzar l'estat intern de la finestra segons quina pàgina es mostra.
+    /// </summary>
     private void frm_Navigated(object sender, NavigationEventArgs e)
     {
         if (frm.Content == principal) pagina = 1;
         if (frm.Content == edicio) pagina = 2;
-        //actualitzaBotons();
     }
-
-
 }
