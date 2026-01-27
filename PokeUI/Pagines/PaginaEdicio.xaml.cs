@@ -80,6 +80,12 @@ namespace PokeUI.Pagines
         {
             if (ThePokemon == null || context == null) return;
 
+            if (ThePokemon.BaseStat == null)
+            {
+                // Si no existe, creamos uno vacío en memoria para que los sliders tengan donde escribir
+                ThePokemon.BaseStat = new BaseStat();
+            }
+
             if (_llistaTipus != null)
             {
                 // Bloquegem esdeveniments per evitar que el canvi de combo dispari lògica de guardat
@@ -299,10 +305,18 @@ namespace PokeUI.Pagines
                 // Evitar duplicats
                 if (!_llistaEvos.Any(item => item.Pokemon.PokId == seleccionado.PokId))
                 {
+                    try
+                    {
                     //int nuevaEtapa = 2;
                     //if (_llistaEvos.Count > 0) nuevaEtapa = _llistaEvos.Max(x => x.Stage);
                     int nuevaEtapa = _llistaEvos.Max(x => x.Stage);
                     _llistaEvos.Add(new EvolutionEditableItem { Pokemon = seleccionado, Stage = nuevaEtapa });
+
+                    }
+                    catch (Exception ex) {
+                        //System.InvalidOperationException: 'Sequence contains no elements'???
+                        //
+                    }
                 }
             }
         }
@@ -546,14 +560,16 @@ namespace PokeUI.Pagines
                     throw new Exception("S'han de completar tots els camps!");
                 }
 
-                
+
 
                 // ---------------------------------------------------------
                 // 3. RECUPERAR O CREAR EL POKÉMON A LA BASE DE DADES
                 // ---------------------------------------------------------
+
                 var pokemonDb = context.Pokemons
                                        .Include(p => p.PokemonTypes)
                                        .Include(p => p.PokemonAbilities)
+                                       .Include(p => p.BaseStat) 
                                        .FirstOrDefault(p => p.PokId == ThePokemon.PokId);
 
                 // Si no existeix, és un INSERT (Nou Pokémon)
@@ -612,8 +628,30 @@ namespace PokeUI.Pagines
                 // ---------------------------------------------------------
                 guardarEvolucions();
 
+
                 // ---------------------------------------------------------
-                // 8. GUARDAR CANVIS I SORTIR
+                // 8. GUARDAR ESTADISTIQUES BASE
+                // ---------------------------------------------------------
+                if (ThePokemon.BaseStat != null)
+                {
+                    // Si la fitxa d'estadístiques no existeix a la BD, la creem
+                    if (pokemonDb.BaseStat == null)
+                    {
+                        // Assegura't que la teva classe es diu 'PokemonStat' o 'BaseStats' segons el teu model
+                        pokemonDb.BaseStat = new BaseStat { PokId = pokemonDb.PokId };
+                    }
+
+                    // Copiem els valors directament (molt més net!)
+                    pokemonDb.BaseStat.BHp = ThePokemon.BaseStat.BHp;
+                    pokemonDb.BaseStat.BAtk = ThePokemon.BaseStat.BAtk;
+                    pokemonDb.BaseStat.BDef = ThePokemon.BaseStat.BDef;
+                    pokemonDb.BaseStat.BSpAtk = ThePokemon.BaseStat.BSpAtk;
+                    pokemonDb.BaseStat.BSpDef = ThePokemon.BaseStat.BSpDef;
+                    pokemonDb.BaseStat.BSpeed = ThePokemon.BaseStat.BSpeed;
+                }
+
+                // ---------------------------------------------------------
+                // 9. GUARDAR CANVIS I SORTIR
                 // ---------------------------------------------------------
                 context.SaveChanges();
 

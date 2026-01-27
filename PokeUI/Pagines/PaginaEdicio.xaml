@@ -189,12 +189,12 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Margin="10">
-                    <uc:SlidingStatBar StatText="HP:"      Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BHp}"/>
-                    <uc:SlidingStatBar StatText="Attack:"  Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BAtk}"/>
-                    <uc:SlidingStatBar StatText="Defense:" Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BDef}"/>
-                    <uc:SlidingStatBar StatText="SpAtk:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpAtk}"/>
-                    <uc:SlidingStatBar StatText="SpDef:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpDef}"/>
-                    <uc:SlidingStatBar StatText="Speed:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpeed}"/>
+                    <uc:SlidingStatBar StatText="HP:"      Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BHp, Mode=TwoWay}"/>
+                    <uc:SlidingStatBar StatText="Attack:"  Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BAtk, Mode=TwoWay}"/>
+                    <uc:SlidingStatBar StatText="Defense:" Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BDef, Mode=TwoWay}"/>
+                    <uc:SlidingStatBar StatText="SpAtk:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpAtk, Mode=TwoWay}"/>
+                    <uc:SlidingStatBar StatText="SpDef:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpDef, Mode=TwoWay}"/>
+                    <uc:SlidingStatBar StatText="Speed:"   Margin="0,2,0,0" Valor="{Binding ElementName=Page, Path=ThePokemon.BaseStat.BSpeed, Mode=TwoWay}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="10,0,10,10">
