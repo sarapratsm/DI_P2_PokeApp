@@ -1,48 +1,33 @@
-PokeUI - WPF Pokédex
+# 🚀 Funcionalidades Destacadas
 
-🚀 Funcionalitats Destacades
-1. Gestió de Pokédex (Vista Principal)
-Cerca Dinàmica: Filtratge en temps real per nom o ID del Pokémon.
+### 1. Gestión de Pokédex (Vista Principal)
+* **Búsqueda Dinámica:** Filtrado en tiempo real por nombre o ID del Pokémon.
+* **Filtro por Tipos:** `ComboBox` con indicador visual de colores según el tipo seleccionado.
+* **Navegación Fluida:** Sistema de navegación integrado (`Frame`) entre la lista y la edición.
+* **Borrado Robusto (Safe Delete):** Implementación de un sistema de eliminación manual que gestiona las **Foreign Keys**. Elimina limpiamente Tipos, Habilidades, Estadísticas y desvincula Evoluciones antes de borrar el Pokémon para evitar errores de integridad en la base de datos.
 
-Filtre per Tipus: ComboBox amb indicador visual de colors segons el tipus seleccionat.
+### 2. Editor de Pokémon (Detalle)
+* **Validación de Datos:** Feedback visual (bordes rojos) y bloqueo de guardado si faltan campos obligatorios.
+* **Sistema de Evoluciones:** Lógica personalizada para gestionar cadenas evolutivas por etapas (Stage 1 → Stage 2 → Stage 3), evitando bucles lógicos y permitiendo reordenar o eliminar evoluciones.
+* **Estadísticas Base:** Edición visual mediante el UserControl personalizado `SlidingStatBar`, con *TwoWay Binding* para HP, Ataque, Defensa, etc.
+* **Gestión de Habilidades:** Adición dinámica de habilidades con control de duplicados.
 
-Navegació Fluida: Sistema de navegació integrat (Frame) entre la llista i l'edició.
+---
 
-Eliminació Robusta (Safe Delete): Implementació d'un sistema d'eliminació manual que gestiona les Foreign Keys. Elimina netament Tipus, Habilitats, Estadístiques i desvincula Evolucions abans d'esborrar el Pokémon per evitar errors d'integritat a la base de dades.
+## 🛠️ Stack Tecnológico
 
-2. Editor de Pokémon (Detall)
-Validació de Dades: Feedback visual (bordes vermells) i bloqueig del guardat si falten camps obligatoris.
+| Componente | Tecnología |
+| :--- | :--- |
+| **Framework** | .NET 9.0 |
+| **UI** | WPF (Windows Presentation Foundation) + XAML |
+| **ORM** | Entity Framework Core |
+| **Base de Datos** | SQL Server / LocalDB |
+| **Patrones** | MVVM (parcial), Data Binding, Dependency Properties |
 
-Sistema d'Evolucions: Lògica personalitzada per gestionar cadenes evolutives per etapes (Stage 1 → Stage 2 → Stage 3), evitant bucles lògics i permetent reordenar o eliminar evolucions fàcilment.
+---
 
-Estadístiques Base: Edició visual mitjançant el UserControl personalitzat SlidingStatBar, amb TwoWay Binding per a HP, Atac, Defensa, etc.
+## 🔧 Instalación y Ejecución
 
-Gestió d'Habilitats: Addició dinàmica d'habilitats amb control de duplicats.
-
-🛠️ Stack Tecnològic
-Framework: .NET 9.0
-
-UI: Windows Presentation Foundation (WPF) + XAML
-
-ORM: Entity Framework Core
-
-Base de Dades: SQL Server / LocalDB
-
-Patrons: MVVM (parcial), Data Binding, Dependency Properties.
-
-🔧 Instal·lació i Execució
-Clonar el repositori:
-
-Configuració de Base de Dades:
-
-Verifica la cadena de connexió a PokeData/AppDbContext.cs.
-
-Aplica les migracions d'Entity Framework si és necessari:
-
-Executar:
-
-Obre la solució a Visual Studio 2022.
-
-Estableix PokeUI com a projecte d'inici.
-
-Compila i executa amb F5.
+### 1. Clonar el repositorio
+```bash
+git clone [https://github.com/tu-usuario/tu-repositorio.git](https://github.com/tu-usuario/tu-repositorio.git)
