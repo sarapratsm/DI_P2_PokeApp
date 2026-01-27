@@ -29,9 +29,3 @@ PokeApp és una aplicació d'escriptori WPF (.NET 9) dissenyada per a l'administ
 | **Patrons** | MVVM (parcial), Data Binding, Dependency Properties |
 
 ---
-
-## 🔧 Instal·lació i Execució
-
-### 1. Clonar el repositori
-```bash
-git clone [https://github.com/el-teu-usuari/el-teu-repositori.git](https://github.com/el-teu-usuari/el-teu-repositori.git)
