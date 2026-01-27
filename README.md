@@ -1,25 +1,27 @@
-PokeApp
-=======
-PokeApp és una aplicació d'escriptori WPF (.NET 9) dissenyada per a l'administració completa d'una base de dades Pokémon. El projecte implementa una arquitectura robusta que separa la lògica de dades de la interfície, oferint funcionalitats avançades com la gestió lineal d'evolucions, controls d'estadístiques personalitzats i un sistema d'eliminació segura per garantir la integritat referencial.
+# PokeApp 📱
+**PokeApp** és una aplicació d'escriptori desenvolupada en **WPF (.NET 9)** per a la gestió integral d'una PokeDex. El projecte ha estat dissenyat seguint els requeriments de les unitats formatives RA2 i RA3, enfocant-se en la creació d'interfícies complexes, controls personalitzats i persistència de dades amb **MySQL**.
 
 ![Status](https://img.shields.io/badge/Status-Completed-success)
 ![Technology](https://img.shields.io/badge/.NET-9.0-purple)
 ![Platform](https://img.shields.io/badge/Platform-WPF-blue)
-![Database](https://img.shields.io/badge/Database-MySql-red)
+![Database](https://img.shields.io/badge/Database-MySQL-orange)
 
 ## 🚀 Funcionalitats Destacades
 
-### 1. Gestió de Pokédex (Vista Principal)
-* **Cerca Dinàmica:** Filtre en temps real per nom o ID del Pokémon.
-* **Filtre per Tipus:** `ComboBox` amb indicador visual de colors segons el tipus seleccionat.
-* **Navegació Fluida:** Sistema de navegació integrat (`Frame`) entre la llista i l'edició.
-* **Esborrat Robust (Safe Delete):** Implementació d'un sistema d'eliminació manual que gestiona les **Foreign Keys**. Elimina netament Tipus, Habilitats, Estadístiques i desvincula Evolucions abans d'esborrar el Pokémon per evitar errors d'integritat a la base de dades.
+### 1. Gestió i Navegació (RA2)
+* **Cerca Avançada:** Filtratge dinàmic de Pokémon per nom o ID en temps real.
+* **Navegació per Frames:** Sistema de navegació fluid entre la llista principal i el formulari de detalls.
+* **Filtre de Tipus:** Selector personalitzat que utilitza el color corporatiu de cada tipus (codis HEX) definit a la base de dades.
 
-### 2. Editor de Pokémon (Detall)
-* **Validació de Dades:** Feedback visual (vores vermelles) i bloqueig de desat si falten camps obligatoris.
-* **Sistema d'Evolucions:** Lògica personalitzada per gestionar cadenes evolutives per etapes (Stage 1 → Stage 2 → Stage 3), evitant bucles lògics i permetent reordenar o eliminar evolucions.
-* **Estadístiques Base:** Edició visual mitjançant l'UserControl personalitzat `SlidingStatBar`, amb *TwoWay Binding* per a HP, Atac, Defensa, etc.
-* **Gestió d'Habilitats:** Addició dinàmica d'habilitats amb control de duplicats.
+### 2. Editor de Detalls i Controls Personalitzats (RA3)
+* **UserControl `SlidingStatBar`:** Control personalitzat amb *Dependency Properties* per visualitzar i editar les estadístiques base (HP, Atac, etc.) mitjançant un lliscador.
+* **Càlcul de Febleses:** Lògica implementada per mostrar automàticament les debilitats i resistències segons el tipus del Pokémon seleccionat.
+* **Gestió d'Evolucions:** Sistema per gestionar cadenes evolutives lineals (fins a 3 etapes), controlant que no es produeixin bucles i mantenint l'ordre lògic.
+* **Validació d'Entrada:** Implementació de feedback visual (estils per a camps obligatoris) per garantir la integritat de les dades abans de desar.
+
+### 3. Persistència i Seguretat de Dades
+* **Esborrat Robust (Safe Delete):** Sistema manual que gestiona l'eliminació en cascada de les claus estrangeres (habilitats, tipus i estadístiques) per evitar errors de referència a MySQL.
+* **ORM:** Ús d'**Entity Framework Core** amb el proveïdor Pomelo per a una comunicació eficient amb la base de dades.
 
 ---
 
@@ -28,10 +30,23 @@ PokeApp és una aplicació d'escriptori WPF (.NET 9) dissenyada per a l'administ
 | Component | Tecnologia |
 | :--- | :--- |
 | **Framework** | .NET 9.0 |
-| **UI** | WPF (Windows Presentation Foundation) + XAML |
-| **ORM** | Entity Framework Core |
-| **Base de Dades** | SQL Server / LocalDB |
-| **Patrons** | MVVM (parcial), Data Binding, Dependency Properties |
+| **UI** | WPF + XAML |
+| **ORM** | Entity Framework Core (Pomelo) |
+| **Base de Dades** | MySQL / MariaDB |
+| **Arquitectura** | Patró MVVM (parcial) i Controls Personalitzats |
+
+---
+
+## 🔧 Instal·lació
+
+1. **Base de Dades:**
+   * Importa el fitxer `dump-pokedex-original.sql` al teu servidor MySQL.
+   * *Nota:* El script inclou l'alteració de la taula `types` per afegir la columna `color`.
+2. **Configuració:**
+   * Actualitza la cadena de connexió a `AppDbContext.cs` amb les teves credencials de MySQL.
+3. **Execució:**
+   * Obre el projecte a **Visual Studio 2022**.
+   * Compila i executa (`F5`).
 
 ---
 
