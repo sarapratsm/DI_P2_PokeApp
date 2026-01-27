@@ -2,6 +2,11 @@ PokeApp
 =======
 PokeApp és una aplicació d'escriptori WPF (.NET 9) dissenyada per a l'administració completa d'una base de dades Pokémon. El projecte implementa una arquitectura robusta que separa la lògica de dades de la interfície, oferint funcionalitats avançades com la gestió lineal d'evolucions, controls d'estadístiques personalitzats i un sistema d'eliminació segura per garantir la integritat referencial.
 
+![Status](https://img.shields.io/badge/Status-Completed-success)
+![Technology](https://img.shields.io/badge/.NET-9.0-purple)
+![Platform](https://img.shields.io/badge/Platform-WPF-blue)
+![Database](https://img.shields.io/badge/Database-MySql-red)
+
 ## 🚀 Funcionalitats Destacades
 
 ### 1. Gestió de Pokédex (Vista Principal)
@@ -29,3 +34,9 @@ PokeApp és una aplicació d'escriptori WPF (.NET 9) dissenyada per a l'administ
 | **Patrons** | MVVM (parcial), Data Binding, Dependency Properties |
 
 ---
+
+## ✒️ Autor
+
+**Sara Prats Morales**
+* [LinkedIn](https://www.linkedin.com/in/sara-prats-morales)
+* [GitHub](https://github.com/kuro-spm)
