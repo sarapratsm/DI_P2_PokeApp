@@ -8,12 +8,12 @@
 
 ## 🚀 Funcionalitats Destacades
 
-### 1. Gestió i Navegació (RA2)
+### 1. Gestió i Navegació
 * **Cerca Avançada:** Filtratge dinàmic de Pokémon per nom o ID en temps real.
 * **Navegació per Frames:** Sistema de navegació fluid entre la llista principal i el formulari de detalls.
 * **Filtre de Tipus:** Selector personalitzat que utilitza el color corporatiu de cada tipus (codis HEX) definit a la base de dades.
 
-### 2. Editor de Detalls i Controls Personalitzats (RA3)
+### 2. Editor de Detalls i Controls Personalitzats
 * **UserControl `SlidingStatBar`:** Control personalitzat amb *Dependency Properties* per visualitzar i editar les estadístiques base (HP, Atac, etc.) mitjançant un lliscador.
 * **Càlcul de Febleses:** Lògica implementada per mostrar automàticament les debilitats i resistències segons el tipus del Pokémon seleccionat.
 * **Gestió d'Evolucions:** Sistema per gestionar cadenes evolutives lineals (fins a 3 etapes), controlant que no es produeixin bucles i mantenint l'ordre lògic.
