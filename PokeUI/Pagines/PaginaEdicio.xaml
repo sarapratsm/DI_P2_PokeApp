@@ -225,7 +225,7 @@
                             Style="{StaticResource RoundAddButtonStyle}"/>
                     </Grid>
 
-                    <ListBox x:Name="lstEvoluciones" Height="200" BorderBrush="Gray" BorderThickness="1">
+                    <ListBox x:Name="lstEvoluciones" Height="200" BorderBrush="Gray" BorderThickness="1" SelectionChanged="lstEvoluciones_SelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -247,13 +247,13 @@
 
                     <UniformGrid Rows="1" Background="DarkGreen">
                         <Button x:Name="btnDeleteEvo" Click="btnDelEvo_Click" Background="Transparent" BorderThickness="0" Foreground="White" Padding="5">
-                            <TextBlock Text="✕" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="✕" FontWeight="Bold" FontSize="14" IsEnabled="False"/>
                         </Button>
                         <Button x:Name="btnUpEvo" Click="btnUpEvo_Click" Background="Transparent" BorderThickness="0" Foreground="White" Padding="5">
-                            <TextBlock Text="↑" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="↑" FontWeight="Bold" FontSize="14" IsEnabled="False"/>
                         </Button>
                         <Button x:Name="btnDownEvo" Click="btnDownEvo_Click" Background="Transparent" BorderThickness="0" Foreground="White" Padding="5">
-                            <TextBlock Text="↓" FontWeight="Bold" FontSize="14"/>
+                            <TextBlock Text="↓" FontWeight="Bold" FontSize="14" IsEnabled="False"/>
                         </Button>
                     </UniformGrid>
                 </StackPanel>

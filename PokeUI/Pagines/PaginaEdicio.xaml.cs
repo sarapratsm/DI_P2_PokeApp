@@ -367,6 +367,37 @@ namespace PokeUI.Pagines
         }
 
         /// <summary>
+        /// Gestiona l'activació dels botons segons si hi ha una evolució seleccionada.
+        /// </summary>
+        private void lstEvoluciones_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var itemSeleccionat = lstEvoluciones.SelectedItem as EvolutionEditableItem;
+
+            if (itemSeleccionat != null)
+            {
+                btnDeleteEvo.IsEnabled = true;
+
+                btnDownEvo.IsEnabled = true;
+
+                if (itemSeleccionat.Stage > 1)
+                {
+                    btnUpEvo.IsEnabled = true;
+                }
+                else
+                {
+                    btnUpEvo.IsEnabled = false;
+                }
+            }
+            else
+            {
+                // Si no hi ha res seleccionat, tot desactivat
+                btnDeleteEvo.IsEnabled = false;
+                btnUpEvo.IsEnabled = false;
+                btnDownEvo.IsEnabled = false;
+            }
+        }
+
+        /// <summary>
         /// Mètode segur per guardar evolucions linealment.
         /// Connecta Stage 1 -> Stage 2 -> Stage 3.
         /// Si la llista està buida, no fa res (evita l'error).
@@ -667,7 +698,9 @@ namespace PokeUI.Pagines
 
 
 
+
         #endregion
+
 
         
     }
