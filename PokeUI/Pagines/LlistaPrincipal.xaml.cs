@@ -181,18 +181,86 @@ namespace PokeUI.Pagines
            //toDo
         }
 
-        // Añade/Sustituye estos métodos en LlistaPrincipal.xaml.cs
+        
 
-        // Añade/Sustituye estos métodos en LlistaPrincipal.xaml.cs
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            // Opción A: Cerrar la aplicación
-            Application.Current.Shutdown();
+            Pokemon pokemonAEliminar;
+            if (lsvPokedex.SelectedItem != null)
+            {
+                pokemonAEliminar = (Pokemon)lsvPokedex.SelectedItem;
+                var resultat = MessageBox.Show(
+            $"Estàs segur que vols eliminar a {pokemonAEliminar.PokName}?\n\nAquesta acció no es pot desfer.",
+            "Confirmar eliminació",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
 
-            // Opción B: Limpiar selección/filtros (Si prefieres esto, descomenta)
-            // lsvPokedex.SelectedItem = null;
-            // btnNetejaFiltres_Click(sender, e);
+                if (resultat == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        int id = pokemonAEliminar.PokId;
+
+                        // -----------------------------------------------------------------
+                        // FASE 1: NETEJA DE DEPENDÈNCIES (Manual Delete)
+                        // -----------------------------------------------------------------
+
+                        // A. Esborrar Tipus
+                        var tipusAsociats = context.PokemonTypes.Where(t => t.PokId == id).ToList();
+                        context.PokemonTypes.RemoveRange(tipusAsociats);
+
+                        // B. Esborrar Habilitats
+                        var habsAsociades = context.PokemonAbilities.Where(a => a.PokId == id).ToList();
+                        context.PokemonAbilities.RemoveRange(habsAsociades);
+
+                        // C. Esborrar Estadístiques (Si existeix la taula PokemonStats)
+                        // Nota: Si la teva BD usa una taula apart 'pokemon_stats', cal netejar-la:
+                        var statsAsociades = context.BaseStats.Where(s => s.PokId == id).ToList();
+                        context.BaseStats.RemoveRange(statsAsociades);
+
+                        // D. Gestió d'Evolucions (Molt Important!)
+
+                        // D1. Si jo sóc fill d'algú -> Esborro la meva fitxa de fill
+                        var fitxaEvo = context.PokemonEvolutionMatchups.FirstOrDefault(m => m.PokId == id);
+                        if (fitxaEvo != null) context.PokemonEvolutionMatchups.Remove(fitxaEvo);
+
+                        // D2. Si jo sóc PARE d'altres -> Els deixem orfes (no els esborrem!)
+                        var fills = context.PokemonEvolutionMatchups.Where(m => m.EvolvesFromSpeciesId == id).ToList();
+                        foreach (var fill in fills)
+                        {
+                            fill.EvolvesFromSpeciesId = null; // Trenquem l'enllaç
+                        }
+
+                        // Guardem aquests canvis preliminars per evitar conflictes
+                        context.SaveChanges();
+
+                        // -----------------------------------------------------------------
+                        // FASE 2: ELIMINACIÓ DEL POKÉMON
+                        // -----------------------------------------------------------------
+
+                        // Ara que està "nu", ja el podem esborrar sense errors de Foreign Key
+                        context.Pokemons.Remove(pokemonAEliminar);
+                        context.SaveChanges();
+
+                        // -----------------------------------------------------------------
+                        // FASE 3: REFRESCCAR IU
+                        // -----------------------------------------------------------------
+
+                        // Recarreguem la llista per veure que ja no hi és
+                        carregarPokemons();
+
+                        MessageBox.Show("Pokémon eliminat correctament.", "Esborrat", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al intentar eliminar: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Si us plau, selecciona un Pokémon de la llista per eliminar-lo.", "Cap selecció", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
