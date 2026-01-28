@@ -440,7 +440,7 @@ namespace PokeUI.Pagines
                 }
             }
 
-            // Guardem el reset (opcional però recomanable per netejar claus foranes)
+            // Guardem el reset 
             // context.SaveChanges(); 
 
             // 3. Reconstrucció de la Línia
