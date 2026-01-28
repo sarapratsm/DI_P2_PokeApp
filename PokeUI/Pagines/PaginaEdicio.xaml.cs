@@ -411,7 +411,7 @@ namespace PokeUI.Pagines
             // 2. Preparació i Neteja
             Dictionary<EvolutionEditableItem, Pokemon> lineaEvo = new Dictionary<EvolutionEditableItem, Pokemon>();
 
-            foreach (var evo in _llistaEvos)
+            foreach (EvolutionEditableItem evo in _llistaEvos)
             {
                 // Recuperem l'entitat real de la BD
                 var evoBd = context.Pokemons
