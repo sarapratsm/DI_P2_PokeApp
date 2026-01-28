@@ -16,7 +16,7 @@ namespace PokeUI.Utils
             }
             catch
             {
-                return Brushes.White; // Color por defecto si falla
+                return Brushes.White; 
             }
         }
     }

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PokeUI.Utils // O el namespace que uses
+namespace PokeUI.Utils 
 {
     public class IntToDecimalConverter : IValueConverter
     {

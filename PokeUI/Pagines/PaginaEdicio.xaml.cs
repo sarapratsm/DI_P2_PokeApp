@@ -268,7 +268,7 @@ namespace PokeUI.Pagines
             // Càrrega mandrosa (lazy) de tots els Pokémon pel cercador
             if (this._llistaTotsPokemons == null)
             {
-                _llistaTotsPokemons = new ObservableCollection<Pokemon>(context.Pokemons.OrderBy(p => p.PokName).ToList());
+                _llistaTotsPokemons = new ObservableCollection<Pokemon>(context.Pokemons.OrderBy(p => p.PokId).ToList());
                 cmbEvoSearch.ItemsSource = _llistaTotsPokemons;
             }
 
