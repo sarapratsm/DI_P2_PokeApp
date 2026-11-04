@@ -1,0 +1,19 @@
+services:
+  db:
+    image: mariadb:10.4
+    container_name: pokeapp_mariadb
+    restart: unless-stopped
+    command: --lower_case_table_names=1
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: pokemon
+      MYSQL_PASSWORD: ""
+    ports:
+      - "3306:3306"
+    volumes:
+      - pokeapp_mariadb_data:/var/lib/mysql
+      - ./dump-pokedex-original.sql:/docker-entrypoint-initdb.d/dump-pokedex-original.sql:ro
+
+volumes:
+  pokeapp_mariadb_data:

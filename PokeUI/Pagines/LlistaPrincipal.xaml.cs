@@ -47,6 +47,7 @@ namespace PokeUI.Pagines
             {
                 MessageBox.Show("Error en carregar els pokémons des de la base de dades. Comprova que la base de dades és accessible. Es tancarà l'aplicació.",
                                 "Error Crític", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine(ex.ToString());
                 Application.Current.Shutdown();
             }
         }
